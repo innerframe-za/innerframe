@@ -19,6 +19,7 @@
 
 # production
 /build
+/dist
 
 # Claude Code config
 .claude/

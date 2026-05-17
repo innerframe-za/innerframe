@@ -126,16 +126,13 @@ export function UploadModal({
 
       setProgress(70)
 
-      const { data: urlData } = supabase.storage
-        .from('documents')
-        .getPublicUrl(storagePath)
-
-      // TODO: replace with Supabase insert once credentials are configured
+      // Store the storage path — NOT a public URL.
+      // Bucket must be private; download links are generated as signed URLs at read time.
       const { error: dbError } = await supabase.from('documents').insert({
         org_id: orgId,
         pillar,
         file_name: file.name,
-        file_url: urlData.publicUrl,
+        file_url: storagePath,
         section_id: sectionId || null,
         patient_id: patientId || null,
         is_global: false,

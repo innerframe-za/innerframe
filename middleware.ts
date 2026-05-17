@@ -40,8 +40,14 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/search') ||
     pathname.startsWith('/settings')
 
+  const isApiRoute = pathname.startsWith('/api/')
+
   if (!user && isPortalRoute) {
     return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (!user && isApiRoute) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   if (user && pathname === '/login') {

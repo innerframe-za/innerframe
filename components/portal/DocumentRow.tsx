@@ -1,9 +1,12 @@
+'use client'
 import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2 } from 'lucide-react'
 import { GlobalBadge } from './GlobalBadge'
+import { createClient } from '@/lib/supabase/client'
 
 /**
  * A single document row used in pillar pages and section groups.
- * Shows file type icon, name, category badge, date, download + optional delete.
+ * fileUrl is the Supabase storage path (not a public URL).
+ * Downloads generate a short-lived signed URL so the bucket stays private.
  */
 interface DocumentRowProps {
   fileName: string
@@ -50,6 +53,18 @@ export function DocumentRow({
 }: DocumentRowProps) {
   const { Icon, color } = getFileIcon(fileName)
   const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
+
+  const handleDownload = async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase.storage
+      .from('documents')
+      .createSignedUrl(fileUrl, 60) // 60-second expiry
+    if (error || !data?.signedUrl) {
+      alert('Could not generate download link. Please try again.')
+      return
+    }
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <div
@@ -109,25 +124,23 @@ export function DocumentRow({
 
       {/* Actions */}
       <div className="flex items-center gap-1 flex-shrink-0">
-        <a
-          href={fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          download
+        <button
+          type="button"
+          onClick={handleDownload}
           className="w-7 h-7 rounded flex items-center justify-center transition-colors"
           style={{ color: '#5a5a5a' }}
           onMouseEnter={e =>
-            ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
               'rgba(30,58,47,0.07)')
           }
           onMouseLeave={e =>
-            ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
               'transparent')
           }
           aria-label={`Download ${fileName}`}
         >
           <Download size={14} />
-        </a>
+        </button>
         {canDelete && onDelete && (
           <button
             type="button"
