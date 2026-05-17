@@ -74,7 +74,7 @@ export function WhoItsFor() {
             <div
               key={audience.title}
               className="bg-white rounded-xl p-6 border"
-              style={{ borderColor: '#ddd6c8' }}
+              style={{ borderColor: '#ddd6c8', boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)' }}
             >
               <h3
                 className="font-medium text-base mb-3"
@@ -118,7 +118,7 @@ export function WhoItsFor() {
           }}
         >
           <div
-            className="w-10 h-10 rounded flex-shrink-0 flex items-center justify-center text-lg"
+            className="w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center text-lg"
             style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
             aria-hidden="true"
           >

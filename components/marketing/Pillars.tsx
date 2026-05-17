@@ -93,11 +93,12 @@ export function Pillars() {
                   borderColor: '#ddd6c8',
                   borderTopWidth: '3px',
                   borderTopColor: index % 2 === 0 ? '#1E3A2F' : '#D4AF37',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)',
                 }}
               >
                 {/* Icon */}
                 <div
-                  className="w-10 h-10 rounded flex items-center justify-center mb-4"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
                   style={{ backgroundColor: 'rgba(30,58,47,0.07)' }}
                 >
                   <Icon

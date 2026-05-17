@@ -72,7 +72,7 @@ export default function LoginPage() {
       style={{ backgroundColor: '#F5F0E8' }}
     >
       <div
-        className="w-full max-w-[400px] bg-white rounded-lg border p-8"
+        className="w-full max-w-[400px] bg-white rounded-2xl border p-8"
         style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}
       >
         {/* Logo */}
@@ -108,7 +108,7 @@ export default function LoginPage() {
               type="email"
               autoComplete="email"
               placeholder="your@email.co.za"
-              className="w-full px-3 py-2.5 rounded border text-sm outline-none transition-colors"
+              className="w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-colors"
               style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
               onFocus={borderFocus}
               aria-invalid={!!errors.email}
@@ -146,7 +146,7 @@ export default function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="w-full px-3 py-2.5 pr-10 rounded border text-sm outline-none transition-colors"
+                className="w-full px-3 py-2.5 pr-10 rounded-lg border text-sm outline-none transition-colors"
                 style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
                 onFocus={borderFocus}
                 aria-invalid={!!errors.password}
@@ -198,7 +198,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded text-sm font-medium mt-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium mt-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
             onMouseEnter={e => {
               if (!isSubmitting)
@@ -228,7 +228,10 @@ export default function LoginPage() {
 
         {/* Footer note */}
         <p className="text-xs text-center mt-6" style={{ color: '#5a5a5a' }}>
-          No self-registration. Accounts are created by Innerframe.
+          Don&apos;t have an account?{' '}
+          <a href="/signup" style={{ color: '#1E3A2F' }} className="font-medium underline">
+            Sign up
+          </a>
         </p>
       </div>
     </div>

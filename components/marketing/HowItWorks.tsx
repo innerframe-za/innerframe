@@ -87,7 +87,7 @@ export function HowItWorks() {
 
                 {/* Icon */}
                 <div
-                  className="w-10 h-10 rounded flex items-center justify-center mb-4"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
                   style={{ backgroundColor: 'rgba(30,58,47,0.06)' }}
                 >
                   <Icon
@@ -142,7 +142,7 @@ export function HowItWorks() {
           </div>
           <a
             href="#contact"
-            className="flex-shrink-0 px-6 py-3 rounded text-sm font-medium transition-colors"
+            className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-colors"
             style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             onMouseEnter={e =>
               ((e.target as HTMLElement).style.backgroundColor = '#B8960C')

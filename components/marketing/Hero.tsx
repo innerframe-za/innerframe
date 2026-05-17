@@ -9,18 +9,8 @@ export function Hero() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ backgroundColor: '#1E3A2F', minHeight: '88vh' }}
+      style={{ backgroundColor: '#F5F0E8', minHeight: '88vh' }}
     >
-      {/* Subtle texture overlay */}
-      <div
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.3) 40px, rgba(255,255,255,0.3) 41px)',
-        }}
-        aria-hidden="true"
-      />
-
       {/* Gold top bar */}
       <div
         className="absolute top-0 left-0 right-0 h-1"
@@ -48,7 +38,7 @@ export function Hero() {
         {/* Main headline */}
         <h1
           className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight mb-6 max-w-4xl"
-          style={{ color: '#F5F0E8' }}
+          style={{ color: '#1E3A2F' }}
         >
           Stronger Structures.
           <br />
@@ -60,7 +50,7 @@ export function Hero() {
         {/* Sub-headline */}
         <p
           className="text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
-          style={{ color: 'rgba(245,240,232,0.75)' }}
+          style={{ color: '#5a5a5a' }}
         >
           Innerframe helps South African old age homes build the operational
           systems, compliance structures, and management frameworks they need to
@@ -71,7 +61,7 @@ export function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 mb-16">
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded text-sm font-medium transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-colors"
             style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             onMouseEnter={e =>
               ((e.target as HTMLElement).style.backgroundColor = '#B8960C')
@@ -85,15 +75,15 @@ export function Hero() {
           </a>
           <a
             href="#pillars"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded text-sm font-medium border transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-medium border transition-colors"
             style={{
-              color: '#F5F0E8',
-              borderColor: 'rgba(245,240,232,0.35)',
+              color: '#1E3A2F',
+              borderColor: 'rgba(30,58,47,0.3)',
               backgroundColor: 'transparent',
             }}
             onMouseEnter={e => {
               const el = e.target as HTMLElement
-              el.style.backgroundColor = 'rgba(245,240,232,0.08)'
+              el.style.backgroundColor = 'rgba(30,58,47,0.05)'
             }}
             onMouseLeave={e => {
               const el = e.target as HTMLElement
@@ -107,7 +97,7 @@ export function Hero() {
         {/* Proof strip */}
         <div
           className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 pt-8 border-t w-full max-w-2xl"
-          style={{ borderColor: 'rgba(245,240,232,0.15)' }}
+          style={{ borderColor: 'rgba(30,58,47,0.12)' }}
         >
           {[
             { value: '5', label: 'Operational Pillars' },
@@ -123,7 +113,7 @@ export function Hero() {
               </div>
               <div
                 className="text-xs mt-1"
-                style={{ color: 'rgba(245,240,232,0.55)' }}
+                style={{ color: '#5a5a5a' }}
               >
                 {item.label}
               </div>
@@ -136,13 +126,13 @@ export function Hero() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
         <span
           className="text-xs"
-          style={{ color: 'rgba(245,240,232,0.4)' }}
+          style={{ color: 'rgba(30,58,47,0.4)' }}
         >
           scroll
         </span>
         <ChevronDown
           size={16}
-          style={{ color: 'rgba(245,240,232,0.4)' }}
+          style={{ color: 'rgba(30,58,47,0.4)' }}
           className="animate-bounce"
         />
       </div>
