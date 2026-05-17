@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Innerframe Care Solutions — Client Portal
+
+Next.js 15 document management portal for old age homes. Built with Tailwind CSS, shadcn/ui, and Supabase.
 
 ## Getting Started
 
