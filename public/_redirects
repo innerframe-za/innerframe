@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects
+# Format: /old-path  /new-path  status-code
+
+# Redirect bare login to portal entry
+/portal  /login  302

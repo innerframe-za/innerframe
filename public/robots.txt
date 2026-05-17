@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block authenticated portal from search engines
+Disallow: /dashboard
+Disallow: /pillar/
+Disallow: /residents/
+Disallow: /search
+Disallow: /settings
+
+Sitemap: https://innerframe.co.za/sitemap.xml
