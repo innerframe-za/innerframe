@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { Search } from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { DocumentRow } from '@/components/portal/DocumentRow'

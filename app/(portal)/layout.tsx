@@ -2,10 +2,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Navbar } from '@/components/portal/Navbar'
 
-/**
- * Portal layout — Server Component auth guard.
- * Redirects to /login if no session. Renders Navbar + children.
- */
+export const runtime = 'edge'
+
 export default async function PortalLayout({
   children,
 }: {

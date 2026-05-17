@@ -1,13 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-/**
- * Auth proxy: protects portal routes and redirects logged-in users
- * away from /login. Supabase session cookies are refreshed on every request.
- *
- * Next.js 16 renames middleware → proxy. The export must be named `proxy`.
- */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(

@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { notFound } from 'next/navigation'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { SectionGroup } from '@/components/portal/SectionGroup'
@@ -125,7 +127,3 @@ export default async function PillarPage({ params }: PillarPageProps) {
   )
 }
 
-/** Pre-generate static params for the 5 pillar slugs */
-export function generateStaticParams() {
-  return Object.keys(PILLAR_MAP).map(slug => ({ slug }))
-}

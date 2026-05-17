@@ -1,4 +1,6 @@
 'use client'
+export const runtime = 'edge'
+
 import { useState } from 'react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { Plus, Trash2, UserMinus } from 'lucide-react'
