@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import MarketingPage from './pages/marketing/MarketingPage'
 import LoginPage from './pages/auth/LoginPage'
-import SignupPage from './pages/auth/SignupPage'
 import DashboardPage from './pages/portal/DashboardPage'
 import ResidentsPage from './pages/portal/ResidentsPage'
 import ResidentDetailPage from './pages/portal/ResidentDetailPage'
@@ -15,7 +14,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<MarketingPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/signup" element={<Navigate to="/login" replace />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />

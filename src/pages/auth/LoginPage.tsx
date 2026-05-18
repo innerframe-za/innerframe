@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -113,8 +113,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-xs text-center mt-6" style={{ color: '#5a5a5a' }}>
-          Don't have an account?{' '}
-          <Link to="/signup" style={{ color: '#1E3A2F' }} className="font-medium underline">Sign up</Link>
+          Contact your administrator to get access.
         </p>
       </div>
     </div>
