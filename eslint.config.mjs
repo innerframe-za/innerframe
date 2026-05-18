@@ -1,24 +1,36 @@
+import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
-import { FlatCompat } from "@eslint/eslintrc";
-import { fileURLToPath } from "url";
-import path from "path";
+import globals from "globals";
 
-// Required for FlatCompat to resolve legacy config paths correctly
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
+// Minimal flat ESLint config for Vite + React (TypeScript)
+// Replaced Next.js-specific config which required eslint-config-next (not installed)
 const eslintConfig = defineConfig([
-  // Bridge legacy eslint-config-next into flat config format
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  js.configs.recommended,
   // Ignore build output and generated files
   globalIgnores([
+    "dist/**",
+    "node_modules/**",
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "*.d.ts",
   ]),
+  {
+    // Declare browser + ES2021 globals (fetch, window, document, setTimeout, etc.)
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+    },
+    rules: {
+      // Allow unused vars prefixed with _ (common TypeScript convention)
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+      // Allow console in dev context
+      "no-console": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;
