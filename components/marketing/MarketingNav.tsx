@@ -1,7 +1,5 @@
-'use client'
 import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
 /**
@@ -18,8 +16,8 @@ export function MarketingNav() {
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image
+        <Link to="/" className="flex items-center gap-3">
+          <img
             src="/logo.jpeg"
             alt="Innerframe Care Solutions"
             width={40}
@@ -41,72 +39,31 @@ export function MarketingNav() {
 
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-8">
-          <a
-            href="#pillars"
-            className="text-sm transition-colors"
-            style={{ color: '#5a5a5a' }}
-            onMouseEnter={e =>
-              ((e.target as HTMLElement).style.color = '#1E3A2F')
-            }
-            onMouseLeave={e =>
-              ((e.target as HTMLElement).style.color = '#5a5a5a')
-            }
-          >
-            What We Do
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-sm transition-colors"
-            style={{ color: '#5a5a5a' }}
-            onMouseEnter={e =>
-              ((e.target as HTMLElement).style.color = '#1E3A2F')
-            }
-            onMouseLeave={e =>
-              ((e.target as HTMLElement).style.color = '#5a5a5a')
-            }
-          >
-            How It Works
-          </a>
-          <a
-            href="#who-its-for"
-            className="text-sm transition-colors"
-            style={{ color: '#5a5a5a' }}
-            onMouseEnter={e =>
-              ((e.target as HTMLElement).style.color = '#1E3A2F')
-            }
-            onMouseLeave={e =>
-              ((e.target as HTMLElement).style.color = '#5a5a5a')
-            }
-          >
-            Who It&apos;s For
-          </a>
-          <a
-            href="#contact"
-            className="text-sm transition-colors"
-            style={{ color: '#5a5a5a' }}
-            onMouseEnter={e =>
-              ((e.target as HTMLElement).style.color = '#1E3A2F')
-            }
-            onMouseLeave={e =>
-              ((e.target as HTMLElement).style.color = '#5a5a5a')
-            }
-          >
-            Contact
-          </a>
+          {['#pillars', '#how-it-works', '#who-its-for', '#contact'].map((href, i) => {
+            const labels = ['What We Do', 'How It Works', "Who It's For", 'Contact']
+            return (
+              <a
+                key={href}
+                href={href}
+                className="text-sm transition-colors"
+                style={{ color: '#5a5a5a' }}
+                onMouseEnter={e => ((e.target as HTMLElement).style.color = '#1E3A2F')}
+                onMouseLeave={e => ((e.target as HTMLElement).style.color = '#5a5a5a')}
+              >
+                {labels[i]}
+              </a>
+            )
+          })}
         </div>
 
         {/* Client portal CTA */}
         <div className="hidden md:flex items-center gap-3">
           <Link
-            href="/login"
+            to="/login"
             className="px-4 py-2 rounded text-sm font-medium text-white transition-colors"
             style={{ backgroundColor: '#1E3A2F' }}
-            onMouseEnter={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#2D5A3D')
-            }
-            onMouseLeave={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#1E3A2F')
-            }
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D5A3D')}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#1E3A2F')}
           >
             Client Portal
           </Link>
@@ -129,28 +86,18 @@ export function MarketingNav() {
           className="md:hidden border-t px-6 py-4 flex flex-col gap-4"
           style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
         >
-          <a href="#pillars" className="text-sm" style={{ color: '#1E3A2F' }}>
-            What We Do
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-sm"
-            style={{ color: '#1E3A2F' }}
-          >
-            How It Works
-          </a>
-          <a
-            href="#who-its-for"
-            className="text-sm"
-            style={{ color: '#1E3A2F' }}
-          >
-            Who It&apos;s For
-          </a>
-          <a href="#contact" className="text-sm" style={{ color: '#1E3A2F' }}>
-            Contact
-          </a>
+          {[
+            { href: '#pillars', label: 'What We Do' },
+            { href: '#how-it-works', label: 'How It Works' },
+            { href: '#who-its-for', label: "Who It's For" },
+            { href: '#contact', label: 'Contact' },
+          ].map(link => (
+            <a key={link.href} href={link.href} className="text-sm" style={{ color: '#1E3A2F' }} onClick={() => setOpen(false)}>
+              {link.label}
+            </a>
+          ))}
           <Link
-            href="/login"
+            to="/login"
             className="px-4 py-2 rounded text-sm font-medium text-white text-center"
             style={{ backgroundColor: '#1E3A2F' }}
           >

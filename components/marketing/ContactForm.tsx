@@ -1,4 +1,3 @@
-'use client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -59,7 +58,7 @@ export function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     setError(null)
-    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL
+    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL
 
     if (!webhookUrl) {
       setError('Contact form is not configured yet. Please email us directly.')

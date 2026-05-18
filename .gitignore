@@ -43,3 +43,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Compiled TypeScript — Vite handles transpilation; tsc runs with --noEmit
+components/**/*.js
+lib/**/*.js
+src/**/*.js
+hooks/**/*.js
+vite.config.js

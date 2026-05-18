@@ -1,8 +1,5 @@
-'use client'
 import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   ClipboardList,
   DollarSign,
@@ -35,14 +32,9 @@ function getInitials(name: string): string {
     .toUpperCase()
 }
 
-/**
- * Portal navbar — 64px height, dark green bg, 2px gold bottom border.
- * Center nav links for the 5 pillars, search input, user avatar.
- * Collapses to hamburger menu on mobile.
- */
 export function Navbar() {
-  const pathname = usePathname()
-  const router = useRouter()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { user } = useUser()
   const [searchValue, setSearchValue] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -50,7 +42,7 @@ export function Navbar() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchValue.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchValue.trim())}`)
+      navigate(`/search?q=${encodeURIComponent(searchValue.trim())}`)
       setSearchValue('')
     }
   }
@@ -58,8 +50,7 @@ export function Navbar() {
   const handleLogout = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/login')
-    router.refresh()
+    navigate('/login')
   }
 
   return (
@@ -75,8 +66,8 @@ export function Navbar() {
         aria-label="Portal navigation"
       >
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-2.5 flex-shrink-0">
-          <Image
+        <Link to="/dashboard" className="flex items-center gap-2.5 flex-shrink-0">
+          <img
             src="/logo.jpeg"
             alt="Innerframe Care Solutions"
             width={40}
@@ -99,11 +90,11 @@ export function Navbar() {
         {/* Desktop: pillar nav links */}
         <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
           {navItems.map(item => {
-            const isActive = pathname.startsWith(item.href)
+            const isActive = location.pathname.startsWith(item.href)
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                to={item.href}
                 className="relative px-3 py-1 text-xs font-medium transition-colors whitespace-nowrap"
                 style={{
                   color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.65)',
@@ -168,7 +159,7 @@ export function Navbar() {
           </div>
         </form>
 
-        {/* Right side: facility + avatar */}
+        {/* Right side: user info + avatar */}
         <div className="flex items-center gap-3 flex-shrink-0 ml-auto lg:ml-0">
           {user && (
             <span
@@ -182,7 +173,6 @@ export function Navbar() {
             </span>
           )}
 
-          {/* Avatar */}
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 cursor-pointer"
             style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
@@ -192,7 +182,6 @@ export function Navbar() {
             {user ? getInitials(user.fullName) : '?'}
           </div>
 
-          {/* Logout */}
           <button
             type="button"
             onClick={handleLogout}
@@ -210,7 +199,6 @@ export function Navbar() {
             <LogOut size={16} />
           </button>
 
-          {/* Mobile hamburger */}
           <button
             type="button"
             className="lg:hidden flex w-7 h-7 items-center justify-center rounded"
@@ -231,12 +219,12 @@ export function Navbar() {
           style={{ backgroundColor: '#1E3A2F', borderBottom: '2px solid #D4AF37' }}
         >
           {navItems.map(item => {
-            const isActive = pathname.startsWith(item.href)
+            const isActive = location.pathname.startsWith(item.href)
             const Icon = item.icon
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                to={item.href}
                 className="flex items-center gap-3 px-3 py-2.5 rounded text-sm"
                 style={{
                   color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.75)',
@@ -252,7 +240,6 @@ export function Navbar() {
             )
           })}
 
-          {/* Mobile search */}
           <form onSubmit={handleSearch} className="mt-2">
             <input
               type="search"
@@ -264,7 +251,6 @@ export function Navbar() {
             />
           </form>
 
-          {/* Mobile logout */}
           <button
             type="button"
             onClick={handleLogout}

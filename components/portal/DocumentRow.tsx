@@ -1,4 +1,3 @@
-'use client'
 import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2 } from 'lucide-react'
 import { GlobalBadge } from './GlobalBadge'
 import { createClient } from '@/lib/supabase/client'

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 
 /**
@@ -22,7 +22,7 @@ export function PillarCard({
 }: PillarCardProps) {
   return (
     <Link
-      href={href}
+      to={href}
       className="bg-white rounded-xl p-4 border flex flex-col items-center text-center gap-2 transition-colors group"
       style={{
         borderColor: '#ddd6c8',

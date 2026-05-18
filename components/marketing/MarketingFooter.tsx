@@ -1,6 +1,4 @@
-'use client'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 
 /**
  * Marketing footer — logo, tagline, nav links, legal note.
@@ -18,7 +16,7 @@ export function MarketingFooter() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <Image
+              <img
                 src="/logo.jpeg"
                 alt="Innerframe Care Solutions"
                 width={36}
@@ -54,7 +52,7 @@ export function MarketingFooter() {
               {[
                 { href: '#pillars', label: 'What We Do' },
                 { href: '#how-it-works', label: 'How It Works' },
-                { href: '#who-its-for', label: 'Who It\'s For' },
+                { href: '#who-its-for', label: "Who It's For" },
                 { href: '#contact', label: 'Contact Us' },
               ].map(link => (
                 <li key={link.href}>
@@ -85,14 +83,14 @@ export function MarketingFooter() {
               Clients
             </p>
             <Link
-              href="/login"
+              to="/login"
               className="inline-flex items-center gap-2 text-xs transition-colors"
               style={{ color: '#F5F0E8' }}
             >
               Client Portal Login →
             </Link>
             <p className="text-xs mt-3" style={{ color: '#5a5a5a' }}>
-              Already a client? Sign in to access your facility&apos;s documents,
+              Already a client? Sign in to access your facility's documents,
               residents, and compliance tools.
             </p>
           </div>

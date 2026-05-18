@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 
 /**
  * A single resident row shown in the dashboard panel and residents list.
@@ -32,7 +32,7 @@ export function ResidentRow({ id, name, roomNumber, status }: ResidentRowProps) 
 
   return (
     <Link
-      href={`/residents/${id}`}
+      to={`/residents/${id}`}
       className="flex items-center gap-3 py-2.5 px-3 rounded-lg border group transition-colors"
       style={{
         borderColor: '#ddd6c8',

@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -12,10 +11,6 @@ export type UserProfile = {
   email: string
 }
 
-/**
- * Client-side hook that returns the currently authenticated user's profile,
- * including their role and org ID (read from the `users` table via Supabase RLS).
- */
 export function useUser() {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -29,7 +24,6 @@ export function useUser() {
         return
       }
 
-      // TODO: replace with Supabase query once credentials are configured
       const { data } = await supabase
         .from('users')
         .select('org_id, role, full_name, email')
