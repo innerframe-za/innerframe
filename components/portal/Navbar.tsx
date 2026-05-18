@@ -11,7 +11,6 @@ import {
   X,
   LogOut,
 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/lib/auth/useUser'
 
 const navItems = [
@@ -47,10 +46,8 @@ export function Navbar() {
     }
   }
 
-  const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    navigate('/login')
+  const handleLogout = () => {
+    navigate('/dashboard')
   }
 
   return (
