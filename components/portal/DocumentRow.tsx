@@ -1,4 +1,4 @@
-import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2, Eye } from 'lucide-react'
+import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2 } from 'lucide-react'
 import { GlobalBadge } from './GlobalBadge'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 
@@ -52,12 +52,6 @@ export function DocumentRow({
 }: DocumentRowProps) {
   const { Icon, color } = getFileIcon(fileName)
   const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
-
-  /** Returns true for file types the browser can render natively */
-  const isViewable = (name: string) => {
-    const ext = name.split('.').pop()?.toLowerCase() ?? ''
-    return ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)
-  }
 
   /** Office docs need Google Docs Viewer; PDFs/images open directly */
   const isOfficeDoc = (name: string) => {
@@ -116,12 +110,24 @@ export function DocumentRow({
 
   return (
     <div
-      className="flex items-center gap-3 py-3 px-4 rounded-lg border group"
+      role="button"
+      tabIndex={0}
+      onClick={handleView}
+      onKeyDown={e => e.key === 'Enter' && handleView()}
+      className="flex items-center gap-3 py-3 px-4 rounded-lg border group cursor-pointer transition-colors"
       style={{
         borderColor: '#ddd6c8',
         borderWidth: '0.5px',
         backgroundColor: '#ffffff',
       }}
+      onMouseEnter={e =>
+        ((e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(30,58,47,0.03)')
+      }
+      onMouseLeave={e =>
+        ((e.currentTarget as HTMLDivElement).style.backgroundColor = '#ffffff')
+      }
+      aria-label={`Open ${fileName}`}
+      title={isOfficeDoc(fileName) ? 'Open in Google Docs Viewer' : 'Click to open'}
     >
       {/* File icon */}
       <div
@@ -170,27 +176,12 @@ export function DocumentRow({
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-1 flex-shrink-0">
-        {/* View button — shown for all file types */}
-        <button
-          type="button"
-          onClick={handleView}
-          className="w-7 h-7 rounded flex items-center justify-center transition-colors"
-          style={{ color: '#5a5a5a' }}
-          onMouseEnter={e =>
-            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-              'rgba(30,58,47,0.07)')
-          }
-          onMouseLeave={e =>
-            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-              'transparent')
-          }
-          aria-label={`Open ${fileName}`}
-          title={isOfficeDoc(fileName) ? 'Open in Google Docs Viewer' : 'Open in browser'}
-        >
-          <Eye size={14} />
-        </button>
+      {/* Actions — stop propagation so clicks don't also trigger row open */}
+      <div
+        className="flex items-center gap-1 flex-shrink-0"
+        onClick={e => e.stopPropagation()}
+        onKeyDown={e => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={handleDownload}
