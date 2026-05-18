@@ -9,13 +9,16 @@ export default async function PortalLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Skip auth check if Supabase is not configured (mirrors middleware guard)
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/login')
+    if (!user) {
+      redirect('/login')
+    }
   }
 
   return (
