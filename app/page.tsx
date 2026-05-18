@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
 import { Pillars } from '@/components/marketing/Pillars'
