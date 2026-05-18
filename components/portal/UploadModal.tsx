@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Upload, X, File } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -102,6 +102,10 @@ export function UploadModal({
 
   const handleUpload = async () => {
     if (!file) return
+    if (!isSupabaseConfigured) {
+      setError('Uploads are not available in demo mode.')
+      return
+    }
     setUploading(true)
     setError(null)
     setProgress(10)
