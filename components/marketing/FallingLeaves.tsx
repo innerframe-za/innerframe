@@ -56,7 +56,7 @@ export function FallingLeaves({ count = 24 }: { count?: number }) {
     <div
       aria-hidden="true"
       className="fixed inset-0 overflow-hidden pointer-events-none"
-      style={{ zIndex: 50 }}
+      style={{ zIndex: 0 }}
     >
       {leaves.map(leaf => (
         <div
