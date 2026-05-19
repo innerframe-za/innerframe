@@ -6,6 +6,15 @@ import { z } from 'zod'
 import { Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+async function getRoleDestination(supabase: ReturnType<typeof createClient>, userId: string): Promise<string> {
+  const { data } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', userId)
+    .single()
+  return data?.role === 'super_admin' ? '/superadmin' : '/dashboard'
+}
+
 const schema = z.object({
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -25,12 +34,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
 
-  // Redirect to dashboard if already logged in
+  // Redirect to the correct portal if already logged in
   useEffect(() => {
     let supabase: ReturnType<typeof createClient>
     try { supabase = createClient() } catch { return }
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) navigate('/dashboard', { replace: true })
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session) {
+        const dest = await getRoleDestination(supabase, session.user.id).catch(() => '/dashboard')
+        navigate(dest, { replace: true })
+      }
     }).catch(() => {})
   }, [navigate])
 
@@ -63,7 +75,9 @@ export default function LoginPage() {
         )
         return
       }
-      navigate('/dashboard')
+      const { data: { session } } = await supabase.auth.getSession()
+      const dest = session ? await getRoleDestination(supabase, session.user.id).catch(() => '/dashboard') : '/dashboard'
+      navigate(dest)
     } catch {
       setAuthError('Sign in failed. If you have an ad blocker, try disabling it for this site.')
     }

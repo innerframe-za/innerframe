@@ -4,6 +4,7 @@ import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
 import { DocumentRow } from '@/components/portal/DocumentRow'
 import { ResidentRow } from '@/components/portal/ResidentRow'
+import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 
 const mockStats = { totalResidents: 24, totalDocuments: 87, pendingReviews: 3, compliancePercent: 78 }
 
@@ -32,6 +33,12 @@ const pillarCards = [
 ]
 
 export default function DashboardPage() {
+  const { permissions } = usePermissions()
+
+  const visiblePillars = pillarCards.filter(
+    card => permissions[card.value as PillarSlug]?.canView !== false
+  )
+
   return (
     <div>
       <PageHeader title="Admin Office" subtitle="Manage your facility's operations and compliance" />
@@ -46,7 +53,7 @@ export default function DashboardPage() {
       <div className="mb-6">
         <h2 className="text-sm font-medium mb-3" style={{ color: '#5a5a5a' }}>Pillar Overview</h2>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-          {pillarCards.map(card => (
+          {visiblePillars.map(card => (
             <PillarCard
               key={card.value}
               name={card.name}

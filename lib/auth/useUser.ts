@@ -42,7 +42,7 @@ export function useUser() {
         .from('users')
         .select('org_id, role, full_name, email')
         .eq('id', authUser.id)
-        .single() as { data: { org_id: string; role: string; full_name: string; email: string } | null; error: unknown }
+        .single()
 
       setUser(profile ? {
         id: authUser.id,

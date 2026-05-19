@@ -1,6 +1,8 @@
 import { useParams, Navigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { SectionGroup } from '@/components/portal/SectionGroup'
+import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
+import { Lock } from 'lucide-react'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
   admin: { name: 'Admin Office', description: 'The Structure Behind the Facility — policies, staff files, resident records, compliance systems', dbKey: 'admin' },
@@ -34,8 +36,33 @@ function getMockSections(dbKey: string) {
 export default function PillarPage() {
   const { slug } = useParams<{ slug: string }>()
   const pillar = slug ? PILLAR_MAP[slug] : null
+  const { permissions, loading } = usePermissions()
 
   if (!pillar) return <Navigate to="/dashboard" replace />
+
+  if (loading) {
+    return (
+      <div className="min-h-[200px] flex items-center justify-center">
+        <span className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+      </div>
+    )
+  }
+
+  const perm = permissions[pillar.dbKey as PillarSlug]
+  if (!perm?.canView) {
+    return (
+      <div>
+        <PageHeader title={pillar.name} subtitle={pillar.description} />
+        <div className="bg-white rounded-xl border p-10 flex flex-col items-center gap-3 text-center" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+          <Lock size={32} style={{ color: '#D4AF37' }} />
+          <p className="text-sm font-medium" style={{ color: '#1E3A2F' }}>Access Restricted</p>
+          <p className="text-xs max-w-xs" style={{ color: '#5a5a5a' }}>
+            You don't have permission to view this section. Contact your facility admin to request access.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   const sections = getMockSections(pillar.dbKey)
 
@@ -44,7 +71,7 @@ export default function PillarPage() {
       <PageHeader title={pillar.name} subtitle={pillar.description} />
       <div className="space-y-2">
         {sections.map(section => (
-          <SectionGroup key={section.id} title={section.title} documents={section.documents} canUpload={true} canDelete={true} />
+          <SectionGroup key={section.id} title={section.title} documents={section.documents} canUpload={perm.canEdit} canDelete={perm.canEdit} />
         ))}
       </div>
     </div>

@@ -174,7 +174,8 @@ export function Navbar() {
             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 cursor-pointer"
             style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             title={user?.fullName ?? 'User'}
-            aria-label="User menu"
+            aria-label="Go to settings"
+            onClick={() => navigate('/settings')}
           >
             {user ? getInitials(user.fullName) : '?'}
           </div>
