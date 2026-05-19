@@ -22,9 +22,11 @@ export function ProtectedRoute() {
       return
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setAuthState(session ? 'authenticated' : 'unauthenticated')
-    })
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        setAuthState(session ? 'authenticated' : 'unauthenticated')
+      })
+      .catch(() => setAuthState('unauthenticated'))
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthState(session ? 'authenticated' : 'unauthenticated')

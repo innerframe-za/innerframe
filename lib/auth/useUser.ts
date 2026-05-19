@@ -54,10 +54,10 @@ export function useUser() {
       setLoading(false)
     }
 
-    loadUser()
+    loadUser().catch(() => { setUser(null); setLoading(false) })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      loadUser()
+      loadUser().catch(() => { setUser(null); setLoading(false) })
     })
 
     return () => subscription.unsubscribe()
