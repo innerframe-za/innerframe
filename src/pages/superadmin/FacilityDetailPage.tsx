@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Users, FileText, Building2, Settings, UserCheck, UserX, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Users, FileText, Building2, Settings, UserCheck, UserX, ShieldCheck, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 type Tab = 'residents' | 'staff' | 'settings'
@@ -40,6 +40,7 @@ export default function FacilityDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [orgForm, setOrgForm] = useState({ name: '', address: '', contactEmail: '', contactPhone: '' })
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [deleteStatus, setDeleteStatus] = useState<'idle' | 'confirming' | 'deleting'>('idle')
 
   useEffect(() => {
     if (!orgId) return
@@ -92,6 +93,18 @@ export default function FacilityDetailPage() {
       setTimeout(() => setSaveStatus('idle'), 2000)
     } catch {
       setSaveStatus('idle')
+    }
+  }
+
+  const handleDeleteFacility = async () => {
+    setDeleteStatus('deleting')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.from('organisations').delete().eq('id', orgId!)
+      if (error) throw error
+      navigate('/superadmin')
+    } catch {
+      setDeleteStatus('confirming') // stay on confirm so user can retry
     }
   }
 
@@ -316,6 +329,62 @@ export default function FacilityDetailPage() {
               {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved!' : 'Save Changes'}
             </button>
           </form>
+
+          {/* Danger zone */}
+          <div className="mt-8 pt-6 border-t" style={{ borderColor: '#ddd6c8' }}>
+            <h3 className="text-sm font-medium mb-1" style={{ color: '#dc2626' }}>Danger Zone</h3>
+            <p className="text-xs mb-4" style={{ color: '#5a5a5a' }}>
+              Permanently deletes this facility and all its residents, staff accounts, and documents. This cannot be undone.
+            </p>
+
+            {deleteStatus === 'idle' && (
+              <button
+                type="button"
+                onClick={() => setDeleteStatus('confirming')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded border text-sm font-medium transition-colors"
+                style={{ borderColor: '#fecaca', color: '#dc2626' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLButtonElement; el.style.backgroundColor = '#fef2f2' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLButtonElement; el.style.backgroundColor = 'transparent' }}
+              >
+                <Trash2 size={14} />
+                Delete Facility
+              </button>
+            )}
+
+            {(deleteStatus === 'confirming' || deleteStatus === 'deleting') && (
+              <div className="p-4 rounded border" style={{ borderColor: '#fecaca', backgroundColor: '#fef2f2' }}>
+                <p className="text-sm font-medium mb-1" style={{ color: '#dc2626' }}>
+                  Are you sure? This will permanently delete <strong>{org?.name}</strong> and all its data.
+                </p>
+                <p className="text-xs mb-4" style={{ color: '#5a5a5a' }}>
+                  All residents, staff accounts, documents, and settings will be removed from Innerframe.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={handleDeleteFacility}
+                    disabled={deleteStatus === 'deleting'}
+                    className="flex items-center gap-2 px-4 py-2 rounded text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: '#dc2626', color: '#ffffff' }}
+                  >
+                    {deleteStatus === 'deleting'
+                      ? <><span className="w-3.5 h-3.5 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#ffffff' }} />Deleting...</>
+                      : <><Trash2 size={13} />Yes, delete permanently</>
+                    }
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteStatus('idle')}
+                    disabled={deleteStatus === 'deleting'}
+                    className="px-4 py-2 rounded border text-sm font-medium transition-colors disabled:opacity-60"
+                    style={{ borderColor: '#ddd6c8', color: '#5a5a5a' }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
