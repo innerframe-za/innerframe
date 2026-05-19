@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Building2, ArrowRight, Users, FileText } from 'lucide-react'
+import { Building2, ArrowRight, Users, FileText, Plus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { NewFacilityModal, type NewFacilityResult } from '@/components/superadmin/NewFacilityModal'
 
 interface FacilityRow {
   id: string
@@ -18,6 +19,12 @@ export default function FacilitiesPage() {
   const [facilities, setFacilities] = useState<FacilityRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  function handleNewFacility(facility: NewFacilityResult) {
+    setFacilities(prev => [facility, ...prev])
+    setModalOpen(false)
+  }
 
   useEffect(() => {
     let supabase: ReturnType<typeof createClient>
@@ -79,14 +86,28 @@ export default function FacilitiesPage() {
   }, [])
 
   return (
+    <>
     <div>
       {/* Page header */}
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold" style={{ color: '#1E3A2F' }}>All Facilities</h1>
-        <div style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '6px' }} aria-hidden="true" />
-        <p className="text-sm mt-2" style={{ color: '#5a5a5a' }}>
-          Click a facility to view its residents, staff, and settings.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-semibold" style={{ color: '#1E3A2F' }}>All Facilities</h1>
+          <div style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '6px' }} aria-hidden="true" />
+          <p className="text-sm mt-2" style={{ color: '#5a5a5a' }}>
+            Click a facility to view its residents, staff, and settings.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded text-sm font-medium flex-shrink-0 transition-colors"
+          style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+          onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
+          onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
+        >
+          <Plus size={15} />
+          New Facility
+        </button>
       </div>
 
       {loading && (
@@ -166,5 +187,12 @@ export default function FacilitiesPage() {
         </div>
       )}
     </div>
+    {modalOpen && (
+      <NewFacilityModal
+        onClose={() => setModalOpen(false)}
+        onSuccess={handleNewFacility}
+      />
+    )}
+    </>
   )
 }
