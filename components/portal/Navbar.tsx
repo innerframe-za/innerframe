@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { createClient } from '@/lib/supabase/client'
 import {
   ClipboardList,
   DollarSign,
@@ -46,8 +47,13 @@ export function Navbar() {
     }
   }
 
-  const handleLogout = () => {
-    navigate('/dashboard')
+  const handleLogout = async () => {
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+    } finally {
+      navigate('/login')
+    }
   }
 
   return (
