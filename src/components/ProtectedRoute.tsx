@@ -13,7 +13,14 @@ export function ProtectedRoute() {
   const [authState, setAuthState] = useState<AuthState>('loading')
 
   useEffect(() => {
-    const supabase = createClient()
+    let supabase: ReturnType<typeof createClient>
+    try {
+      supabase = createClient()
+    } catch {
+      // Supabase not configured — treat as unauthenticated
+      setAuthState('unauthenticated')
+      return
+    }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setAuthState(session ? 'authenticated' : 'unauthenticated')
