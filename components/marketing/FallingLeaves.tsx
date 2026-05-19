@@ -57,7 +57,7 @@ export function FallingLeaves({ count = 24 }: { count?: number }) {
     <div
       aria-hidden="true"
       className="fixed inset-0 overflow-hidden pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 50 }}
     >
       {leaves.map(leaf => (
         <div
@@ -66,8 +66,7 @@ export function FallingLeaves({ count = 24 }: { count?: number }) {
             position: 'absolute',
             left: `${leaf.x}%`,
             top: '-60px',
-            opacity: 0.17,
-            // fall animation controls vertical movement + fade
+            // opacity is controlled entirely by the leafFall keyframe (peaks at 0.18)
             animation: `leafFall ${leaf.duration}s ${leaf.delay}s infinite linear`,
           }}
         >

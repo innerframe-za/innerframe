@@ -122,8 +122,8 @@
 /* Falling leaves animation */
 @keyframes leafFall {
   0%   { top: -60px; opacity: 0; }
-  6%   { opacity: 1; }
-  92%  { opacity: 1; }
+  8%   { opacity: 0.18; }
+  90%  { opacity: 0.18; }
   100% { top: calc(100vh + 60px); opacity: 0; }
 }
 
