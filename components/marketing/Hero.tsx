@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ backgroundColor: '#F5F0E8', minHeight: '88vh' }}
+      style={{ backgroundColor: '#6c846c', minHeight: '88vh' }}
     >
       {/* Gold top bar */}
       <div

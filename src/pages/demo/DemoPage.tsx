@@ -14,7 +14,7 @@ export default function DemoPage() {
         {/* Hero */}
         <section
           className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
-          style={{ backgroundColor: 'rgba(245, 240, 232, 0.92)' }}
+          style={{ backgroundColor: '#6c846c' }}
         >
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8 border"
@@ -57,7 +57,7 @@ export default function DemoPage() {
         {/* Feature strip */}
         <section
           className="py-20 px-6"
-          style={{ backgroundColor: 'rgba(237, 232, 220, 0.95)' }}
+          style={{ backgroundColor: '#6c846c' }}
         >
           <div className="max-w-4xl mx-auto text-center">
             <h2

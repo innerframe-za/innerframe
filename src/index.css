@@ -113,6 +113,22 @@
   }
 }
 
+/* Falling leaves animation */
+@keyframes leafFall {
+  0%   { top: -60px; opacity: 0; }
+  8%   { opacity: 0.18; }
+  90%  { opacity: 0.18; }
+  100% { top: calc(100vh + 60px); opacity: 0; }
+}
+
+@keyframes leafMotion {
+  0%   { transform: translateX(0) rotate(0deg); }
+  25%  { transform: translateX(var(--leaf-sway)) rotate(90deg); }
+  50%  { transform: translateX(0px) rotate(180deg); }
+  75%  { transform: translateX(calc(-0.6 * var(--leaf-sway))) rotate(270deg); }
+  100% { transform: translateX(var(--leaf-sway)) rotate(360deg); }
+}
+
 /* Gold underline bar utility */
 .gold-underline {
   position: relative;
