@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Upload, X, File, Globe } from 'lucide-react'
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import type { UserRole } from '@/lib/auth/useUser'
 
 // Fixed UUID for the Innerframe internal organisation — global docs are stored here
@@ -110,10 +110,6 @@ export function UploadModal({
 
   const handleUpload = async () => {
     if (!file) return
-    if (!isSupabaseConfigured) {
-      setError('Uploads are not available in demo mode.')
-      return
-    }
     setUploading(true)
     setError(null)
     setProgress(10)

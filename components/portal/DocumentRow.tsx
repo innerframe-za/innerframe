@@ -1,6 +1,6 @@
 import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2 } from 'lucide-react'
 import { GlobalBadge } from './GlobalBadge'
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 
 /**
  * A single document row used in pillar pages and section groups.
@@ -69,10 +69,6 @@ export function DocumentRow({
   }
 
   const handleView = async () => {
-    if (!isSupabaseConfigured) {
-      alert('Document preview is not available in demo mode.')
-      return
-    }
     const signedUrl = await getSignedUrl()
     if (!signedUrl) {
       alert('Could not open document. Please try again.')
@@ -91,10 +87,6 @@ export function DocumentRow({
   }
 
   const handleDownload = async () => {
-    if (!isSupabaseConfigured) {
-      alert('Document downloads are not available in demo mode.')
-      return
-    }
     const signedUrl = await getSignedUrl()
     if (!signedUrl) {
       alert('Could not generate download link. Please try again.')
