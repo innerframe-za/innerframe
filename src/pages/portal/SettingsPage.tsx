@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
-import { Plus, Trash2, UserMinus, UserCheck, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Trash2, UserMinus, ChevronDown, ChevronUp } from 'lucide-react'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { PillarSlug } from '@/lib/auth/usePermissions'
+import { InviteStaffModal } from '@/components/portal/InviteStaffModal'
+
+type NewMember = { id: string; fullName: string; email: string; role: string }
 
 const ALL_PILLARS: { slug: PillarSlug; label: string }[] = [
   { slug: 'admin', label: 'Admin Office' },
@@ -207,6 +210,7 @@ export default function SettingsPage() {
 
   // Staff
   const [staff, setStaff] = useState<StaffMember[]>([])
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   // Document categories
   const [categories, setCategories] = useState<string[]>([])
@@ -346,6 +350,7 @@ export default function SettingsPage() {
   }
 
   return (
+    <>
     <div className="max-w-3xl">
       <PageHeader title="Settings" subtitle="Facility profile, staff management, and document categories" />
 
@@ -402,9 +407,11 @@ export default function SettingsPage() {
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium"
+            onClick={() => setInviteOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors"
             style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
-            title="Contact Innerframe to invite new staff via the admin panel"
+            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
           >
             <Plus size={12} />Invite Staff
           </button>
@@ -499,5 +506,17 @@ export default function SettingsPage() {
         </section>
       )}
     </div>
+
+    {inviteOpen && user && (
+      <InviteStaffModal
+        orgId={user.orgId}
+        onClose={() => setInviteOpen(false)}
+        onSuccess={(member: NewMember) => {
+          setStaff(prev => [...prev, member])
+          setInviteOpen(false)
+        }}
+      />
+    )}
+    </>
   )
 }

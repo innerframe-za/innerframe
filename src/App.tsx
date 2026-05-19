@@ -13,6 +13,7 @@ import SettingsPage from './pages/portal/SettingsPage'
 import OrgViewerPage from './pages/portal/OrgViewerPage'
 import FacilitiesPage from './pages/superadmin/FacilitiesPage'
 import FacilityDetailPage from './pages/superadmin/FacilityDetailPage'
+import ChangePasswordPage from './pages/auth/ChangePasswordPage'
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
 
       {/* Facility portal — home_admin and staff */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/pillar/:slug" element={<PillarPage />} />
         <Route path="/residents" element={<ResidentsPage />} />
