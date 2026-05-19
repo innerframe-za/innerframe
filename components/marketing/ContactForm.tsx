@@ -23,20 +23,17 @@ type ContactFormData = z.infer<typeof schema>
 
 const inputBase =
   'w-full px-3 py-2.5 rounded border text-sm outline-none transition-colors'
-const inputStyle = {
-  borderColor: 'var(--color-if-border)',
-  color: 'var(--color-if-text)',
-}
+const inputStyle = { borderColor: '#ddd6c8', color: '#1a1a1a' }
 
 function handleFocus(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-  e.target.style.borderColor = 'var(--color-if-primary)'
+  e.target.style.borderColor = '#1E3A2F'
 }
 function handleBlurStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-  e.target.style.borderColor = 'var(--color-if-border)'
+  e.target.style.borderColor = '#ddd6c8'
 }
 
 /**
- * Contact form that POSTs to the n8n webhook URL via VITE_N8N_WEBHOOK_URL.
+ * Contact form that POSTs to the n8n webhook URL via NEXT_PUBLIC_N8N_WEBHOOK_URL.
  * Validates with zod before submitting. Never exposes the webhook URL in source.
  */
 export function ContactForm() {
@@ -95,19 +92,19 @@ export function ContactForm() {
       <section
         id="contact"
         className="py-20 px-6"
-        style={{ backgroundColor: 'var(--color-if-primary)' }}
+        style={{ backgroundColor: '#1E3A2F' }}
       >
         <div className="max-w-2xl mx-auto text-center">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: 'rgba(211, 178, 75, 0.15)' }}
+            style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
           >
-            <CheckCircle size={32} style={{ color: 'var(--color-if-gold-text)' }} />
+            <CheckCircle size={32} style={{ color: '#D4AF37' }} />
           </div>
-          <h2 className="text-2xl font-medium mb-3" style={{ color: 'var(--color-if-text-on-dark)' }}>
+          <h2 className="text-2xl font-medium mb-3" style={{ color: '#F5F0E8' }}>
             Message received
           </h2>
-          <p className="text-sm" style={{ color: 'rgba(251, 246, 242, 0.7)' }}>
+          <p className="text-sm" style={{ color: 'rgba(245,240,232,0.7)' }}>
             Thank you for reaching out. A member of the Innerframe team will be
             in touch within one business day.
           </p>
@@ -120,7 +117,7 @@ export function ContactForm() {
     <section
       id="contact"
       className="py-20 px-6"
-      style={{ backgroundColor: 'var(--color-if-primary)' }}
+      style={{ backgroundColor: '#1E3A2F' }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -129,14 +126,14 @@ export function ContactForm() {
             <div className="inline-block mb-6">
               <h2
                 className="text-3xl font-medium gold-underline"
-                style={{ color: 'var(--color-if-text-on-dark)' }}
+                style={{ color: '#F5F0E8' }}
               >
                 Get in Touch
               </h2>
             </div>
             <p
               className="text-base leading-relaxed mb-8"
-              style={{ color: 'rgba(251, 246, 242, 0.75)' }}
+              style={{ color: 'rgba(245,240,232,0.75)' }}
             >
               Ready to bring structure to your facility? Tell us about your old
               age home and we&apos;ll be in touch to arrange a no-obligation
@@ -151,14 +148,14 @@ export function ContactForm() {
                 <div key={item.label} className="flex items-start gap-3">
                   <div
                     className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2"
-                    style={{ backgroundColor: 'var(--color-if-gold-text)' }}
+                    style={{ backgroundColor: '#D4AF37' }}
                     aria-hidden="true"
                   />
                   <div>
-                    <div className="text-sm font-medium" style={{ color: 'var(--color-if-text-on-dark)' }}>
+                    <div className="text-sm font-medium" style={{ color: '#F5F0E8' }}>
                       {item.label}
                     </div>
-                    <div className="text-xs" style={{ color: 'rgba(251, 246, 242, 0.55)' }}>
+                    <div className="text-xs" style={{ color: 'rgba(245,240,232,0.55)' }}>
                       {item.sub}
                     </div>
                   </div>
@@ -171,7 +168,7 @@ export function ContactForm() {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="rounded-xl p-8 border"
-            style={{ backgroundColor: '#ffffff', borderColor: 'var(--color-if-border)' }}
+            style={{ backgroundColor: '#ffffff', borderColor: '#ddd6c8' }}
             noValidate
           >
             <div className="space-y-5">
@@ -180,9 +177,9 @@ export function ContactForm() {
                 <label
                   htmlFor="name"
                   className="block text-xs font-medium mb-1.5"
-                  style={{ color: 'var(--color-if-text)' }}
+                  style={{ color: '#1a1a1a' }}
                 >
-                  Your Name <span style={{ color: 'var(--color-if-gold-text)' }}>*</span>
+                  Your Name <span style={{ color: '#D4AF37' }}>*</span>
                 </label>
                 <input
                   id="name"
@@ -197,7 +194,7 @@ export function ContactForm() {
                   onBlur={e => { handleBlurStyle(e); nameReg.onBlur(e) }}
                 />
                 {errors.name && (
-                  <p id="name-error" className="mt-1 text-xs" style={{ color: '#8B3A3A' }} role="alert">
+                  <p id="name-error" className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">
                     {errors.name.message}
                   </p>
                 )}
@@ -208,9 +205,9 @@ export function ContactForm() {
                 <label
                   htmlFor="facility"
                   className="block text-xs font-medium mb-1.5"
-                  style={{ color: 'var(--color-if-text)' }}
+                  style={{ color: '#1a1a1a' }}
                 >
-                  Facility Name <span style={{ color: 'var(--color-if-gold-text)' }}>*</span>
+                  Facility Name <span style={{ color: '#D4AF37' }}>*</span>
                 </label>
                 <input
                   id="facility"
@@ -225,7 +222,7 @@ export function ContactForm() {
                   onBlur={e => { handleBlurStyle(e); facilityReg.onBlur(e) }}
                 />
                 {errors.facility && (
-                  <p id="facility-error" className="mt-1 text-xs" style={{ color: '#8B3A3A' }} role="alert">
+                  <p id="facility-error" className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">
                     {errors.facility.message}
                   </p>
                 )}
@@ -237,9 +234,9 @@ export function ContactForm() {
                   <label
                     htmlFor="email"
                     className="block text-xs font-medium mb-1.5"
-                    style={{ color: 'var(--color-if-text)' }}
+                    style={{ color: '#1a1a1a' }}
                   >
-                    Email <span style={{ color: 'var(--color-if-gold-text)' }}>*</span>
+                    Email <span style={{ color: '#D4AF37' }}>*</span>
                   </label>
                   <input
                     id="email"
@@ -254,7 +251,7 @@ export function ContactForm() {
                     onBlur={e => { handleBlurStyle(e); emailReg.onBlur(e) }}
                   />
                   {errors.email && (
-                    <p id="email-error" className="mt-1 text-xs" style={{ color: '#8B3A3A' }} role="alert">
+                    <p id="email-error" className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">
                       {errors.email.message}
                     </p>
                   )}
@@ -263,7 +260,7 @@ export function ContactForm() {
                   <label
                     htmlFor="phone"
                     className="block text-xs font-medium mb-1.5"
-                    style={{ color: 'var(--color-if-text)' }}
+                    style={{ color: '#1a1a1a' }}
                   >
                     Phone
                   </label>
@@ -279,7 +276,7 @@ export function ContactForm() {
                     onBlur={e => { handleBlurStyle(e); phoneReg.onBlur(e) }}
                   />
                   {errors.phone && (
-                    <p className="mt-1 text-xs" style={{ color: '#8B3A3A' }} role="alert">
+                    <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">
                       {errors.phone.message}
                     </p>
                   )}
@@ -291,10 +288,10 @@ export function ContactForm() {
                 <label
                   htmlFor="message"
                   className="block text-xs font-medium mb-1.5"
-                  style={{ color: 'var(--color-if-text)' }}
+                  style={{ color: '#1a1a1a' }}
                 >
                   Tell us about your facility{' '}
-                  <span style={{ color: 'var(--color-if-gold-text)' }}>*</span>
+                  <span style={{ color: '#D4AF37' }}>*</span>
                 </label>
                 <textarea
                   id="message"
@@ -309,7 +306,7 @@ export function ContactForm() {
                   onBlur={e => { handleBlurStyle(e); messageReg.onBlur(e) }}
                 />
                 {errors.message && (
-                  <p id="message-error" className="mt-1 text-xs" style={{ color: '#8B3A3A' }} role="alert">
+                  <p id="message-error" className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">
                     {errors.message.message}
                   </p>
                 )}
@@ -319,7 +316,7 @@ export function ContactForm() {
               {error && (
                 <p
                   className="text-xs p-3 rounded border"
-                  style={{ color: '#8B3A3A', backgroundColor: '#fef2f2', borderColor: '#fecaca' }}
+                  style={{ color: '#dc2626', backgroundColor: '#fef2f2', borderColor: '#fecaca' }}
                   role="alert"
                 >
                   {error}
@@ -331,14 +328,14 @@ export function ContactForm() {
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ backgroundColor: 'var(--color-if-primary)', color: 'var(--color-if-text-on-dark)' }}
+                style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
                 onMouseEnter={e => {
                   if (!isSubmitting)
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-if-secondary)'
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D'
                 }}
                 onMouseLeave={e => {
                   if (!isSubmitting)
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-if-primary)'
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F'
                 }}
               >
                 {isSubmitting ? (

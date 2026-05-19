@@ -18,7 +18,7 @@ interface DocumentRowProps {
   onDelete?: () => void
 }
 
-/** Map file extension to icon and color (semantic file-type colors — not brand colors) */
+/** Map file extension to icon and color */
 function getFileIcon(fileName: string) {
   const ext = fileName.split('.').pop()?.toLowerCase() ?? ''
   if (['pdf'].includes(ext))
@@ -29,16 +29,15 @@ function getFileIcon(fileName: string) {
     return { Icon: FileSpreadsheet, color: '#16a34a' }
   if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext))
     return { Icon: ImageIcon, color: '#9333ea' }
-  return { Icon: File, color: 'var(--color-if-text-muted)' }
+  return { Icon: File, color: '#5a5a5a' }
 }
 
-/* Pillar accent colors mapped to new brand palette */
 const pillarColors: Record<string, string> = {
-  admin:            'var(--color-if-primary)',
-  finance:          'var(--color-if-secondary)',
-  kitchen:          'var(--color-if-tertiary)',
-  medical:          'var(--color-if-accent-light)',
-  board_governance: 'var(--color-if-gold-text)',
+  admin: '#1E3A2F',
+  finance: '#2D5A3D',
+  kitchen: '#3B6B4A',
+  medical: '#8AAF8E',
+  board_governance: '#D4AF37',
 }
 
 export function DocumentRow({
@@ -52,7 +51,7 @@ export function DocumentRow({
   onDelete,
 }: DocumentRowProps) {
   const { Icon, color } = getFileIcon(fileName)
-  const pillarColor = pillar ? (pillarColors[pillar] ?? 'var(--color-if-text-muted)') : 'var(--color-if-text-muted)'
+  const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
 
   /** Office docs need Google Docs Viewer; PDFs/images open directly */
   const isOfficeDoc = (name: string) => {
@@ -117,12 +116,12 @@ export function DocumentRow({
       onKeyDown={e => e.key === 'Enter' && handleView()}
       className="flex items-center gap-3 py-3 px-4 rounded-lg border group cursor-pointer transition-colors"
       style={{
-        borderColor: 'var(--color-if-border)',
+        borderColor: '#ddd6c8',
         borderWidth: '0.5px',
         backgroundColor: '#ffffff',
       }}
       onMouseEnter={e =>
-        ((e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(47, 67, 55, 0.03)')
+        ((e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(30,58,47,0.03)')
       }
       onMouseLeave={e =>
         ((e.currentTarget as HTMLDivElement).style.backgroundColor = '#ffffff')
@@ -142,7 +141,7 @@ export function DocumentRow({
       <div className="flex-1 min-w-0">
         <p
           className="text-sm font-medium truncate"
-          style={{ color: 'var(--color-if-text)' }}
+          style={{ color: '#1a1a1a' }}
           title={fileName}
         >
           {fileName}
@@ -152,8 +151,8 @@ export function DocumentRow({
             <span
               className="text-xs px-1.5 py-0.5 rounded"
               style={{
-                backgroundColor: 'rgba(47, 67, 55, 0.07)',
-                color: 'var(--color-if-primary)',
+                backgroundColor: 'rgba(30,58,47,0.07)',
+                color: '#1E3A2F',
               }}
             >
               {category}
@@ -163,7 +162,7 @@ export function DocumentRow({
             <span
               className="text-xs px-1.5 py-0.5 rounded"
               style={{
-                backgroundColor: 'rgba(47, 67, 55, 0.07)',
+                backgroundColor: `${pillarColor}12`,
                 color: pillarColor,
               }}
             >
@@ -171,7 +170,7 @@ export function DocumentRow({
             </span>
           )}
           {isGlobal && <GlobalBadge />}
-          <span className="text-xs" style={{ color: 'var(--color-if-text-muted)' }}>
+          <span className="text-xs" style={{ color: '#5a5a5a' }}>
             {date}
           </span>
         </div>
@@ -187,10 +186,10 @@ export function DocumentRow({
           type="button"
           onClick={handleDownload}
           className="w-7 h-7 rounded flex items-center justify-center transition-colors"
-          style={{ color: 'var(--color-if-text-muted)' }}
+          style={{ color: '#5a5a5a' }}
           onMouseEnter={e =>
             ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-              'rgba(47, 67, 55, 0.07)')
+              'rgba(30,58,47,0.07)')
           }
           onMouseLeave={e =>
             ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
@@ -206,13 +205,12 @@ export function DocumentRow({
             type="button"
             onClick={onDelete}
             className="w-7 h-7 rounded flex items-center justify-center transition-colors"
-            style={{ color: 'var(--color-if-text-muted)' }}
+            style={{ color: '#5a5a5a' }}
             onMouseEnter={e =>
-              /* Error state uses semantic error red per design principles */
-              ((e.currentTarget as HTMLButtonElement).style.color = '#8B3A3A')
+              ((e.currentTarget as HTMLButtonElement).style.color = '#dc2626')
             }
             onMouseLeave={e =>
-              ((e.currentTarget as HTMLButtonElement).style.color = 'var(--color-if-text-muted)')
+              ((e.currentTarget as HTMLButtonElement).style.color = '#5a5a5a')
             }
             aria-label={`Delete ${fileName}`}
           >

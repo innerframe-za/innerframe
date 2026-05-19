@@ -181,7 +181,7 @@ export function UploadModal({
     <Dialog open={open} onOpenChange={open => !open && handleClose()}>
       <DialogContent className="max-w-md" style={{ backgroundColor: '#ffffff' }}>
         <DialogHeader>
-          <DialogTitle style={{ color: 'var(--color-if-primary)' }}>Upload Document</DialogTitle>
+          <DialogTitle style={{ color: '#1E3A2F' }}>Upload Document</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 mt-2">
@@ -189,8 +189,8 @@ export function UploadModal({
           <div
             className="rounded-lg border-2 border-dashed p-8 text-center cursor-pointer transition-colors"
             style={{
-              borderColor: dragging ? 'var(--color-if-primary)' : 'var(--color-if-border)',
-              backgroundColor: dragging ? 'rgba(47, 67, 55, 0.03)' : 'var(--color-if-bg)',
+              borderColor: dragging ? '#1E3A2F' : '#ddd6c8',
+              backgroundColor: dragging ? 'rgba(30,58,47,0.03)' : '#F5F0E8',
             }}
             onDragOver={e => { e.preventDefault(); setDragging(true) }}
             onDragLeave={() => setDragging(false)}
@@ -210,8 +210,8 @@ export function UploadModal({
             />
             {file ? (
               <div className="flex items-center justify-center gap-3">
-                <File size={20} style={{ color: 'var(--color-if-primary)' }} />
-                <span className="text-sm font-medium" style={{ color: 'var(--color-if-primary)' }}>
+                <File size={20} style={{ color: '#1E3A2F' }} />
+                <span className="text-sm font-medium" style={{ color: '#1E3A2F' }}>
                   {file.name}
                 </span>
                 <button
@@ -219,16 +219,16 @@ export function UploadModal({
                   onClick={e => { e.stopPropagation(); setFile(null) }}
                   aria-label="Remove file"
                 >
-                  <X size={16} style={{ color: 'var(--color-if-text-muted)' }} />
+                  <X size={16} style={{ color: '#5a5a5a' }} />
                 </button>
               </div>
             ) : (
               <>
-                <Upload size={24} className="mx-auto mb-3" style={{ color: 'var(--color-if-text-muted)' }} />
-                <p className="text-sm font-medium" style={{ color: 'var(--color-if-primary)' }}>
+                <Upload size={24} className="mx-auto mb-3" style={{ color: '#5a5a5a' }} />
+                <p className="text-sm font-medium" style={{ color: '#1E3A2F' }}>
                   Click to browse or drag a file here
                 </p>
-                <p className="text-xs mt-1" style={{ color: 'var(--color-if-text-muted)' }}>
+                <p className="text-xs mt-1" style={{ color: '#5a5a5a' }}>
                   PDF, DOC, DOCX, XLS, XLSX, JPG, PNG — max {MAX_FILE_SIZE_MB}MB
                 </p>
               </>
@@ -239,7 +239,7 @@ export function UploadModal({
           <div>
             <label
               className="block text-xs font-medium mb-1.5"
-              style={{ color: 'var(--color-if-text)' }}
+              style={{ color: '#1a1a1a' }}
             >
               Pillar
             </label>
@@ -247,7 +247,7 @@ export function UploadModal({
               value={pillar}
               onChange={e => setPillar(e.target.value)}
               className="w-full px-3 py-2.5 rounded border text-sm outline-none"
-              style={{ borderColor: 'var(--color-if-border)', color: 'var(--color-if-text)' }}
+              style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
             >
               {PILLARS.map(p => (
                 <option key={p.value} value={p.value}>{p.label}</option>
@@ -260,7 +260,7 @@ export function UploadModal({
             <div>
               <label
                 className="block text-xs font-medium mb-1.5"
-                style={{ color: 'var(--color-if-text)' }}
+                style={{ color: '#1a1a1a' }}
               >
                 Section (optional)
               </label>
@@ -268,7 +268,7 @@ export function UploadModal({
                 value={sectionId}
                 onChange={e => setSectionId(e.target.value)}
                 className="w-full px-3 py-2.5 rounded border text-sm outline-none"
-                style={{ borderColor: 'var(--color-if-border)', color: 'var(--color-if-text)' }}
+                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
               >
                 <option value="">-- No section --</option>
                 {sections.map(s => (
@@ -283,7 +283,7 @@ export function UploadModal({
             <div>
               <label
                 className="block text-xs font-medium mb-1.5"
-                style={{ color: 'var(--color-if-text)' }}
+                style={{ color: '#1a1a1a' }}
               >
                 Link to resident (optional)
               </label>
@@ -291,7 +291,7 @@ export function UploadModal({
                 value={patientId}
                 onChange={e => setPatientId(e.target.value)}
                 className="w-full px-3 py-2.5 rounded border text-sm outline-none"
-                style={{ borderColor: 'var(--color-if-border)', color: 'var(--color-if-text)' }}
+                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
               >
                 <option value="">-- No resident --</option>
                 {patients.map(p => (
@@ -305,20 +305,19 @@ export function UploadModal({
           {isSuperAdmin && (
             <label
               className="flex items-center gap-2.5 cursor-pointer select-none p-3 rounded-lg border"
-              style={{ borderColor: 'var(--color-if-gold-text)', backgroundColor: 'rgba(211, 178, 75, 0.06)' }}
+              style={{ borderColor: '#D4AF37', backgroundColor: 'rgba(212,175,55,0.06)' }}
             >
               <input
                 type="checkbox"
                 checked={isGlobal}
                 onChange={e => setIsGlobal(e.target.checked)}
-                className="w-4 h-4 cursor-pointer"
-                style={{ accentColor: 'var(--color-if-primary)' }}
+                className="w-4 h-4 accent-[#1E3A2F] cursor-pointer"
               />
-              <Globe size={14} style={{ color: 'var(--color-if-gold-text)' }} aria-hidden="true" />
-              <span className="text-sm font-medium" style={{ color: 'var(--color-if-text)' }}>
+              <Globe size={14} style={{ color: '#D4AF37' }} aria-hidden="true" />
+              <span className="text-sm font-medium" style={{ color: '#1a1a1a' }}>
                 Make global
               </span>
-              <span className="text-xs" style={{ color: 'var(--color-if-text-muted)' }}>
+              <span className="text-xs" style={{ color: '#5a5a5a' }}>
                 — visible to all facilities
               </span>
             </label>
@@ -328,13 +327,13 @@ export function UploadModal({
           {uploading && (
             <div
               className="w-full h-1.5 rounded-full overflow-hidden"
-              style={{ backgroundColor: 'var(--color-if-border)' }}
+              style={{ backgroundColor: '#ddd6c8' }}
             >
               <div
                 className="h-full rounded-full transition-all duration-300"
                 style={{
                   width: `${progress}%`,
-                  backgroundColor: 'var(--color-if-gold-text)',
+                  backgroundColor: '#D4AF37',
                 }}
               />
             </div>
@@ -345,7 +344,7 @@ export function UploadModal({
             <p
               className="text-xs p-3 rounded border"
               style={{
-                color: '#8B3A3A',
+                color: '#dc2626',
                 backgroundColor: '#fef2f2',
                 borderColor: '#fecaca',
               }}
@@ -362,7 +361,7 @@ export function UploadModal({
               onClick={handleClose}
               disabled={uploading}
               className="flex-1 px-4 py-2.5 rounded border text-sm font-medium transition-colors"
-              style={{ borderColor: 'var(--color-if-border)', color: 'var(--color-if-text-muted)' }}
+              style={{ borderColor: '#ddd6c8', color: '#5a5a5a' }}
             >
               Cancel
             </button>
@@ -371,7 +370,7 @@ export function UploadModal({
               onClick={handleUpload}
               disabled={!file || uploading}
               className="flex-1 px-4 py-2.5 rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ backgroundColor: 'var(--color-if-primary)', color: 'var(--color-if-text-on-dark)' }}
+              style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
             >
               {uploading ? 'Uploading...' : 'Upload'}
             </button>

@@ -3,18 +3,18 @@ import { ArrowRight, ChevronDown } from 'lucide-react'
 
 /**
  * Full-width hero section for the marketing landing page.
- * Warm cream bg with green headline — communicates authority and warmth.
+ * Dark green bg with cream headline — communicates authority and warmth.
  */
 export function Hero() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ backgroundColor: 'var(--color-if-bg)', minHeight: '88vh' }}
+      style={{ backgroundColor: '#F5F0E8', minHeight: '88vh' }}
     >
       {/* Gold top bar */}
       <div
         className="absolute top-0 left-0 right-0 h-1"
-        style={{ backgroundColor: 'var(--color-if-gold-text)' }}
+        style={{ backgroundColor: '#D4AF37' }}
         aria-hidden="true"
       />
 
@@ -23,14 +23,14 @@ export function Hero() {
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8 border"
           style={{
-            color: 'var(--color-if-gold-text)',
-            borderColor: 'rgba(211, 178, 75, 0.4)',
-            backgroundColor: 'rgba(211, 178, 75, 0.08)',
+            color: '#D4AF37',
+            borderColor: 'rgba(212,175,55,0.4)',
+            backgroundColor: 'rgba(212,175,55,0.08)',
           }}
         >
           <span
             className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: 'var(--color-if-gold-text)' }}
+            style={{ backgroundColor: '#D4AF37' }}
           />
           South African Care Facility Specialists
         </div>
@@ -38,19 +38,19 @@ export function Hero() {
         {/* Main headline */}
         <h1
           className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight mb-6 max-w-4xl"
-          style={{ color: 'var(--color-if-text-heading)' }}
+          style={{ color: '#1E3A2F' }}
         >
           Stronger Structures.
           <br />
           Better Care.
           <br />
-          <span style={{ color: 'var(--color-if-primary)' }}>Brighter Futures.</span>
+          <span style={{ color: '#D4AF37' }}>Brighter Futures.</span>
         </h1>
 
         {/* Sub-headline */}
         <p
           className="text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
-          style={{ color: 'var(--color-if-text-muted)' }}
+          style={{ color: '#5a5a5a' }}
         >
           Innerframe helps South African old age homes build the operational
           systems, compliance structures, and management frameworks they need to
@@ -62,12 +62,12 @@ export function Hero() {
           <a
             href="#contact"
             className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-colors"
-            style={{ backgroundColor: 'var(--color-if-primary)', color: 'var(--color-if-text-on-dark)' }}
+            style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             onMouseEnter={e =>
-              ((e.target as HTMLElement).style.backgroundColor = 'var(--color-if-secondary)')
+              ((e.target as HTMLElement).style.backgroundColor = '#B8960C')
             }
             onMouseLeave={e =>
-              ((e.target as HTMLElement).style.backgroundColor = 'var(--color-if-primary)')
+              ((e.target as HTMLElement).style.backgroundColor = '#D4AF37')
             }
           >
             Get Started
@@ -77,13 +77,13 @@ export function Hero() {
             href="#pillars"
             className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-medium border transition-colors"
             style={{
-              color: 'var(--color-if-primary)',
-              borderColor: 'rgba(47, 67, 55, 0.3)',
+              color: '#1E3A2F',
+              borderColor: 'rgba(30,58,47,0.3)',
               backgroundColor: 'transparent',
             }}
             onMouseEnter={e => {
               const el = e.target as HTMLElement
-              el.style.backgroundColor = 'rgba(47, 67, 55, 0.05)'
+              el.style.backgroundColor = 'rgba(30,58,47,0.05)'
             }}
             onMouseLeave={e => {
               const el = e.target as HTMLElement
@@ -97,7 +97,7 @@ export function Hero() {
         {/* Proof strip */}
         <div
           className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 pt-8 border-t w-full max-w-2xl"
-          style={{ borderColor: 'var(--color-if-border)' }}
+          style={{ borderColor: 'rgba(30,58,47,0.12)' }}
         >
           {[
             { value: '5', label: 'Operational Pillars' },
@@ -107,13 +107,13 @@ export function Hero() {
             <div key={item.label} className="text-center flex-1">
               <div
                 className="text-2xl font-medium"
-                style={{ color: 'var(--color-if-text-heading)' }}
+                style={{ color: '#D4AF37' }}
               >
                 {item.value}
               </div>
               <div
                 className="text-xs mt-1"
-                style={{ color: 'var(--color-if-text-muted)' }}
+                style={{ color: '#5a5a5a' }}
               >
                 {item.label}
               </div>
@@ -126,13 +126,13 @@ export function Hero() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
         <span
           className="text-xs"
-          style={{ color: 'rgba(47, 67, 55, 0.4)' }}
+          style={{ color: 'rgba(30,58,47,0.4)' }}
         >
           scroll
         </span>
         <ChevronDown
           size={16}
-          style={{ color: 'rgba(47, 67, 55, 0.4)' }}
+          style={{ color: 'rgba(30,58,47,0.4)' }}
           className="animate-bounce"
         />
       </div>

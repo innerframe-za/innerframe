@@ -14,6 +14,7 @@ const pillars = [
     tagline: 'The Structure Behind the Facility',
     description:
       'Policies, staff files, resident records, daily registers, compliance systems, and audit-ready documentation.',
+    color: '#1E3A2F',
   },
   {
     icon: DollarSign,
@@ -21,6 +22,7 @@ const pillars = [
     tagline: 'Financial Transparency & Sustainability',
     description:
       'Budgeting, DSD allocation tracking, payroll controls, procurement workflows, and monthly reporting packs.',
+    color: '#2D5A3D',
   },
   {
     icon: UtensilsCrossed,
@@ -28,6 +30,7 @@ const pillars = [
     tagline: 'Safe Nutrition. Safe Residents.',
     description:
       'Meal planning, food safety logs, temperature controls, hygiene standards, and special dietary monitoring.',
+    color: '#3B6B4A',
   },
   {
     icon: Stethoscope,
@@ -35,6 +38,7 @@ const pillars = [
     tagline: 'Resident Safety & Clinical Compliance',
     description:
       'Medication management, care plans, incident reporting, infection control, and nursing documentation systems.',
+    color: '#1E3A2F',
   },
   {
     icon: Scale,
@@ -42,6 +46,7 @@ const pillars = [
     tagline: 'Leadership, Accountability & Sustainability',
     description:
       'Board structure, meeting schedules, risk registers, strategic plans, and DSD reporting oversight.',
+    color: '#2D5A3D',
   },
 ]
 
@@ -53,7 +58,7 @@ export function Pillars() {
     <section
       id="pillars"
       className="py-20 px-6"
-      style={{ backgroundColor: 'var(--color-if-bg)' }}
+      style={{ backgroundColor: '#F5F0E8' }}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section heading */}
@@ -61,14 +66,14 @@ export function Pillars() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: 'var(--color-if-text-heading)' }}
+              style={{ color: '#1E3A2F' }}
             >
               The 5 Pillars
             </h2>
           </div>
           <p
             className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: 'var(--color-if-text-muted)' }}
+            style={{ color: '#5a5a5a' }}
           >
             Every well-run care facility needs five operational foundations.
             Innerframe assesses, structures, and implements all five — so
@@ -85,21 +90,20 @@ export function Pillars() {
                 key={pillar.name}
                 className="bg-white rounded-xl p-6 border transition-transform hover:-translate-y-0.5"
                 style={{
-                  borderColor: 'var(--color-if-border)',
+                  borderColor: '#ddd6c8',
                   borderTopWidth: '3px',
-                  /* Alternate top border: primary green on even, gold on odd */
-                  borderTopColor: index % 2 === 0 ? 'var(--color-if-primary)' : 'var(--color-if-gold-text)',
-                  boxShadow: '0 1px 3px var(--color-if-shadow), 0 4px 12px var(--color-if-shadow)',
+                  borderTopColor: index % 2 === 0 ? '#1E3A2F' : '#D4AF37',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)',
                 }}
               >
                 {/* Icon */}
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                  style={{ backgroundColor: 'rgba(47, 67, 55, 0.07)' }}
+                  style={{ backgroundColor: 'rgba(30,58,47,0.07)' }}
                 >
                   <Icon
                     size={20}
-                    style={{ color: 'var(--color-if-primary)' }}
+                    style={{ color: '#1E3A2F' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -107,45 +111,45 @@ export function Pillars() {
                 {/* Content */}
                 <h3
                   className="font-medium text-base mb-1"
-                  style={{ color: 'var(--color-if-primary)' }}
+                  style={{ color: '#1E3A2F' }}
                 >
                   {pillar.name}
                 </h3>
                 <p
                   className="text-xs mb-3 font-medium"
-                  style={{ color: 'var(--color-if-gold-text)' }}
+                  style={{ color: '#D4AF37' }}
                 >
                   {pillar.tagline}
                 </p>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-if-text-muted)' }}>
+                <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
                   {pillar.description}
                 </p>
               </article>
             )
           })}
 
-          {/* Sixth card fills the grid row cleanly */}
+          {/* Fifth card spans to complete the row cleanly */}
           <div
             className="hidden lg:block rounded-xl p-6 border"
             style={{
-              borderColor: 'var(--color-if-border)',
-              backgroundColor: 'rgba(47, 67, 55, 0.03)',
+              borderColor: '#ddd6c8',
+              backgroundColor: 'rgba(30,58,47,0.03)',
             }}
           >
             <div className="h-full flex flex-col justify-center text-center px-4">
               <div
                 className="text-3xl font-medium mb-3"
-                style={{ color: 'var(--color-if-text-heading)' }}
+                style={{ color: '#D4AF37' }}
               >
                 5
               </div>
               <p
                 className="text-sm font-medium"
-                style={{ color: 'var(--color-if-primary)' }}
+                style={{ color: '#1E3A2F' }}
               >
                 Interconnected pillars
               </p>
-              <p className="text-xs mt-2" style={{ color: 'var(--color-if-text-muted)' }}>
+              <p className="text-xs mt-2" style={{ color: '#5a5a5a' }}>
                 Every pillar strengthens the others. Weakness in one creates
                 risk across all.
               </p>

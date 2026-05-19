@@ -44,14 +44,14 @@ export function HowItWorks() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: 'var(--color-if-text-heading)' }}
+              style={{ color: '#1E3A2F' }}
             >
               How It Works
             </h2>
           </div>
           <p
             className="mt-6 text-base max-w-lg mx-auto"
-            style={{ color: 'var(--color-if-text-muted)' }}
+            style={{ color: '#5a5a5a' }}
           >
             A structured three-step process that transforms your facility from
             reactive to audit-ready.
@@ -68,7 +68,7 @@ export function HowItWorks() {
                 {index < steps.length - 1 && (
                   <div
                     className="hidden md:block absolute top-8 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
-                    style={{ backgroundColor: 'var(--color-if-border)' }}
+                    style={{ backgroundColor: '#ddd6c8' }}
                     aria-hidden="true"
                   />
                 )}
@@ -78,8 +78,8 @@ export function HowItWorks() {
                   className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
                   style={{
                     backgroundColor: '#ffffff',
-                    borderColor: 'var(--color-if-gold-text)',
-                    color: 'var(--color-if-gold-text)',
+                    borderColor: '#D4AF37',
+                    color: '#D4AF37',
                   }}
                 >
                   <span className="text-xl font-medium">{step.number}</span>
@@ -88,11 +88,11 @@ export function HowItWorks() {
                 {/* Icon */}
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                  style={{ backgroundColor: 'rgba(47, 67, 55, 0.06)' }}
+                  style={{ backgroundColor: 'rgba(30,58,47,0.06)' }}
                 >
                   <Icon
                     size={20}
-                    style={{ color: 'var(--color-if-primary)' }}
+                    style={{ color: '#1E3A2F' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -100,17 +100,17 @@ export function HowItWorks() {
                 {/* Content */}
                 <h3
                   className="text-xl font-medium mb-1"
-                  style={{ color: 'var(--color-if-primary)' }}
+                  style={{ color: '#1E3A2F' }}
                 >
                   {step.title}
                 </h3>
                 <p
                   className="text-xs font-medium mb-3"
-                  style={{ color: 'var(--color-if-gold-text)' }}
+                  style={{ color: '#D4AF37' }}
                 >
                   {step.subtitle}
                 </p>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-if-text-muted)' }}>
+                <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
                   {step.description}
                 </p>
               </div>
@@ -122,20 +122,20 @@ export function HowItWorks() {
         <div
           className="mt-16 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 border"
           style={{
-            backgroundColor: 'var(--color-if-primary)',
-            borderColor: 'rgba(211, 178, 75, 0.3)',
+            backgroundColor: '#1E3A2F',
+            borderColor: 'rgba(212,175,55,0.3)',
           }}
         >
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-2"
-              style={{ color: 'var(--color-if-gold-text)' }}
+              style={{ color: '#D4AF37' }}
             >
               The Innerframe Outcome
             </p>
             <h3
               className="text-xl font-medium"
-              style={{ color: 'var(--color-if-text-on-dark)' }}
+              style={{ color: '#F5F0E8' }}
             >
               Structured. Compliant. Compassionate.
             </h3>
@@ -143,12 +143,12 @@ export function HowItWorks() {
           <a
             href="#contact"
             className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-colors"
-            style={{ backgroundColor: 'var(--color-if-gold-text)', color: 'var(--color-if-primary)' }}
+            style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             onMouseEnter={e =>
-              ((e.target as HTMLElement).style.backgroundColor = 'var(--color-if-accent)')
+              ((e.target as HTMLElement).style.backgroundColor = '#B8960C')
             }
             onMouseLeave={e =>
-              ((e.target as HTMLElement).style.backgroundColor = 'var(--color-if-gold-text)')
+              ((e.target as HTMLElement).style.backgroundColor = '#D4AF37')
             }
           >
             Start the Assessment

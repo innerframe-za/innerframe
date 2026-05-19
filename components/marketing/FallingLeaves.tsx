@@ -14,14 +14,13 @@ const LEAF_PATHS = [
   'M10,3 Q17,3 18,10 Q17,19 10,21 Q3,19 2,10 Q3,3 10,3 Z',
 ]
 
-/* New palette leaf colors — greens and warm golds */
 const LEAF_COLORS = [
-  '#2f4337', // deep forest green (primary)
-  '#546d57', // sage green (secondary)
-  '#6c846c', // muted sage (tertiary)
-  '#bdad89', // sand/tan (accent-light)
-  '#d3b24b', // vibrant gold (gold-text)
-  '#9a8454', // warm gold (accent)
+  '#1E3A2F', // dark green
+  '#2D5A3D', // mid green
+  '#3B6B4A', // light green
+  '#8AAF8E', // muted green
+  '#D4AF37', // gold
+  '#B8960C', // gold-dark
 ]
 
 interface Leaf {

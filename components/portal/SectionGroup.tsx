@@ -37,11 +37,11 @@ export function SectionGroup({
       {/* Section heading with gold underline */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-medium" style={{ color: 'var(--color-if-primary)' }}>
+          <h2 className="text-sm font-medium" style={{ color: '#1E3A2F' }}>
             {title}
           </h2>
           <div
-            style={{ width: '36px', height: '2px', backgroundColor: 'var(--color-if-gold-text)', marginTop: '4px' }}
+            style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '4px' }}
             aria-hidden="true"
           />
         </div>
@@ -51,19 +51,19 @@ export function SectionGroup({
             onClick={onUpload}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border transition-colors"
             style={{
-              borderColor: 'var(--color-if-primary)',
-              color: 'var(--color-if-primary)',
+              borderColor: '#1E3A2F',
+              color: '#1E3A2F',
               backgroundColor: 'transparent',
             }}
             onMouseEnter={e => {
               const el = e.currentTarget as HTMLButtonElement
-              el.style.backgroundColor = 'var(--color-if-primary)'
-              el.style.color = 'var(--color-if-text-on-dark)'
+              el.style.backgroundColor = '#1E3A2F'
+              el.style.color = '#ffffff'
             }}
             onMouseLeave={e => {
               const el = e.currentTarget as HTMLButtonElement
               el.style.backgroundColor = 'transparent'
-              el.style.color = 'var(--color-if-primary)'
+              el.style.color = '#1E3A2F'
             }}
           >
             <Upload size={12} />
@@ -74,7 +74,7 @@ export function SectionGroup({
 
       {/* Documents */}
       {documents.length === 0 ? (
-        <p className="text-xs py-4 text-center" style={{ color: 'var(--color-if-text-muted)' }}>
+        <p className="text-xs py-4 text-center" style={{ color: '#5a5a5a' }}>
           No documents in this section yet.
         </p>
       ) : (

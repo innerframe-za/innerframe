@@ -56,8 +56,8 @@ export function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center px-6 gap-4"
         style={{
           height: '64px',
-          backgroundColor: 'var(--color-if-primary)',
-          borderBottom: '2px solid var(--color-if-gold-text)',
+          backgroundColor: '#1E3A2F',
+          borderBottom: '2px solid #D4AF37',
         }}
         role="navigation"
         aria-label="Portal navigation"
@@ -94,7 +94,7 @@ export function Navbar() {
                 to={item.href}
                 className="relative px-3 py-1 text-xs font-medium transition-colors whitespace-nowrap"
                 style={{
-                  color: isActive ? 'var(--color-if-gold-text)' : 'rgba(255,255,255,0.65)',
+                  color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.65)',
                 }}
                 onMouseEnter={e => {
                   if (!isActive)
@@ -112,7 +112,7 @@ export function Navbar() {
                 {isActive && (
                   <span
                     className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t"
-                    style={{ backgroundColor: 'var(--color-if-gold-text)' }}
+                    style={{ backgroundColor: '#D4AF37' }}
                     aria-hidden="true"
                   />
                 )}
@@ -172,7 +172,7 @@ export function Navbar() {
 
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 cursor-pointer"
-            style={{ backgroundColor: 'var(--color-if-gold-text)', color: 'var(--color-if-primary)' }}
+            style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             title={user?.fullName ?? 'User'}
             aria-label="User menu"
           >
@@ -213,7 +213,7 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="fixed top-[64px] left-0 right-0 z-40 px-4 py-4 flex flex-col gap-1 lg:hidden"
-          style={{ backgroundColor: 'var(--color-if-primary)', borderBottom: '2px solid var(--color-if-gold-text)' }}
+          style={{ backgroundColor: '#1E3A2F', borderBottom: '2px solid #D4AF37' }}
         >
           {navItems.map(item => {
             const isActive = location.pathname.startsWith(item.href)
@@ -224,9 +224,9 @@ export function Navbar() {
                 to={item.href}
                 className="flex items-center gap-3 px-3 py-2.5 rounded text-sm"
                 style={{
-                  color: isActive ? 'var(--color-if-gold-text)' : 'rgba(255,255,255,0.75)',
+                  color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.75)',
                   backgroundColor: isActive
-                    ? 'rgba(211, 178, 75, 0.1)'
+                    ? 'rgba(212,175,55,0.1)'
                     : 'transparent',
                 }}
                 onClick={() => setMobileOpen(false)}

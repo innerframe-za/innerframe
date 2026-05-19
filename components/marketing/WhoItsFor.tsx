@@ -45,7 +45,7 @@ export function WhoItsFor() {
     <section
       id="who-its-for"
       className="py-20 px-6"
-      style={{ backgroundColor: 'var(--color-if-bg)' }}
+      style={{ backgroundColor: '#F5F0E8' }}
     >
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
@@ -53,14 +53,14 @@ export function WhoItsFor() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: 'var(--color-if-text-heading)' }}
+              style={{ color: '#1E3A2F' }}
             >
               Built for South African Care Facilities
             </h2>
           </div>
           <p
             className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: 'var(--color-if-text-muted)' }}
+            style={{ color: '#5a5a5a' }}
           >
             Innerframe was designed specifically for the South African context —
             DSD regulations, ZAR-denominated operations, and the unique
@@ -74,20 +74,17 @@ export function WhoItsFor() {
             <div
               key={audience.title}
               className="bg-white rounded-xl p-6 border"
-              style={{
-                borderColor: 'var(--color-if-border)',
-                boxShadow: '0 1px 3px var(--color-if-shadow), 0 4px 12px var(--color-if-shadow)',
-              }}
+              style={{ borderColor: '#ddd6c8', boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)' }}
             >
               <h3
                 className="font-medium text-base mb-3"
-                style={{ color: 'var(--color-if-primary)' }}
+                style={{ color: '#1E3A2F' }}
               >
                 {audience.title}
               </h3>
               <p
                 className="text-sm leading-relaxed mb-5"
-                style={{ color: 'var(--color-if-text-muted)' }}
+                style={{ color: '#5a5a5a' }}
               >
                 {audience.description}
               </p>
@@ -96,12 +93,12 @@ export function WhoItsFor() {
                   <li
                     key={check}
                     className="flex items-start gap-2 text-sm"
-                    style={{ color: 'var(--color-if-text)' }}
+                    style={{ color: '#1a1a1a' }}
                   >
                     <Check
                       size={14}
                       className="flex-shrink-0 mt-0.5"
-                      style={{ color: 'var(--color-if-gold-text)' }}
+                      style={{ color: '#D4AF37' }}
                       aria-hidden="true"
                     />
                     {check}
@@ -116,13 +113,13 @@ export function WhoItsFor() {
         <div
           className="mt-12 rounded-xl p-6 border flex flex-col md:flex-row items-start md:items-center gap-4"
           style={{
-            borderColor: 'rgba(211, 178, 75, 0.4)',
-            backgroundColor: 'rgba(211, 178, 75, 0.05)',
+            borderColor: 'rgba(212,175,55,0.4)',
+            backgroundColor: 'rgba(212,175,55,0.05)',
           }}
         >
           <div
             className="w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center text-lg"
-            style={{ backgroundColor: 'rgba(211, 178, 75, 0.15)' }}
+            style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
             aria-hidden="true"
           >
             🇿🇦
@@ -130,11 +127,11 @@ export function WhoItsFor() {
           <div>
             <p
               className="text-sm font-medium"
-              style={{ color: 'var(--color-if-primary)' }}
+              style={{ color: '#1E3A2F' }}
             >
               Proudly South African
             </p>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--color-if-text-muted)' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
               We understand the DSD funding model, Section 20 & 21 requirements,
               local labour law, and the everyday realities of running a care
               facility in South Africa.

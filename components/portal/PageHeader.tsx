@@ -15,7 +15,7 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
         <div className="inline-block">
           <h1
             className="text-2xl font-medium"
-            style={{ color: 'var(--color-if-text-heading)' }}
+            style={{ color: '#1E3A2F' }}
           >
             {title}
           </h1>
@@ -25,13 +25,13 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
             style={{
               width: '36px',
               height: '2px',
-              backgroundColor: 'var(--color-if-gold-text)',
+              backgroundColor: '#D4AF37',
             }}
             aria-hidden="true"
           />
         </div>
         {subtitle && (
-          <p className="mt-3 text-sm" style={{ color: 'var(--color-if-text-muted)' }}>
+          <p className="mt-3 text-sm" style={{ color: '#5a5a5a' }}>
             {subtitle}
           </p>
         )}
