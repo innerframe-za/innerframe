@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,6 +25,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
 
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    let supabase: ReturnType<typeof createClient>
+    try { supabase = createClient() } catch { return }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate('/dashboard', { replace: true })
+    }).catch(() => {})
+  }, [navigate])
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
   })
@@ -34,20 +43,30 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setAuthError(null)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    })
-    if (error) {
-      setAuthError(
-        error.message === 'Invalid login credentials'
-          ? 'Incorrect email or password. Please try again.'
-          : error.message
-      )
+    let supabase: ReturnType<typeof createClient>
+    try {
+      supabase = createClient()
+    } catch {
+      setAuthError('App is not configured correctly. Please contact support.')
       return
     }
-    navigate('/dashboard')
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      })
+      if (error) {
+        setAuthError(
+          error.message === 'Invalid login credentials'
+            ? 'Incorrect email or password. Please try again.'
+            : error.message
+        )
+        return
+      }
+      navigate('/dashboard')
+    } catch {
+      setAuthError('Sign in failed. If you have an ad blocker, try disabling it for this site.')
+    }
   }
 
   return (
