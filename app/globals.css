@@ -7,36 +7,41 @@
 
 /* ---- Innerframe brand color tokens ---- */
 @theme inline {
-  --color-if-green-dark:    #1E3A2F;
-  --color-if-green-mid:     #2D5A3D;
-  --color-if-green-light:   #3B6B4A;
-  --color-if-green-muted:   #8AAF8E;
-  --color-if-gold:          #D4AF37;
-  --color-if-gold-dark:     #B8960C;
-  --color-if-cream:         #F5F0E8;
-  --color-if-cream-surface: #EDE8DC;
-  --color-if-text:          #1a1a1a;
-  --color-if-text-muted:    #5a5a5a;
-  --color-if-border:        #ddd6c8;
+  /* Core palette */
+  --color-if-primary:       #2f4337;   /* Deep forest green — main CTAs, navbar, primary buttons */
+  --color-if-secondary:     #546d57;   /* Sage green — secondary buttons, section backgrounds */
+  --color-if-tertiary:      #6c846c;   /* Muted sage — borders, icons, subtle UI elements */
+  --color-if-accent:        #9a8454;   /* Warm gold — hover states, decorative details */
+  --color-if-accent-light:  #bdad89;   /* Sand/tan — badges, tags, soft background tints */
+  --color-if-bg:            #fbf6f2;   /* Warm cream — main page background */
+  --color-if-gold-text:     #d3b24b;   /* Vibrant gold — headings, section titles, display text */
+
+  /* Derived role aliases */
+  --color-if-text:          #2f4337;   /* Body text — primary green, not black */
+  --color-if-text-heading:  #d3b24b;   /* All headings (h1–h4) and display text */
+  --color-if-text-muted:    #6c846c;   /* Secondary/muted text */
+  --color-if-text-on-dark:  #fbf6f2;   /* Text on dark/green backgrounds */
+  --color-if-border:        rgba(44, 67, 55, 0.15);
+  --color-if-shadow:        rgba(44, 67, 55, 0.12);
 
   /* Override shadcn defaults to match brand */
-  --color-background: var(--color-if-cream);
+  --color-background: var(--color-if-bg);
   --color-foreground: var(--color-if-text);
   --color-card: #ffffff;
   --color-card-foreground: var(--color-if-text);
   --color-popover: #ffffff;
   --color-popover-foreground: var(--color-if-text);
-  --color-primary: var(--color-if-green-dark);
-  --color-primary-foreground: #ffffff;
-  --color-secondary: var(--color-if-cream-surface);
-  --color-secondary-foreground: var(--color-if-text);
-  --color-muted: var(--color-if-cream-surface);
+  --color-primary: var(--color-if-primary);
+  --color-primary-foreground: var(--color-if-text-on-dark);
+  --color-secondary: var(--color-if-secondary);
+  --color-secondary-foreground: var(--color-if-text-on-dark);
+  --color-muted: var(--color-if-bg);
   --color-muted-foreground: var(--color-if-text-muted);
-  --color-accent: var(--color-if-gold);
-  --color-accent-foreground: var(--color-if-green-dark);
+  --color-accent: var(--color-if-accent);
+  --color-accent-foreground: var(--color-if-primary);
   --color-border: var(--color-if-border);
   --color-input: var(--color-if-border);
-  --color-ring: var(--color-if-green-mid);
+  --color-ring: var(--color-if-accent);
 
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
@@ -51,50 +56,50 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --radius: 0.75rem;
 
-  --color-sidebar-ring: var(--color-if-green-mid);
+  --color-sidebar-ring: var(--color-if-accent);
   --color-sidebar-border: var(--color-if-border);
   --color-sidebar-accent-foreground: #ffffff;
-  --color-sidebar-accent: var(--color-if-green-mid);
+  --color-sidebar-accent: var(--color-if-secondary);
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-primary: var(--color-if-green-dark);
+  --color-sidebar-primary: var(--color-if-primary);
   --color-sidebar-foreground: rgba(255,255,255,0.85);
-  --color-sidebar: var(--color-if-green-dark);
-  --color-chart-1: var(--color-if-green-dark);
-  --color-chart-2: var(--color-if-gold);
-  --color-chart-3: var(--color-if-green-mid);
-  --color-chart-4: var(--color-if-green-light);
-  --color-chart-5: var(--color-if-green-muted);
+  --color-sidebar: var(--color-if-primary);
+  --color-chart-1: var(--color-if-primary);
+  --color-chart-2: var(--color-if-gold-text);
+  --color-chart-3: var(--color-if-secondary);
+  --color-chart-4: var(--color-if-tertiary);
+  --color-chart-5: var(--color-if-accent-light);
   --color-destructive: oklch(0.577 0.245 27.325);
 }
 
 :root {
-  --background: #F5F0E8;
-  --foreground: #1a1a1a;
+  --background: #fbf6f2;
+  --foreground: #2f4337;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #2f4337;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  --primary: #1E3A2F;
-  --primary-foreground: #ffffff;
-  --secondary: #EDE8DC;
-  --secondary-foreground: #1a1a1a;
-  --muted: #EDE8DC;
-  --muted-foreground: #5a5a5a;
-  --accent: #D4AF37;
-  --accent-foreground: #1E3A2F;
+  --popover-foreground: #2f4337;
+  --primary: #2f4337;
+  --primary-foreground: #fbf6f2;
+  --secondary: #546d57;
+  --secondary-foreground: #fbf6f2;
+  --muted: #fbf6f2;
+  --muted-foreground: #6c846c;
+  --accent: #9a8454;
+  --accent-foreground: #2f4337;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #ddd6c8;
-  --input: #ddd6c8;
-  --ring: #2D5A3D;
+  --border: rgba(44, 67, 55, 0.15);
+  --input: rgba(44, 67, 55, 0.15);
+  --ring: #9a8454;
   --radius: 0.75rem;
-  --sidebar: #1E3A2F;
+  --sidebar: #2f4337;
   --sidebar-foreground: rgba(255,255,255,0.85);
-  --sidebar-primary: #1E3A2F;
+  --sidebar-primary: #2f4337;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2D5A3D;
+  --sidebar-accent: #546d57;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #ddd6c8;
-  --sidebar-ring: #2D5A3D;
+  --sidebar-border: rgba(44, 67, 55, 0.15);
+  --sidebar-ring: #9a8454;
 }
 
 @layer base {
@@ -140,6 +145,6 @@
   display: block;
   width: 36px;
   height: 2px;
-  background-color: #D4AF37;
+  background-color: var(--color-if-gold-text, #d3b24b);
   margin-top: 8px;
 }

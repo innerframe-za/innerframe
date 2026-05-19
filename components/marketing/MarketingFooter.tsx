@@ -9,7 +9,7 @@ export function MarketingFooter() {
   return (
     <footer
       className="py-12 px-6 border-t"
-      style={{ backgroundColor: '#1a1a1a', borderColor: '#333333' }}
+      style={{ backgroundColor: 'var(--color-if-primary)', borderColor: 'rgba(47, 67, 55, 0.5)' }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -26,16 +26,16 @@ export function MarketingFooter() {
               <div>
                 <div
                   className="font-medium text-sm tracking-wide"
-                  style={{ color: '#F5F0E8' }}
+                  style={{ color: 'var(--color-if-text-on-dark)' }}
                 >
                   INNERFRAME
                 </div>
-                <div className="text-xs" style={{ color: '#5a5a5a' }}>
+                <div className="text-xs" style={{ color: 'rgba(251, 246, 242, 0.55)' }}>
                   CARE SOLUTIONS
                 </div>
               </div>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#5a5a5a' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'rgba(251, 246, 242, 0.55)' }}>
               Stronger Structures. Better Care. Brighter Futures.
             </p>
           </div>
@@ -44,7 +44,7 @@ export function MarketingFooter() {
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-4"
-              style={{ color: '#D4AF37' }}
+              style={{ color: 'var(--color-if-gold-text)' }}
             >
               Quick Links
             </p>
@@ -59,12 +59,12 @@ export function MarketingFooter() {
                   <a
                     href={link.href}
                     className="text-xs transition-colors"
-                    style={{ color: '#5a5a5a' }}
+                    style={{ color: 'rgba(251, 246, 242, 0.55)' }}
                     onMouseEnter={e =>
-                      ((e.target as HTMLElement).style.color = '#F5F0E8')
+                      ((e.target as HTMLElement).style.color = 'var(--color-if-text-on-dark)')
                     }
                     onMouseLeave={e =>
-                      ((e.target as HTMLElement).style.color = '#5a5a5a')
+                      ((e.target as HTMLElement).style.color = 'rgba(251, 246, 242, 0.55)')
                     }
                   >
                     {link.label}
@@ -78,18 +78,18 @@ export function MarketingFooter() {
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-4"
-              style={{ color: '#D4AF37' }}
+              style={{ color: 'var(--color-if-gold-text)' }}
             >
               Clients
             </p>
             <Link
               to="/login"
               className="inline-flex items-center gap-2 text-xs transition-colors"
-              style={{ color: '#F5F0E8' }}
+              style={{ color: 'var(--color-if-text-on-dark)' }}
             >
               Client Portal Login →
             </Link>
-            <p className="text-xs mt-3" style={{ color: '#5a5a5a' }}>
+            <p className="text-xs mt-3" style={{ color: 'rgba(251, 246, 242, 0.55)' }}>
               Already a client? Sign in to access your facility's documents,
               residents, and compliance tools.
             </p>
@@ -99,12 +99,12 @@ export function MarketingFooter() {
         {/* Bottom bar */}
         <div
           className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-2"
-          style={{ borderColor: '#333333' }}
+          style={{ borderColor: 'rgba(47, 67, 55, 0.5)' }}
         >
-          <p className="text-xs" style={{ color: '#5a5a5a' }}>
+          <p className="text-xs" style={{ color: 'rgba(251, 246, 242, 0.4)' }}>
             &copy; {year} Innerframe Care Solutions. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: '#5a5a5a' }}>
+          <p className="text-xs" style={{ color: 'rgba(251, 246, 242, 0.4)' }}>
             South Africa
           </p>
         </div>

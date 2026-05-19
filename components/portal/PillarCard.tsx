@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 
 /**
  * Clickable pillar card used in the dashboard quick-nav row.
- * Dark green top border when active, gold on hover.
+ * Primary green top border when active, gold accent on hover.
  */
 interface PillarCardProps {
   name: string
@@ -25,39 +25,39 @@ export function PillarCard({
       to={href}
       className="bg-white rounded-xl p-4 border flex flex-col items-center text-center gap-2 transition-colors group"
       style={{
-        borderColor: '#ddd6c8',
+        borderColor: 'var(--color-if-border)',
         borderWidth: '0.5px',
         borderTopWidth: '3px',
-        borderTopColor: isActive ? '#1E3A2F' : '#ddd6c8',
+        borderTopColor: isActive ? 'var(--color-if-primary)' : 'var(--color-if-border)',
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLAnchorElement
-        if (!isActive) el.style.borderTopColor = '#D4AF37'
+        if (!isActive) el.style.borderTopColor = 'var(--color-if-accent)'
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLAnchorElement
-        if (!isActive) el.style.borderTopColor = '#ddd6c8'
+        if (!isActive) el.style.borderTopColor = 'var(--color-if-border)'
       }}
       aria-current={isActive ? 'page' : undefined}
     >
       <div
         className="w-9 h-9 rounded flex items-center justify-center"
-        style={{ backgroundColor: isActive ? 'rgba(30,58,47,0.1)' : 'rgba(30,58,47,0.05)' }}
+        style={{ backgroundColor: isActive ? 'rgba(47, 67, 55, 0.1)' : 'rgba(47, 67, 55, 0.05)' }}
       >
         <Icon
           size={18}
-          style={{ color: isActive ? '#1E3A2F' : '#5a5a5a' }}
+          style={{ color: isActive ? 'var(--color-if-primary)' : 'var(--color-if-text-muted)' }}
           aria-hidden="true"
         />
       </div>
       <div>
         <p
           className="text-xs font-medium leading-tight"
-          style={{ color: isActive ? '#1E3A2F' : '#1a1a1a' }}
+          style={{ color: isActive ? 'var(--color-if-primary)' : 'var(--color-if-text)' }}
         >
           {name}
         </p>
-        <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
+        <p className="text-xs mt-0.5" style={{ color: 'var(--color-if-text-muted)' }}>
           {docCount} docs
         </p>
       </div>

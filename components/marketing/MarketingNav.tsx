@@ -12,7 +12,7 @@ export function MarketingNav() {
   return (
     <nav
       className="w-full bg-white border-b"
-      style={{ borderColor: '#ddd6c8' }}
+      style={{ borderColor: 'var(--color-if-border)' }}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -27,11 +27,11 @@ export function MarketingNav() {
           <div>
             <div
               className="font-medium tracking-wide text-sm leading-tight"
-              style={{ color: '#1E3A2F' }}
+              style={{ color: 'var(--color-if-primary)' }}
             >
               INNERFRAME
             </div>
-            <div className="text-xs leading-tight" style={{ color: '#5a5a5a' }}>
+            <div className="text-xs leading-tight" style={{ color: 'var(--color-if-text-muted)' }}>
               CARE SOLUTIONS
             </div>
           </div>
@@ -46,9 +46,9 @@ export function MarketingNav() {
                 key={href}
                 href={href}
                 className="text-sm transition-colors"
-                style={{ color: '#5a5a5a' }}
-                onMouseEnter={e => ((e.target as HTMLElement).style.color = '#1E3A2F')}
-                onMouseLeave={e => ((e.target as HTMLElement).style.color = '#5a5a5a')}
+                style={{ color: 'var(--color-if-text-muted)' }}
+                onMouseEnter={e => ((e.target as HTMLElement).style.color = 'var(--color-if-primary)')}
+                onMouseLeave={e => ((e.target as HTMLElement).style.color = 'var(--color-if-text-muted)')}
               >
                 {labels[i]}
               </a>
@@ -60,10 +60,10 @@ export function MarketingNav() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             to="/login"
-            className="px-4 py-2 rounded text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: '#1E3A2F' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D5A3D')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#1E3A2F')}
+            className="px-4 py-2 rounded text-sm font-medium transition-colors"
+            style={{ backgroundColor: 'var(--color-if-primary)', color: 'var(--color-if-text-on-dark)' }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = 'var(--color-if-secondary)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = 'var(--color-if-primary)')}
           >
             Client Portal
           </Link>
@@ -74,7 +74,7 @@ export function MarketingNav() {
           className="md:hidden p-2 rounded"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
-          style={{ color: '#1E3A2F' }}
+          style={{ color: 'var(--color-if-primary)' }}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -84,7 +84,7 @@ export function MarketingNav() {
       {open && (
         <div
           className="md:hidden border-t px-6 py-4 flex flex-col gap-4"
-          style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
+          style={{ borderColor: 'var(--color-if-border)', backgroundColor: '#ffffff' }}
         >
           {[
             { href: '#pillars', label: 'What We Do' },
@@ -92,14 +92,14 @@ export function MarketingNav() {
             { href: '#who-its-for', label: "Who It's For" },
             { href: '#contact', label: 'Contact' },
           ].map(link => (
-            <a key={link.href} href={link.href} className="text-sm" style={{ color: '#1E3A2F' }} onClick={() => setOpen(false)}>
+            <a key={link.href} href={link.href} className="text-sm" style={{ color: 'var(--color-if-primary)' }} onClick={() => setOpen(false)}>
               {link.label}
             </a>
           ))}
           <Link
             to="/login"
-            className="px-4 py-2 rounded text-sm font-medium text-white text-center"
-            style={{ backgroundColor: '#1E3A2F' }}
+            className="px-4 py-2 rounded text-sm font-medium text-center"
+            style={{ backgroundColor: 'var(--color-if-primary)', color: 'var(--color-if-text-on-dark)' }}
           >
             Client Portal
           </Link>
