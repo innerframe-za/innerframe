@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Users, FileText, Building2, Settings, UserCheck, UserX, ShieldCheck, Trash2 } from 'lucide-react'
+import { ArrowLeft, Users, FileText, Building2, Settings, UserCheck, UserX, ShieldCheck, Trash2, UserPlus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { InviteStaffModal } from '@/components/portal/InviteStaffModal'
 
 type Tab = 'residents' | 'staff' | 'settings'
 
@@ -41,6 +42,7 @@ export default function FacilityDetailPage() {
   const [orgForm, setOrgForm] = useState({ name: '', address: '', contactEmail: '', contactPhone: '' })
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const [deleteStatus, setDeleteStatus] = useState<'idle' | 'confirming' | 'deleting'>('idle')
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   useEffect(() => {
     if (!orgId) return
@@ -140,6 +142,7 @@ export default function FacilityDetailPage() {
   }
 
   return (
+    <>
     <div>
       {/* Back + header */}
       <div className="mb-6">
@@ -248,6 +251,20 @@ export default function FacilityDetailPage() {
       {/* Tab: Staff */}
       {activeTab === 'staff' && (
         <div className="space-y-2">
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-xs" style={{ color: '#5a5a5a' }}>{staff.length} member{staff.length !== 1 ? 's' : ''}</p>
+            <button
+              type="button"
+              onClick={() => setInviteOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors"
+              style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
+              onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
+            >
+              <UserPlus size={13} />
+              Add Staff
+            </button>
+          </div>
           {staff.length === 0 && (
             <div className="bg-white rounded-xl border py-10 text-center text-sm" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px', color: '#5a5a5a' }}>
               No staff members found.
@@ -388,5 +405,23 @@ export default function FacilityDetailPage() {
         </div>
       )}
     </div>
+
+    {inviteOpen && orgId && (
+      <InviteStaffModal
+        orgId={orgId}
+        onClose={() => setInviteOpen(false)}
+        onSuccess={member => {
+          setStaff(prev => [...prev, {
+            id: member.id,
+            fullName: member.fullName,
+            email: member.email,
+            role: member.role,
+            createdAt: new Date().toISOString(),
+          }])
+          setInviteOpen(false)
+        }}
+      />
+    )}
+    </>
   )
 }
