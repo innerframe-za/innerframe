@@ -44,7 +44,7 @@ export function FallingLeaves({ count = 24 }: { count?: number }) {
         x: Math.random() * 97,
         size: 13 + Math.random() * 17,
         delay: Math.random() * 22,
-        duration: 11 + Math.random() * 11,
+        duration: 5 + Math.random() * 5,
         sway: 20 + Math.random() * 55,
         color: LEAF_COLORS[Math.floor(Math.random() * LEAF_COLORS.length)],
         pathIndex: Math.floor(Math.random() * LEAF_PATHS.length),
