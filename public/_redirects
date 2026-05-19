@@ -1,8 +1,1 @@
-# Cloudflare Pages redirects
-# Format: /old-path  /new-path  status-code
-
-# Redirect bare login to portal entry
 /portal  /login  302
-
-# SPA fallback — all unmatched paths serve index.html
-/*  /index.html  200
