@@ -7,12 +7,14 @@ type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
 /**
  * Wraps all portal routes. Checks Supabase session — redirects to /login
- * if unauthenticated. If the user has force_password_change set in their
- * metadata, redirects to /change-password before allowing portal access.
+ * if unauthenticated. Super admins are bounced to /superadmin if they try
+ * to access facility portal routes. Staff with force_password_change are
+ * redirected to /change-password before accessing anything else.
  */
 export function ProtectedRoute() {
   const [authState, setAuthState] = useState<AuthState>('loading')
   const [forcePasswordChange, setForcePasswordChange] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
   const location = useLocation()
 
   useEffect(() => {
@@ -24,25 +26,47 @@ export function ProtectedRoute() {
       return
     }
 
-    supabase.auth.getSession()
-      .then(({ data: { session } }) => {
-        if (session) {
-          setForcePasswordChange(session.user.user_metadata?.force_password_change === true)
-          setAuthState('authenticated')
-        } else {
+    async function loadSession() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
           setAuthState('unauthenticated')
+          return
         }
-      })
-      .catch(() => setAuthState('unauthenticated'))
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
         setForcePasswordChange(session.user.user_metadata?.force_password_change === true)
+        const { data: profile } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+        setUserRole(profile?.role ?? null)
         setAuthState('authenticated')
-      } else {
-        setForcePasswordChange(false)
+      } catch {
         setAuthState('unauthenticated')
       }
+    }
+
+    loadSession()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setForcePasswordChange(false)
+        setUserRole(null)
+        setAuthState('unauthenticated')
+        return
+      }
+      setForcePasswordChange(session.user.user_metadata?.force_password_change === true)
+      supabase
+        .from('users')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data: profile }) => {
+          setUserRole(profile?.role ?? null)
+          setAuthState('authenticated')
+        }, () => {
+          setAuthState('unauthenticated')
+        })
     })
 
     return () => subscription.unsubscribe()
@@ -60,7 +84,7 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace />
   }
 
-  // Staff must set their own password before accessing the portal
+  // Staff must change password before accessing anything else
   if (forcePasswordChange && location.pathname !== '/change-password') {
     return <Navigate to="/change-password" replace />
   }
@@ -68,6 +92,11 @@ export function ProtectedRoute() {
   // /change-password renders without the Navbar shell
   if (location.pathname === '/change-password') {
     return <Outlet />
+  }
+
+  // Super admins belong in /superadmin — block access to facility portal routes
+  if (userRole === 'super_admin' && !location.pathname.startsWith('/superadmin')) {
+    return <Navigate to="/superadmin" replace />
   }
 
   return (
