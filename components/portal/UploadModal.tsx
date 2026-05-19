@@ -5,8 +5,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Upload, X, File } from 'lucide-react'
+import { Upload, X, File, Globe } from 'lucide-react'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
+import type { UserRole } from '@/lib/auth/useUser'
+
+// Fixed UUID for the Innerframe internal organisation — global docs are stored here
+const INNERFRAME_ORG_ID = '00000000-0000-0000-0000-000000000001'
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -42,6 +46,7 @@ interface UploadModalProps {
   open: boolean
   onClose: () => void
   orgId: string
+  userRole?: UserRole
   defaultPillar?: string
   sections?: Section[]
   patients?: Patient[]
@@ -57,6 +62,7 @@ export function UploadModal({
   open,
   onClose,
   orgId,
+  userRole,
   defaultPillar,
   sections = [],
   patients = [],
@@ -66,11 +72,13 @@ export function UploadModal({
   const [pillar, setPillar] = useState(defaultPillar ?? 'admin')
   const [sectionId, setSectionId] = useState('')
   const [patientId, setPatientId] = useState('')
+  const [isGlobal, setIsGlobal] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const isSuperAdmin = userRole === 'super_admin'
 
   const validateFile = (f: File): string | null => {
     if (!ACCEPTED_TYPES.includes(f.type))
@@ -131,14 +139,15 @@ export function UploadModal({
 
       // Store the storage path — NOT a public URL.
       // Bucket must be private; download links are generated as signed URLs at read time.
+      // Global documents are stored under the Innerframe internal org.
       const { error: dbError } = await supabase.from('documents').insert({
-        org_id: orgId,
+        org_id: isGlobal ? INNERFRAME_ORG_ID : orgId,
         pillar,
         file_name: file.name,
         file_url: storagePath,
         section_id: sectionId || null,
         patient_id: patientId || null,
-        is_global: false,
+        is_global: isGlobal,
       })
 
       if (dbError) throw dbError
@@ -164,6 +173,7 @@ export function UploadModal({
     setPillar(defaultPillar ?? 'admin')
     setSectionId('')
     setPatientId('')
+    setIsGlobal(false)
     onClose()
   }
 
@@ -289,6 +299,28 @@ export function UploadModal({
                 ))}
               </select>
             </div>
+          )}
+
+          {/* Make global toggle — super_admin only */}
+          {isSuperAdmin && (
+            <label
+              className="flex items-center gap-2.5 cursor-pointer select-none p-3 rounded-lg border"
+              style={{ borderColor: '#D4AF37', backgroundColor: 'rgba(212,175,55,0.06)' }}
+            >
+              <input
+                type="checkbox"
+                checked={isGlobal}
+                onChange={e => setIsGlobal(e.target.checked)}
+                className="w-4 h-4 accent-[#1E3A2F] cursor-pointer"
+              />
+              <Globe size={14} style={{ color: '#D4AF37' }} aria-hidden="true" />
+              <span className="text-sm font-medium" style={{ color: '#1a1a1a' }}>
+                Make global
+              </span>
+              <span className="text-xs" style={{ color: '#5a5a5a' }}>
+                — visible to all facilities
+              </span>
+            </label>
           )}
 
           {/* Progress bar */}

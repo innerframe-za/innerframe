@@ -43,8 +43,10 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/pillar') ||
     pathname.startsWith('/residents') ||
     pathname.startsWith('/search') ||
-    pathname.startsWith('/settings')
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/admin')
 
+  const isAdminRoute = pathname.startsWith('/admin')
   const isApiRoute = pathname.startsWith('/api/')
 
   if (!user && isPortalRoute) {
@@ -57,6 +59,19 @@ export async function middleware(request: NextRequest) {
 
   if (user && pathname === '/login') {
     return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  // Protect /admin/* — only super_admin may access
+  if (user && isAdminRoute) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.role !== 'super_admin') {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
   }
 
   return supabaseResponse

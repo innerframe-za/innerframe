@@ -1,4 +1,4 @@
-export type UserRole = 'home_admin' | 'staff'
+export type UserRole = 'home_admin' | 'staff' | 'super_admin'
 
 export type UserProfile = {
   id: string
