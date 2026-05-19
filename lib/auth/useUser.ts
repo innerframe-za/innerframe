@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -36,7 +34,7 @@ export function useUser() {
         .from('users')
         .select('org_id, role, full_name, email')
         .eq('id', authUser.id)
-        .single()
+        .single() as { data: { org_id: string; role: string; full_name: string; email: string } | null; error: unknown }
 
       if (profile) {
         setUser({

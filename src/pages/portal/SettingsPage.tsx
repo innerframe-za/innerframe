@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
-import { Plus, Trash2, UserMinus } from 'lucide-react'
+import { Plus, Trash2, UserMinus, ExternalLink } from 'lucide-react'
+import { useUser } from '@/lib/auth/useUser'
 
 const mockOrg = {
   name: 'Sunrise Old Age Home',
@@ -17,6 +19,12 @@ const mockStaff = [
 
 const mockCategories = ['Care Plans', 'Medication', 'Policies', 'Reports', 'Templates', 'Compliance']
 
+// TODO: replace with supabase.from('organisations').select('id,name,contact_email,created_at,patients(count),documents(count)').neq('id','00000000-0000-0000-0000-000000000001')
+const mockOrgs = [
+  { id: 'org-1', name: 'Sunrise Old Age Home', contactEmail: 'admin@sunrisecare.co.za', residents: 24, documents: 87, createdAt: '2024-03-15' },
+  { id: 'org-2', name: 'Garden View Care Centre', contactEmail: 'info@gardenview.co.za', residents: 18, documents: 53, createdAt: '2024-06-02' },
+]
+
 function SectionHeading({ title }: { title: string }) {
   return (
     <div className="mb-5">
@@ -27,15 +35,19 @@ function SectionHeading({ title }: { title: string }) {
 }
 
 export default function SettingsPage() {
+  const { user } = useUser()
+  const navigate = useNavigate()
   const [orgForm, setOrgForm] = useState(mockOrg)
   const [staff] = useState(mockStaff)
   const [categories, setCategories] = useState(mockCategories)
   const [newCategory, setNewCategory] = useState('')
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const isSuperAdmin = user?.role === 'super_admin'
 
   const handleSaveOrg = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaveStatus('saving')
+    // TODO: supabase.from('organisations').update(orgForm).eq('id', user.orgId)
     await new Promise(resolve => setTimeout(resolve, 800))
     setSaveStatus('saved')
     setTimeout(() => setSaveStatus('idle'), 2000)
@@ -56,6 +68,7 @@ export default function SettingsPage() {
     <div className="max-w-3xl">
       <PageHeader title="Settings" subtitle="Facility profile, staff management, and document categories" />
 
+      {/* 1. Facility Profile */}
       <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <SectionHeading title="Facility Profile" />
         <form onSubmit={handleSaveOrg} className="space-y-4">
@@ -93,6 +106,7 @@ export default function SettingsPage() {
         </form>
       </section>
 
+      {/* 2. Staff Management */}
       <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex items-start justify-between mb-5">
           <div>
@@ -132,7 +146,8 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      <section className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      {/* 3. Document Categories */}
+      <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <SectionHeading title="Document Categories" />
         <div className="flex flex-wrap gap-2 mb-4">
           {categories.map(cat => (
@@ -158,6 +173,45 @@ export default function SettingsPage() {
           </button>
         </div>
       </section>
+
+      {/* 4. Organisations — super_admin only */}
+      {isSuperAdmin && (
+        <section className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+          <SectionHeading title="Organisations" />
+          <p className="text-xs mb-4" style={{ color: '#5a5a5a' }}>
+            All subscribed facilities. Click View to inspect a facility's data for support.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr style={{ borderBottom: '1px solid #ddd6c8' }}>
+                  {['Facility', 'Contact Email', 'Residents', 'Documents', 'Created', ''].map(h => (
+                    <th key={h} className="text-left py-2 px-3 text-xs font-medium" style={{ color: '#5a5a5a' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {mockOrgs.map(org => (
+                  <tr key={org.id} style={{ borderBottom: '0.5px solid #ddd6c8' }} className="transition-colors hover:bg-[#F5F0E8]">
+                    <td className="py-3 px-3 font-medium" style={{ color: '#1a1a1a' }}>{org.name}</td>
+                    <td className="py-3 px-3" style={{ color: '#5a5a5a' }}>{org.contactEmail}</td>
+                    <td className="py-3 px-3 text-center" style={{ color: '#1a1a1a' }}>{org.residents}</td>
+                    <td className="py-3 px-3 text-center" style={{ color: '#1a1a1a' }}>{org.documents}</td>
+                    <td className="py-3 px-3" style={{ color: '#5a5a5a' }}>{org.createdAt}</td>
+                    <td className="py-3 px-3">
+                      <button type="button" onClick={() => navigate(`/admin/orgs/${org.id}`)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors"
+                        style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}>
+                        <ExternalLink size={11} />View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

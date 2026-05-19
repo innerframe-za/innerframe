@@ -1,13 +1,17 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { createClient as supabaseCreateClient } from '@supabase/supabase-js'
 
-/**
- * Creates a Supabase client for use in Client Components.
- * Uses cookie-based session management via @supabase/ssr so it stays
- * in sync with the server session set by middleware.
- */
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+
+// Singleton — reuse the same client across the app
+let _client: ReturnType<typeof supabaseCreateClient> | null = null
+
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error('Supabase is not configured — set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local')
+  }
+  if (!_client) {
+    _client = supabaseCreateClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  }
+  return _client
 }
