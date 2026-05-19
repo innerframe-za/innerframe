@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import MarketingPage from './pages/marketing/MarketingPage'
+import DemoPage from './pages/demo/DemoPage'
 import DashboardPage from './pages/portal/DashboardPage'
 import ResidentsPage from './pages/portal/ResidentsPage'
 import ResidentDetailPage from './pages/portal/ResidentDetailPage'
@@ -12,6 +13,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<MarketingPage />} />
+      <Route path="/demo" element={<DemoPage />} />
       <Route path="/login" element={<Navigate to="/dashboard" replace />} />
       <Route path="/signup" element={<Navigate to="/dashboard" replace />} />
 
