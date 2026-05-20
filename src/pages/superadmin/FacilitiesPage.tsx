@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Building2, ArrowRight, Users, FileText, Plus } from 'lucide-react'
+import { Building2, ArrowRight, Users, FileText, Plus, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { NewFacilityModal, type NewFacilityResult } from '@/components/superadmin/NewFacilityModal'
 
@@ -20,6 +20,24 @@ export default function FacilitiesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleDeleteFacility() {
+    if (!deleteTarget) return
+    setDeleting(true)
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.from('organisations').delete().eq('id', deleteTarget.id)
+      if (error) throw error
+      setFacilities(prev => prev.filter(f => f.id !== deleteTarget.id))
+      setDeleteTarget(null)
+    } catch {
+      // stay open so user can retry
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   function handleNewFacility(facility: NewFacilityResult) {
     setFacilities(prev => [facility, ...prev])
@@ -177,7 +195,20 @@ export default function FacilitiesPage() {
                       {new Date(facility.createdAt).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}
                     </td>
                     <td className="py-3.5 px-4">
-                      <ArrowRight size={16} style={{ color: '#D4AF37' }} />
+                      <div className="flex items-center gap-3 justify-end">
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); setDeleteTarget({ id: facility.id, name: facility.name }) }}
+                          aria-label={`Delete ${facility.name}`}
+                          className="w-7 h-7 flex items-center justify-center rounded transition-colors"
+                          style={{ color: 'rgba(220,38,38,0.4)' }}
+                          onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.color = '#dc2626')}
+                          onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(220,38,38,0.4)')}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                        <ArrowRight size={16} style={{ color: '#D4AF37' }} />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -192,6 +223,48 @@ export default function FacilitiesPage() {
         onClose={() => setModalOpen(false)}
         onSuccess={handleNewFacility}
       />
+    )}
+
+    {deleteTarget && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="bg-white rounded-xl border shadow-xl w-full max-w-sm p-6" style={{ borderColor: '#ddd6c8' }}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#fef2f2' }}>
+              <Trash2 size={18} style={{ color: '#dc2626' }} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>Delete Facility</p>
+              <p className="text-xs" style={{ color: '#5a5a5a' }}>This cannot be undone</p>
+            </div>
+          </div>
+          <p className="text-sm mb-5" style={{ color: '#5a5a5a' }}>
+            Permanently delete <strong style={{ color: '#1a1a1a' }}>{deleteTarget.name}</strong> and all its residents, staff accounts, and data?
+          </p>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleDeleteFacility}
+              disabled={deleting}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: '#dc2626', color: '#ffffff' }}
+            >
+              {deleting
+                ? <><span className="w-3.5 h-3.5 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#ffffff' }} />Deleting...</>
+                : <><Trash2 size={13} />Delete</>
+              }
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}
+              className="flex-1 py-2.5 rounded border text-sm font-medium transition-colors disabled:opacity-60"
+              style={{ borderColor: '#ddd6c8', color: '#5a5a5a' }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
     )}
     </>
   )

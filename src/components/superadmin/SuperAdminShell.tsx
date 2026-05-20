@@ -156,7 +156,7 @@ export function SuperAdminShell({ children }: { children: ReactNode }) {
       )}
 
       {/* Main content */}
-      <div className="flex-1 lg:pl-64">
+      <div className="flex-1 lg:pl-64" style={{ backgroundColor: '#F5F0E8' }}>
         <main className="pt-14 lg:pt-0 min-h-screen" style={{ backgroundColor: '#F5F0E8' }}>
           <div className="p-6">{children}</div>
         </main>
