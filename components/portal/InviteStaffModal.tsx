@@ -23,7 +23,7 @@ interface InviteStaffModalProps {
   onSuccess: (member: { id: string; fullName: string; email: string; role: string }) => void
 }
 
-const WEBHOOK_URL = import.meta.env.VITE_N8N_INVITE_WEBHOOK_URL as string | undefined
+const WEBHOOK_URL = import.meta.env.VITE_N8N_ADD_STAFF_WEBHOOK_URL as string | undefined
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
@@ -43,7 +43,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
     setSubmitError(null)
 
     if (!WEBHOOK_URL) {
-      setSubmitError('Invite webhook is not configured. Set VITE_N8N_INVITE_WEBHOOK_URL in .env.local')
+      setSubmitError('Add staff webhook is not configured. Set VITE_N8N_ADD_STAFF_WEBHOOK_URL in .env.local')
       return
     }
 
@@ -52,11 +52,11 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          fullName: data.fullName,
+          admin_email: data.email,
+          admin_full_name: data.fullName,
+          admin_password: data.password,
           role: data.role,
-          orgId,
+          org_id: orgId,
         }),
       })
 
@@ -84,7 +84,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
       style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-md bg-white rounded-2xl border shadow-xl" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="w-full max-w-md bg-white rounded-2xl border shadow-xl" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: '#ddd6c8' }}>
           <div className="flex items-center gap-2.5">

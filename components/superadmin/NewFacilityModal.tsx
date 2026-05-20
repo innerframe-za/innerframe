@@ -82,11 +82,12 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: data.adminEmail,
-          password: data.adminPassword,
-          fullName: data.adminName,
+          facility_name: data.facilityName,
+          admin_email: data.adminEmail,
+          admin_full_name: data.adminName,
+          admin_password: data.adminPassword,
           role: 'home_admin',
-          orgId: org.id,
+          org_id: org.id,
         }),
       })
 
