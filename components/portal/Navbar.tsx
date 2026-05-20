@@ -177,11 +177,11 @@ export function Navbar() {
           )}
 
           <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 cursor-pointer"
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${user && user.role !== 'staff' ? 'cursor-pointer' : ''}`}
             style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
             title={user?.fullName ?? 'User'}
-            aria-label="Go to settings"
-            onClick={() => navigate('/settings')}
+            aria-label={user && user.role !== 'staff' ? 'Go to settings' : undefined}
+            onClick={() => { if (user && user.role !== 'staff') navigate('/settings') }}
           >
             {user ? getInitials(user.fullName) : '?'}
           </div>

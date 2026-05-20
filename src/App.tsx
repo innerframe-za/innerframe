@@ -50,7 +50,14 @@ export default function App() {
         <Route path="/residents" element={<ResidentsPage />} />
         <Route path="/residents/:id" element={<ResidentDetailPage />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route
+          path="/settings"
+          element={
+            <RoleGuard allowedRoles={['home_admin', 'super_admin']} fallback="/dashboard">
+              <SettingsPage />
+            </RoleGuard>
+          }
+        />
         <Route path="/admin/orgs/:orgId" element={<OrgViewerPage />} />
       </Route>
 
