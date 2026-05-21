@@ -44,7 +44,7 @@ export function MarketingFooter() {
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-4"
-              style={{ color: '#D4AF37' }}
+              style={{ color: '#d3b24b' }}
             >
               Quick Links
             </p>
@@ -78,7 +78,7 @@ export function MarketingFooter() {
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-4"
-              style={{ color: '#D4AF37' }}
+              style={{ color: '#d3b24b' }}
             >
               Clients
             </p>

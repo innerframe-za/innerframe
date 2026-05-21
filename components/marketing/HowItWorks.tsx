@@ -44,7 +44,7 @@ export function HowItWorks() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: '#1E3A2F' }}
+              style={{ color: '#334739' }}
             >
               How It Works
             </h2>
@@ -78,8 +78,8 @@ export function HowItWorks() {
                   className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
                   style={{
                     backgroundColor: '#ffffff',
-                    borderColor: '#D4AF37',
-                    color: '#D4AF37',
+                    borderColor: '#d3b24b',
+                    color: '#d3b24b',
                   }}
                 >
                   <span className="text-xl font-medium">{step.number}</span>
@@ -92,7 +92,7 @@ export function HowItWorks() {
                 >
                   <Icon
                     size={20}
-                    style={{ color: '#1E3A2F' }}
+                    style={{ color: '#334739' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -100,13 +100,13 @@ export function HowItWorks() {
                 {/* Content */}
                 <h3
                   className="text-xl font-medium mb-1"
-                  style={{ color: '#1E3A2F' }}
+                  style={{ color: '#334739' }}
                 >
                   {step.title}
                 </h3>
                 <p
                   className="text-xs font-medium mb-3"
-                  style={{ color: '#D4AF37' }}
+                  style={{ color: '#d3b24b' }}
                 >
                   {step.subtitle}
                 </p>
@@ -122,14 +122,14 @@ export function HowItWorks() {
         <div
           className="mt-16 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 border"
           style={{
-            backgroundColor: '#1E3A2F',
+            backgroundColor: '#334739',
             borderColor: 'rgba(212,175,55,0.3)',
           }}
         >
           <div>
             <p
               className="text-xs font-medium uppercase tracking-wider mb-2"
-              style={{ color: '#D4AF37' }}
+              style={{ color: '#d3b24b' }}
             >
               The Innerframe Outcome
             </p>
@@ -143,12 +143,12 @@ export function HowItWorks() {
           <a
             href="#contact"
             className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-colors"
-            style={{ backgroundColor: '#D4AF37', color: '#1E3A2F' }}
+            style={{ backgroundColor: '#d3b24b', color: '#334739' }}
             onMouseEnter={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#B8960C')
+              ((e.target as HTMLElement).style.backgroundColor = '#b8972e')
             }
             onMouseLeave={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#D4AF37')
+              ((e.target as HTMLElement).style.backgroundColor = '#d3b24b')
             }
           >
             Start the Assessment

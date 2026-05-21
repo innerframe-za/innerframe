@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -6,14 +6,14 @@
 
 /* ---- Innerframe brand color tokens ---- */
 @theme inline {
-  --color-if-green-dark:    #1E3A2F;
-  --color-if-green-mid:     #2D5A3D;
+  --color-if-green-dark:    #334739;
+  --color-if-green-mid:     #698169;
   --color-if-green-light:   #3B6B4A;
   --color-if-green-muted:   #8AAF8E;
-  --color-if-gold:          #D4AF37;
-  --color-if-gold-dark:     #B8960C;
-  --color-if-cream:         #F5F0E8;
-  --color-if-cream-surface: #EDE8DC;
+  --color-if-gold:          #d3b24b;
+  --color-if-gold-dark:     #b8972e;
+  --color-if-cream:         #faf7f0;
+  --color-if-cream-surface: #f0ece3;
   --color-if-text:          #1a1a1a;
   --color-if-text-muted:    #5a5a5a;
   --color-if-border:        #ddd6c8;
@@ -37,9 +37,9 @@
   --color-input: var(--color-if-border);
   --color-ring: var(--color-if-green-mid);
 
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -67,33 +67,33 @@
 }
 
 :root {
-  --background: #F5F0E8;
+  --background: #faf7f0;
   --foreground: #1a1a1a;
   --card: #ffffff;
   --card-foreground: #1a1a1a;
   --popover: #ffffff;
   --popover-foreground: #1a1a1a;
-  --primary: #1E3A2F;
-  --primary-foreground: #ffffff;
-  --secondary: #EDE8DC;
+  --primary: #334739;
+  --primary-foreground: #faf7f0;
+  --secondary: #f0ece3;
   --secondary-foreground: #1a1a1a;
-  --muted: #EDE8DC;
+  --muted: #f0ece3;
   --muted-foreground: #5a5a5a;
-  --accent: #D4AF37;
-  --accent-foreground: #1E3A2F;
+  --accent: #d3b24b;
+  --accent-foreground: #334739;
   --destructive: oklch(0.577 0.245 27.325);
   --border: #ddd6c8;
   --input: #ddd6c8;
-  --ring: #2D5A3D;
+  --ring: #698169;
   --radius: 0.75rem;
-  --sidebar: #1E3A2F;
-  --sidebar-foreground: rgba(255,255,255,0.85);
-  --sidebar-primary: #1E3A2F;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2D5A3D;
-  --sidebar-accent-foreground: #ffffff;
+  --sidebar: #334739;
+  --sidebar-foreground: rgba(250,247,240,0.85);
+  --sidebar-primary: #334739;
+  --sidebar-primary-foreground: #faf7f0;
+  --sidebar-accent: #698169;
+  --sidebar-accent-foreground: #faf7f0;
   --sidebar-border: #ddd6c8;
-  --sidebar-ring: #2D5A3D;
+  --sidebar-ring: #698169;
 }
 
 @layer base {
@@ -109,7 +109,8 @@
     @apply font-sans;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
   }
 }
 
@@ -139,6 +140,6 @@
   display: block;
   width: 36px;
   height: 2px;
-  background-color: #D4AF37;
+  background-color: #d3b24b;
   margin-top: 8px;
 }

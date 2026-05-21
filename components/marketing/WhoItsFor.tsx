@@ -45,7 +45,7 @@ export function WhoItsFor() {
     <section
       id="who-its-for"
       className="py-20 px-6"
-      style={{ backgroundColor: '#F5F0E8' }}
+      style={{ backgroundColor: '#faf7f0' }}
     >
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
@@ -53,7 +53,7 @@ export function WhoItsFor() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: '#1E3A2F' }}
+              style={{ color: '#334739' }}
             >
               Built for South African Care Facilities
             </h2>
@@ -78,7 +78,7 @@ export function WhoItsFor() {
             >
               <h3
                 className="font-medium text-base mb-3"
-                style={{ color: '#1E3A2F' }}
+                style={{ color: '#334739' }}
               >
                 {audience.title}
               </h3>
@@ -98,7 +98,7 @@ export function WhoItsFor() {
                     <Check
                       size={14}
                       className="flex-shrink-0 mt-0.5"
-                      style={{ color: '#D4AF37' }}
+                      style={{ color: '#d3b24b' }}
                       aria-hidden="true"
                     />
                     {check}
@@ -127,7 +127,7 @@ export function WhoItsFor() {
           <div>
             <p
               className="text-sm font-medium"
-              style={{ color: '#1E3A2F' }}
+              style={{ color: '#334739' }}
             >
               Proudly South African
             </p>

@@ -2,106 +2,104 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
-/**
- * Top navigation bar for the public marketing site.
- * Cream bg, logo left, CTA right. Collapses to hamburger on mobile.
- */
+const NAV_LINKS = [
+  { href: '#who-we-are', label: 'Who we are' },
+  { href: '#pillars', label: 'What we do' },
+  { href: '#why-innerframe', label: 'Why Innerframe' },
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#contact', label: 'Blog' },
+]
+
 export function MarketingNav() {
   const [open, setOpen] = useState(false)
 
   return (
     <nav
-      className="w-full bg-white border-b"
-      style={{ borderColor: '#ddd6c8' }}
+      className="fixed top-0 left-0 right-0 z-50 w-full"
+      style={{ backgroundColor: '#698169', height: '78px' }}
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 h-full flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/" className="flex-shrink-0">
           <img
-            src="/logo.jpeg"
+            src="/logo-full.jpeg"
             alt="Innerframe Care Solutions"
-            width={40}
-            height={40}
-            className="rounded object-contain"
+            style={{ height: '56px', objectFit: 'contain' }}
           />
-          <div>
-            <div
-              className="font-medium tracking-wide text-sm leading-tight"
-              style={{ color: '#1E3A2F' }}
-            >
-              INNERFRAME
-            </div>
-            <div className="text-xs leading-tight" style={{ color: '#5a5a5a' }}>
-              CARE SOLUTIONS
-            </div>
-          </div>
         </Link>
 
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-8">
-          {['#pillars', '#how-it-works', '#who-its-for', '#contact'].map((href, i) => {
-            const labels = ['What We Do', 'How It Works', "Who It's For", 'Contact']
-            return (
-              <a
-                key={href}
-                href={href}
-                className="text-sm transition-colors"
-                style={{ color: '#5a5a5a' }}
-                onMouseEnter={e => ((e.target as HTMLElement).style.color = '#1E3A2F')}
-                onMouseLeave={e => ((e.target as HTMLElement).style.color = '#5a5a5a')}
-              >
-                {labels[i]}
-              </a>
-            )
-          })}
+          {NAV_LINKS.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-sm transition-opacity hover:opacity-70"
+              style={{ color: '#faf7f0', letterSpacing: '0.05em' }}
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
 
-        {/* Client portal CTA */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Portal pill button */}
+        <div className="hidden md:block">
           <Link
             to="/login"
-            className="px-4 py-2 rounded text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: '#1E3A2F' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#2D5A3D')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#1E3A2F')}
+            className="text-sm font-medium transition-opacity hover:opacity-85"
+            style={{
+              backgroundColor: '#334739',
+              color: '#faf7f0',
+              borderRadius: '30px',
+              padding: '12px 28px',
+              display: 'inline-block',
+            }}
           >
-            Client Portal
+            Portal
           </Link>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 rounded"
+          className="md:hidden p-2"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
-          style={{ color: '#1E3A2F' }}
+          style={{ color: '#faf7f0' }}
         >
-          {open ? <X size={20} /> : <Menu size={20} />}
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Mobile dropdown */}
       {open && (
         <div
-          className="md:hidden border-t px-6 py-4 flex flex-col gap-4"
-          style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
+          className="md:hidden px-8 py-6 flex flex-col gap-5 border-t"
+          style={{ backgroundColor: '#698169', borderColor: 'rgba(250,247,240,0.15)' }}
         >
-          {[
-            { href: '#pillars', label: 'What We Do' },
-            { href: '#how-it-works', label: 'How It Works' },
-            { href: '#who-its-for', label: "Who It's For" },
-            { href: '#contact', label: 'Contact' },
-          ].map(link => (
-            <a key={link.href} href={link.href} className="text-sm" style={{ color: '#1E3A2F' }} onClick={() => setOpen(false)}>
+          {NAV_LINKS.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-sm transition-opacity hover:opacity-70"
+              style={{ color: '#faf7f0', letterSpacing: '0.05em' }}
+              onClick={() => setOpen(false)}
+            >
               {link.label}
             </a>
           ))}
           <Link
             to="/login"
-            className="px-4 py-2 rounded text-sm font-medium text-white text-center"
-            style={{ backgroundColor: '#1E3A2F' }}
+            className="text-sm font-medium self-start"
+            style={{
+              backgroundColor: '#334739',
+              color: '#faf7f0',
+              borderRadius: '30px',
+              padding: '12px 28px',
+              display: 'inline-block',
+            }}
+            onClick={() => setOpen(false)}
           >
-            Client Portal
+            Portal
           </Link>
         </div>
       )}

@@ -10,7 +10,7 @@ export default function MarketingPage() {
   return (
     <>
       <MarketingNav />
-      <main>
+      <main className="pt-[78px]">
         <Hero />
         <Pillars />
         <HowItWorks />

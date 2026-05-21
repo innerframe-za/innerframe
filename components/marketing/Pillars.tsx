@@ -78,7 +78,7 @@ export function Pillars() {
     <section
       id="pillars"
       className="py-20 px-6"
-      style={{ backgroundColor: '#F5F0E8' }}
+      style={{ backgroundColor: '#faf7f0' }}
     >
       <div className="max-w-7xl mx-auto">
         {/* Section heading */}
@@ -86,7 +86,7 @@ export function Pillars() {
           <div className="inline-block">
             <h2
               className="text-3xl font-medium gold-underline"
-              style={{ color: '#1E3A2F' }}
+              style={{ color: '#334739' }}
             >
               The 5 Pillars
             </h2>
@@ -112,7 +112,7 @@ export function Pillars() {
                 style={{
                   borderColor: '#ddd6c8',
                   borderTopWidth: '3px',
-                  borderTopColor: index % 2 === 0 ? '#1E3A2F' : '#D4AF37',
+                  borderTopColor: index % 2 === 0 ? '#334739' : '#d3b24b',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)',
                   minHeight: '340px',
                 }}
@@ -124,7 +124,7 @@ export function Pillars() {
                 >
                   <Icon
                     size={22}
-                    style={{ color: '#1E3A2F' }}
+                    style={{ color: '#334739' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -132,13 +132,13 @@ export function Pillars() {
                 {/* Content */}
                 <h3
                   className="font-semibold text-sm mb-1"
-                  style={{ color: '#1E3A2F' }}
+                  style={{ color: '#334739' }}
                 >
                   {pillar.name}
                 </h3>
                 <p
                   className="text-xs mb-4 font-medium leading-snug"
-                  style={{ color: '#D4AF37' }}
+                  style={{ color: '#d3b24b' }}
                 >
                   {pillar.tagline}
                 </p>
@@ -153,7 +153,7 @@ export function Pillars() {
                     >
                       <span
                         className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: '#1E3A2F' }}
+                        style={{ backgroundColor: '#334739' }}
                         aria-hidden="true"
                       />
                       {point}

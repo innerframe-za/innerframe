@@ -26,7 +26,7 @@ const inputBase =
 const inputStyle = { borderColor: '#ddd6c8', color: '#1a1a1a' }
 
 function handleFocus(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-  e.target.style.borderColor = '#1E3A2F'
+  e.target.style.borderColor = '#334739'
 }
 function handleBlurStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
   e.target.style.borderColor = '#ddd6c8'
@@ -92,16 +92,16 @@ export function ContactForm() {
       <section
         id="contact"
         className="py-20 px-6"
-        style={{ backgroundColor: '#1E3A2F' }}
+        style={{ backgroundColor: '#334739' }}
       >
         <div className="max-w-2xl mx-auto text-center">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
             style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
           >
-            <CheckCircle size={32} style={{ color: '#D4AF37' }} />
+            <CheckCircle size={32} style={{ color: '#d3b24b' }} />
           </div>
-          <h2 className="text-2xl font-medium mb-3" style={{ color: '#F5F0E8' }}>
+          <h2 className="text-2xl font-medium mb-3" style={{ color: '#faf7f0' }}>
             Message received
           </h2>
           <p className="text-sm" style={{ color: 'rgba(245,240,232,0.7)' }}>
@@ -117,7 +117,7 @@ export function ContactForm() {
     <section
       id="contact"
       className="py-20 px-6"
-      style={{ backgroundColor: '#1E3A2F' }}
+      style={{ backgroundColor: '#334739' }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -126,7 +126,7 @@ export function ContactForm() {
             <div className="inline-block mb-6">
               <h2
                 className="text-3xl font-medium gold-underline"
-                style={{ color: '#F5F0E8' }}
+                style={{ color: '#faf7f0' }}
               >
                 Get in Touch
               </h2>
@@ -148,11 +148,11 @@ export function ContactForm() {
                 <div key={item.label} className="flex items-start gap-3">
                   <div
                     className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2"
-                    style={{ backgroundColor: '#D4AF37' }}
+                    style={{ backgroundColor: '#d3b24b' }}
                     aria-hidden="true"
                   />
                   <div>
-                    <div className="text-sm font-medium" style={{ color: '#F5F0E8' }}>
+                    <div className="text-sm font-medium" style={{ color: '#faf7f0' }}>
                       {item.label}
                     </div>
                     <div className="text-xs" style={{ color: 'rgba(245,240,232,0.55)' }}>
@@ -179,7 +179,7 @@ export function ContactForm() {
                   className="block text-xs font-medium mb-1.5"
                   style={{ color: '#1a1a1a' }}
                 >
-                  Your Name <span style={{ color: '#D4AF37' }}>*</span>
+                  Your Name <span style={{ color: '#d3b24b' }}>*</span>
                 </label>
                 <input
                   id="name"
@@ -207,7 +207,7 @@ export function ContactForm() {
                   className="block text-xs font-medium mb-1.5"
                   style={{ color: '#1a1a1a' }}
                 >
-                  Facility Name <span style={{ color: '#D4AF37' }}>*</span>
+                  Facility Name <span style={{ color: '#d3b24b' }}>*</span>
                 </label>
                 <input
                   id="facility"
@@ -236,7 +236,7 @@ export function ContactForm() {
                     className="block text-xs font-medium mb-1.5"
                     style={{ color: '#1a1a1a' }}
                   >
-                    Email <span style={{ color: '#D4AF37' }}>*</span>
+                    Email <span style={{ color: '#d3b24b' }}>*</span>
                   </label>
                   <input
                     id="email"
@@ -291,7 +291,7 @@ export function ContactForm() {
                   style={{ color: '#1a1a1a' }}
                 >
                   Tell us about your facility{' '}
-                  <span style={{ color: '#D4AF37' }}>*</span>
+                  <span style={{ color: '#d3b24b' }}>*</span>
                 </label>
                 <textarea
                   id="message"
@@ -328,14 +328,14 @@ export function ContactForm() {
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+                style={{ backgroundColor: '#334739', color: '#ffffff' }}
                 onMouseEnter={e => {
                   if (!isSubmitting)
                     (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D'
                 }}
                 onMouseLeave={e => {
                   if (!isSubmitting)
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F'
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#334739'
                 }}
               >
                 {isSubmitting ? (
