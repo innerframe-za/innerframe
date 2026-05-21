@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Upload, UserPlus, HeartPulse, Briefcase } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Users, FileText, ClipboardCheck, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Upload, UserPlus, HeartPulse, Briefcase } from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
@@ -7,8 +7,7 @@ import { UploadModal } from '@/components/portal/UploadModal'
 import { AddResidentModal } from '@/components/portal/AddResidentModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 import { useUser } from '@/lib/auth/useUser'
-
-const mockStats = { totalResidents: 24, totalDocuments: 87, pendingReviews: 3, compliancePercent: 78 }
+import { createClient } from '@/lib/supabase/client'
 
 const pillarCards = [
   { value: 'admin', name: 'Admin Office', icon: ClipboardList, href: '/pillar/admin' },
@@ -20,11 +19,29 @@ const pillarCards = [
   { value: 'hr', name: 'HR', icon: Briefcase, href: '/pillar/hr' },
 ]
 
+type Stats = { totalResidents: number; totalDocuments: number; pendingReviews: number }
+
 export default function DashboardPage() {
   const { permissions } = usePermissions()
   const { user } = useUser()
   const [uploadOpen, setUploadOpen] = useState(false)
   const [addResidentOpen, setAddResidentOpen] = useState(false)
+  const [stats, setStats] = useState<Stats>({ totalResidents: 0, totalDocuments: 0, pendingReviews: 0 })
+
+  useEffect(() => {
+    if (!user?.orgId) return
+    const supabase = createClient()
+    Promise.all([
+      supabase.from('patients').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
+      supabase.from('documents').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
+    ]).then(([residentsRes, docsRes]) => {
+      setStats({
+        totalResidents: residentsRes.count ?? 0,
+        totalDocuments: docsRes.count ?? 0,
+        pendingReviews: 0,
+      })
+    })
+  }, [user?.orgId])
 
   const visiblePillars = pillarCards.filter(
     card => permissions[card.value as PillarSlug]?.canView !== false
@@ -34,11 +51,10 @@ export default function DashboardPage() {
     <div>
       <PageHeader title="Dashboard" subtitle="Manage your facility's operations and compliance" />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Residents" value={mockStats.totalResidents} icon={Users} />
-        <StatCard label="Total Documents" value={mockStats.totalDocuments} icon={FileText} />
-        <StatCard label="Pending Reviews" value={mockStats.pendingReviews} icon={ClipboardCheck} />
-        <StatCard label="Compliance" value={`${mockStats.compliancePercent}%`} icon={BarChart2} />
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <StatCard label="Total Residents" value={stats.totalResidents} icon={Users} />
+        <StatCard label="Total Documents" value={stats.totalDocuments} icon={FileText} />
+        <StatCard label="Pending Reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
       </div>
 
       <div className="mb-6">
@@ -92,7 +108,7 @@ export default function DashboardPage() {
       <AddResidentModal
         open={addResidentOpen}
         onClose={() => setAddResidentOpen(false)}
-        onSuccess={() => setAddResidentOpen(false)}
+        onSuccess={() => { setAddResidentOpen(false); setStats(s => ({ ...s, totalResidents: s.totalResidents + 1 })) }}
       />
     </div>
   )

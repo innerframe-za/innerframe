@@ -159,6 +159,15 @@ export default function ResidentDetailPage() {
 
   useEffect(() => { load() }, [load])
 
+  const handleDocDelete = async (docId: string, fileUrl: string) => {
+    if (!window.confirm('Delete this document? This cannot be undone.')) return
+    const supabase = createClient()
+    const { error } = await supabase.from('documents').delete().eq('id', docId)
+    if (error) { alert('Could not delete document: ' + error.message); return }
+    await supabase.storage.from('documents').remove([fileUrl])
+    setDocuments(prev => prev.filter(d => d.id !== docId))
+  }
+
   if (notFound) return <Navigate to="/residents" replace />
 
   if (loading || !resident) {
@@ -424,6 +433,7 @@ export default function ResidentDetailPage() {
                         date={formatDate(doc.created_at) ?? doc.created_at}
                         isGlobal={doc.is_global}
                         canDelete={true}
+                        onDelete={() => handleDocDelete(doc.id, doc.file_url)}
                       />
                     ))}
                   </div>

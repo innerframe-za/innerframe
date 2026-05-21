@@ -15,7 +15,7 @@ interface SectionGroupProps {
   title: string
   documents: Document[]
   canDelete?: boolean
-  onDelete?: (id: string) => void
+  onDelete?: (id: string, fileUrl: string) => void
 }
 
 export function SectionGroup({
@@ -57,7 +57,7 @@ export function SectionGroup({
               date={doc.date}
               isGlobal={doc.isGlobal}
               canDelete={canDelete && !doc.isGlobal}
-              onDelete={onDelete ? () => onDelete(doc.id) : undefined}
+              onDelete={onDelete ? () => onDelete(doc.id, doc.fileUrl) : undefined}
             />
           ))}
         </div>

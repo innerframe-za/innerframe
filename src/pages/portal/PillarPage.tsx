@@ -154,9 +154,15 @@ export default function PillarPage() {
     )
   }
 
-  const handleDelete = async (docId: string) => {
+  const handleDelete = async (docId: string, fileUrl: string) => {
+    if (!window.confirm('Delete this document? This cannot be undone.')) return
     const supabase = createClient()
-    await supabase.from('documents').delete().eq('id', docId)
+    const { error } = await supabase.from('documents').delete().eq('id', docId)
+    if (error) {
+      alert('Could not delete document: ' + error.message)
+      return
+    }
+    await supabase.storage.from('documents').remove([fileUrl])
     load()
   }
 
