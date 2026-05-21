@@ -1,4 +1,3 @@
-import { Upload } from 'lucide-react'
 import { DocumentRow } from './DocumentRow'
 
 interface Document {
@@ -12,25 +11,17 @@ interface Document {
   isGlobal?: boolean
 }
 
-/**
- * A document section group: section heading with gold underline,
- * list of DocumentRow items, and an Upload button.
- */
 interface SectionGroupProps {
   title: string
   documents: Document[]
-  canUpload?: boolean
   canDelete?: boolean
-  onUpload?: () => void
   onDelete?: (id: string) => void
 }
 
 export function SectionGroup({
   title,
   documents,
-  canUpload = false,
   canDelete = false,
-  onUpload,
   onDelete,
 }: SectionGroupProps) {
   return (
@@ -46,31 +37,6 @@ export function SectionGroup({
             aria-hidden="true"
           />
         </div>
-        {canUpload && (
-          <button
-            type="button"
-            onClick={onUpload}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border transition-colors"
-            style={{
-              borderColor: '#1E3A2F',
-              color: '#1E3A2F',
-              backgroundColor: 'transparent',
-            }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.backgroundColor = '#1E3A2F'
-              el.style.color = '#ffffff'
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLButtonElement
-              el.style.backgroundColor = 'transparent'
-              el.style.color = '#1E3A2F'
-            }}
-          >
-            <Upload size={12} />
-            Upload
-          </button>
-        )}
       </div>
 
       {/* Documents */}

@@ -6,7 +6,7 @@ import { UploadModal } from '@/components/portal/UploadModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
-import { Lock } from 'lucide-react'
+import { Lock, Upload } from 'lucide-react'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
   admin: { name: 'Admin Office', description: 'The Structure Behind the Facility — policies, staff files, resident records, compliance systems', dbKey: 'admin' },
@@ -165,16 +165,29 @@ export default function PillarPage() {
 
   return (
     <div>
-      <PageHeader title={pillar.name} subtitle={pillar.description} />
+      <PageHeader
+        title={pillar.name}
+        subtitle={pillar.description}
+        action={perm.canEdit ? (
+          <button
+            type="button"
+            onClick={() => setUploadOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium"
+            style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
+          >
+            <Upload size={14} />Upload Document
+          </button>
+        ) : undefined}
+      />
       <div className="space-y-2">
         {sections.map(section => (
           <SectionGroup
             key={section.id}
             title={section.title}
             documents={section.documents}
-            canUpload={perm.canEdit && section.id !== 'global'}
             canDelete={perm.canEdit}
-            onUpload={() => setUploadOpen(true)}
             onDelete={handleDelete}
           />
         ))}
