@@ -5,6 +5,7 @@ interface Document {
   id: string
   fileName: string
   fileUrl: string
+  title?: string
   category?: string
   pillar?: string
   date: string
@@ -84,6 +85,7 @@ export function SectionGroup({
               key={doc.id}
               fileName={doc.fileName}
               fileUrl={doc.fileUrl}
+              title={doc.title}
               category={doc.category}
               pillar={doc.pillar}
               date={doc.date}

@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/client'
 interface DocumentRowProps {
   fileName: string
   fileUrl: string
+  title?: string
   category?: string
   pillar?: string
   date: string
@@ -37,12 +38,29 @@ const pillarColors: Record<string, string> = {
   finance: '#2D5A3D',
   kitchen: '#3B6B4A',
   medical: '#8AAF8E',
+  medical_residence: '#5B8C6B',
+  hr: '#7A6B4A',
   board_governance: '#D4AF37',
+}
+
+const pillarLabels: Record<string, string> = {
+  admin: 'Admin',
+  finance: 'Finance',
+  kitchen: 'Kitchen',
+  medical: 'Medical',
+  medical_residence: 'Medical Residence',
+  hr: 'HR',
+  board_governance: 'Board Governance',
+}
+
+function friendlyPillar(p: string) {
+  return pillarLabels[p] ?? p.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
 export function DocumentRow({
   fileName,
   fileUrl,
+  title,
   category,
   pillar,
   date,
@@ -52,6 +70,7 @@ export function DocumentRow({
 }: DocumentRowProps) {
   const { Icon, color } = getFileIcon(fileName)
   const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
+  const displayTitle = title || fileName
 
   /** Office docs need Google Docs Viewer; PDFs/images open directly */
   const isOfficeDoc = (name: string) => {
@@ -131,21 +150,25 @@ export function DocumentRow({
 
       {/* File info */}
       <div className="flex-1 min-w-0">
+        {/* Heading: user title or filename */}
         <p
           className="text-sm font-medium truncate"
           style={{ color: '#1a1a1a' }}
-          title={fileName}
+          title={displayTitle}
         >
-          {fileName}
+          {displayTitle}
         </p>
+        {/* Subheading: original filename when a separate title exists */}
+        {title && title !== fileName && (
+          <p className="text-xs truncate mt-0.5" style={{ color: '#9ca3af' }} title={fileName}>
+            {fileName}
+          </p>
+        )}
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           {category && (
             <span
               className="text-xs px-1.5 py-0.5 rounded"
-              style={{
-                backgroundColor: 'rgba(30,58,47,0.07)',
-                color: '#1E3A2F',
-              }}
+              style={{ backgroundColor: 'rgba(30,58,47,0.07)', color: '#1E3A2F' }}
             >
               {category}
             </span>
@@ -153,18 +176,13 @@ export function DocumentRow({
           {pillar && (
             <span
               className="text-xs px-1.5 py-0.5 rounded"
-              style={{
-                backgroundColor: `${pillarColor}12`,
-                color: pillarColor,
-              }}
+              style={{ backgroundColor: `${pillarColor}12`, color: pillarColor }}
             >
-              {pillar.replace('_', ' ')}
+              {friendlyPillar(pillar)}
             </span>
           )}
           {isGlobal && <GlobalBadge />}
-          <span className="text-xs" style={{ color: '#5a5a5a' }}>
-            {date}
-          </span>
+          <span className="text-xs" style={{ color: '#5a5a5a' }}>{date}</span>
         </div>
       </div>
 

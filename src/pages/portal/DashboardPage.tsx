@@ -129,6 +129,7 @@ export default function DashboardPage() {
           onClose={() => setUploadOpen(false)}
           orgId={user.orgId}
           userRole={user.role}
+          onSuccess={() => setUploadOpen(false)}
         />
       )}
       <AddResidentModal

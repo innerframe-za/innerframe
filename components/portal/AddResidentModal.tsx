@@ -223,40 +223,41 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
                   </div>
                 </div>
 
-                {/* Divider */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#1E3A2F' }}>Medical Information</span>
-                  <div className="flex-1 h-px" style={{ backgroundColor: '#ddd6c8' }} />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <Label>Allergies</Label>
-                    <Input value={allergies} onChange={setAllergies} placeholder="e.g. Penicillin, latex" />
+                {/* Medical Information — own card block */}
+                <div className="rounded-lg border p-4 space-y-4" style={{ borderColor: '#ddd6c8', backgroundColor: '#fafaf8' }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#1E3A2F' }}>Medical Information</span>
+                    <div className="flex-1 h-px" style={{ backgroundColor: '#ddd6c8' }} />
                   </div>
-                  <div className="sm:col-span-2">
-                    <Label>Chronic Conditions</Label>
-                    <Input value={chronicConditions} onChange={setChronicConditions} placeholder="e.g. Hypertension, Type 2 Diabetes" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <Label>Current Medications</Label>
-                    <Input value={medications} onChange={setMedications} placeholder="e.g. Metformin 500mg, Amlodipine 5mg" />
-                  </div>
-                  <div>
-                    <Label>GP / Doctor Name</Label>
-                    <Input value={gpName} onChange={setGpName} placeholder="Dr. van der Merwe" />
-                  </div>
-                  <div>
-                    <Label>GP Contact</Label>
-                    <Input value={gpContact} onChange={setGpContact} placeholder="011 555 0100" />
-                  </div>
-                  <div>
-                    <Label>Medical Aid Scheme</Label>
-                    <Input value={medAidScheme} onChange={setMedAidScheme} placeholder="e.g. Discovery Health" />
-                  </div>
-                  <div>
-                    <Label>Member Number</Label>
-                    <Input value={medAidNumber} onChange={setMedAidNumber} placeholder="e.g. 1234567890" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <Label>Allergies</Label>
+                      <Input value={allergies} onChange={setAllergies} placeholder="e.g. Penicillin, latex" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Chronic Conditions</Label>
+                      <Input value={chronicConditions} onChange={setChronicConditions} placeholder="e.g. Hypertension, Type 2 Diabetes" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Current Medications</Label>
+                      <Input value={medications} onChange={setMedications} placeholder="e.g. Metformin 500mg, Amlodipine 5mg" />
+                    </div>
+                    <div>
+                      <Label>GP / Doctor Name</Label>
+                      <Input value={gpName} onChange={setGpName} placeholder="Dr. van der Merwe" />
+                    </div>
+                    <div>
+                      <Label>GP Contact</Label>
+                      <Input value={gpContact} onChange={setGpContact} placeholder="011 555 0100" />
+                    </div>
+                    <div>
+                      <Label>Medical Aid Scheme</Label>
+                      <Input value={medAidScheme} onChange={setMedAidScheme} placeholder="e.g. Discovery Health" />
+                    </div>
+                    <div>
+                      <Label>Member Number</Label>
+                      <Input value={medAidNumber} onChange={setMedAidNumber} placeholder="e.g. 1234567890" />
+                    </div>
                   </div>
                 </div>
               </div>

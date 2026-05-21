@@ -89,19 +89,30 @@ export function Navbar() {
         role="navigation"
         aria-label="Portal top navigation"
       >
-        {/* Wordmark — no logo image */}
-        <Link to="/dashboard" className="flex flex-col flex-shrink-0 leading-none">
+        {/* Wordmark — matches MarketingNav exactly */}
+        <Link to="/dashboard" className="flex-shrink-0 flex flex-col items-center leading-none">
           <span
-            className="font-semibold tracking-widest text-white"
-            style={{ fontSize: '15px', letterSpacing: '0.12em', fontFamily: "'Cormorant Garamond', serif" }}
+            style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontWeight: 600,
+              fontSize: '26px',
+              color: '#faf7f0',
+              letterSpacing: '0.12em',
+            }}
           >
             INNERFRAME
           </span>
           <span
-            className="tracking-widest"
-            style={{ fontSize: '9px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', fontFamily: 'Inter, sans-serif' }}
+            style={{
+              fontFamily: "'Inter', system-ui, sans-serif",
+              fontWeight: 400,
+              fontSize: '11px',
+              color: 'rgba(250,247,240,0.8)',
+              letterSpacing: '0.18em',
+              marginTop: '3px',
+            }}
           >
-            — CARE SOLUTIONS
+            — CARE SOLUTIONS —
           </span>
         </Link>
 
@@ -173,7 +184,7 @@ export function Navbar() {
         style={{
           top: '56px',
           height: '44px',
-          backgroundColor: '#17302A',
+          backgroundColor: '#698169',
           borderBottom: '2px solid #D4AF37',
         }}
         role="navigation"
@@ -250,7 +261,7 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="fixed left-0 right-0 z-30 px-4 py-4 flex flex-col gap-1 md:hidden"
-          style={{ top: '100px', backgroundColor: '#1E3A2F', borderBottom: '2px solid #D4AF37' }}
+          style={{ top: '100px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
         >
           {tabItems.map(item => {
             const active = isTabActive(item.href)

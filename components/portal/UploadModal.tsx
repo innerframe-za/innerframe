@@ -74,6 +74,7 @@ export function UploadModal({
   preselectedPatientId,
 }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
+  const [title, setTitle] = useState('')
   const [pillar, setPillar] = useState(defaultPillar ?? 'admin')
   const [sectionId, setSectionId] = useState('')
   const [patientId, setPatientId] = useState(preselectedPatientId ?? '')
@@ -98,6 +99,11 @@ export function UploadModal({
     if (err) { setError(err); return }
     setError(null)
     setFile(f)
+    // Auto-fill title from filename: strip extension, replace underscores/hyphens with spaces
+    if (!title) {
+      const stem = f.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ').trim()
+      setTitle(stem)
+    }
   }
 
   const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -144,6 +150,7 @@ export function UploadModal({
       const { error: dbError } = await supabase.from('documents').insert({
         org_id: isGlobal ? INNERFRAME_ORG_ID : orgId,
         pillar,
+        title: title.trim() || null,
         file_name: file.name,
         file_url: storagePath,
         section_id: sectionId || null,
@@ -169,6 +176,7 @@ export function UploadModal({
   const handleClose = () => {
     if (uploading) return
     setFile(null)
+    setTitle('')
     setError(null)
     setProgress(0)
     setPillar(defaultPillar ?? 'admin')
@@ -234,6 +242,23 @@ export function UploadModal({
                 </p>
               </>
             )}
+          </div>
+
+          {/* Document title */}
+          <div>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>
+              Document Title
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="e.g. Q1 Finance Report"
+              className="w-full px-3 py-2.5 rounded border text-sm outline-none"
+              style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+              onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
+              onBlur={e => (e.target.style.borderColor = '#ddd6c8')}
+            />
           </div>
 
           {/* Pillar selector */}

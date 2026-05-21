@@ -207,6 +207,7 @@ export type Database = {
           category_id: string | null
           section_id: string | null
           pillar: string
+          title: string | null
           file_name: string
           file_url: string
           uploaded_by: string | null
@@ -220,6 +221,7 @@ export type Database = {
           category_id?: string | null
           section_id?: string | null
           pillar: string
+          title?: string | null
           file_name: string
           file_url: string
           uploaded_by?: string | null
@@ -233,6 +235,7 @@ export type Database = {
           category_id?: string | null
           section_id?: string | null
           pillar?: string
+          title?: string | null
           file_name?: string
           file_url?: string
           uploaded_by?: string | null

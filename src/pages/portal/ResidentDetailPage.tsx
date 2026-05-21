@@ -99,14 +99,6 @@ function Field({ icon: Icon, label, value, editing, name, onChange }: {
   )
 }
 
-function SectionDivider({ label }: { label: string }) {
-  return (
-    <div className="col-span-full flex items-center gap-3 pt-2">
-      <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#1E3A2F' }}>{label}</span>
-      <div className="flex-1 h-px" style={{ backgroundColor: '#ddd6c8' }} />
-    </div>
-  )
-}
 
 function formatDate(iso: string | null) {
   if (!iso) return null
@@ -287,15 +279,23 @@ export default function ResidentDetailPage() {
           <Field icon={BookOpen} label="Religion" value={displayResident.religion} editing={editing} name="religion" onChange={v => setField('religion', v)} />
           <Field icon={Utensils} label="Dietary Requirements" value={displayResident.dietary_requirements} editing={editing} name="dietary_requirements" onChange={v => setField('dietary_requirements', v)} />
 
-          <SectionDivider label="Medical Information" />
+        </div>
 
-          <Field icon={AlertCircle} label="Allergies" value={displayResident.allergies} editing={editing} name="allergies" onChange={v => setField('allergies', v)} />
-          <Field icon={Heart} label="Chronic Conditions" value={displayResident.chronic_conditions} editing={editing} name="chronic_conditions" onChange={v => setField('chronic_conditions', v)} />
-          <Field icon={Pill} label="Current Medications" value={displayResident.current_medications} editing={editing} name="current_medications" onChange={v => setField('current_medications', v)} />
-          <Field icon={Stethoscope} label="GP / Doctor Name" value={displayResident.gp_name} editing={editing} name="gp_name" onChange={v => setField('gp_name', v)} />
-          <Field icon={Phone} label="GP Contact" value={displayResident.gp_contact} editing={editing} name="gp_contact" onChange={v => setField('gp_contact', v)} />
-          <Field icon={BookOpen} label="Medical Aid Scheme" value={displayResident.medical_aid_scheme} editing={editing} name="medical_aid_scheme" onChange={v => setField('medical_aid_scheme', v)} />
-          <Field icon={Hash} label="Medical Aid Member No." value={displayResident.medical_aid_member_number} editing={editing} name="medical_aid_member_number" onChange={v => setField('medical_aid_member_number', v)} />
+        {/* Medical Information — own sub-card */}
+        <div className="mt-5 rounded-lg border p-5" style={{ borderColor: '#ddd6c8', backgroundColor: '#fafaf8' }}>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#1E3A2F' }}>Medical Information</span>
+            <div className="flex-1 h-px" style={{ backgroundColor: '#ddd6c8' }} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Field icon={AlertCircle} label="Allergies" value={displayResident.allergies} editing={editing} name="allergies" onChange={v => setField('allergies', v)} />
+            <Field icon={Heart} label="Chronic Conditions" value={displayResident.chronic_conditions} editing={editing} name="chronic_conditions" onChange={v => setField('chronic_conditions', v)} />
+            <Field icon={Pill} label="Current Medications" value={displayResident.current_medications} editing={editing} name="current_medications" onChange={v => setField('current_medications', v)} />
+            <Field icon={Stethoscope} label="GP / Doctor Name" value={displayResident.gp_name} editing={editing} name="gp_name" onChange={v => setField('gp_name', v)} />
+            <Field icon={Phone} label="GP Contact" value={displayResident.gp_contact} editing={editing} name="gp_contact" onChange={v => setField('gp_contact', v)} />
+            <Field icon={BookOpen} label="Medical Aid Scheme" value={displayResident.medical_aid_scheme} editing={editing} name="medical_aid_scheme" onChange={v => setField('medical_aid_scheme', v)} />
+            <Field icon={Hash} label="Medical Aid Member No." value={displayResident.medical_aid_member_number} editing={editing} name="medical_aid_member_number" onChange={v => setField('medical_aid_member_number', v)} />
+          </div>
         </div>
       </div>
 
