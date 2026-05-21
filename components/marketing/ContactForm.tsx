@@ -101,7 +101,7 @@ export function ContactForm() {
           >
             <CheckCircle size={32} style={{ color: '#d3b24b' }} />
           </div>
-          <h2 className="text-2xl font-medium mb-3" style={{ color: '#faf7f0' }}>
+          <h2 className="text-2xl font-semibold mb-3" style={{ color: '#faf7f0', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}>
             Message received
           </h2>
           <p className="text-sm" style={{ color: 'rgba(245,240,232,0.7)' }}>
@@ -125,8 +125,8 @@ export function ContactForm() {
           <div>
             <div className="inline-block mb-6">
               <h2
-                className="text-3xl font-medium gold-underline"
-                style={{ color: '#faf7f0' }}
+                className="text-3xl font-semibold gold-underline"
+                style={{ color: '#faf7f0', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
               >
                 Get in Touch
               </h2>

@@ -85,8 +85,8 @@ export function Pillars() {
         <div className="text-center mb-14">
           <div className="inline-block">
             <h2
-              className="text-3xl font-medium gold-underline"
-              style={{ color: '#334739' }}
+              className="text-3xl font-semibold gold-underline"
+              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
             >
               The 5 Pillars
             </h2>
@@ -131,8 +131,8 @@ export function Pillars() {
 
                 {/* Content */}
                 <h3
-                  className="font-semibold text-sm mb-1"
-                  style={{ color: '#334739' }}
+                  className="font-semibold text-base mb-1"
+                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal', fontSize: '17px' }}
                 >
                   {pillar.name}
                 </h3>

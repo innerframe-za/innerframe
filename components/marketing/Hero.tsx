@@ -7,8 +7,24 @@ export function Hero() {
         minHeight: 'calc(100vh - 78px)',
       }}
     >
-      {/* Left column — text content */}
-      <div className="flex flex-col justify-center px-10 py-16 md:pl-20 md:pr-10">
+      {/* Left column — brand illustration */}
+      <div
+        className="hidden md:flex items-center justify-center py-10 px-10"
+        style={{ backgroundColor: '#faf7f0' }}
+      >
+        <img
+          src="/logo-full.jpeg"
+          alt="Innerframe Care Solutions brand illustration"
+          style={{
+            maxHeight: 'calc(100vh - 160px)',
+            maxWidth: '100%',
+            objectFit: 'contain',
+          }}
+        />
+      </div>
+
+      {/* Right column — text content */}
+      <div className="flex flex-col justify-center px-10 py-16 md:pr-20 md:pl-10">
         {/* Eyebrow label */}
         <p
           className="text-xs font-medium uppercase tracking-widest mb-6"
@@ -17,18 +33,22 @@ export function Hero() {
           South African Care Facility Specialists
         </p>
 
-        {/* Headline — gold accent + dark green */}
+        {/* Headline — dark green + gold accent on last line */}
         <h1
-          className="font-bold leading-tight mb-6"
+          className="leading-tight mb-6"
           style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontWeight: 600,
+            fontStyle: 'normal',
             fontSize: 'clamp(38px, 4.5vw, 58px)',
-            lineHeight: '1.1',
+            lineHeight: '1.15',
           }}
         >
-          <span style={{ color: '#d3b24b' }}>Effortless Compliance,</span>
+          <span style={{ color: '#334739' }}>Stronger Structure.</span>
           <br />
-          <span style={{ color: '#334739' }}>Stronger Care Homes.</span>
+          <span style={{ color: '#334739' }}>Better Care.</span>
+          <br />
+          <span style={{ color: '#d3b24b' }}>Effortless Compliance.</span>
         </h1>
 
         {/* Body copy */}
@@ -74,22 +94,6 @@ export function Hero() {
             Learn More
           </a>
         </div>
-      </div>
-
-      {/* Right column — brand illustration, no box or shadow */}
-      <div
-        className="hidden md:flex items-center justify-center py-10 px-10"
-        style={{ backgroundColor: '#faf7f0' }}
-      >
-        <img
-          src="/logo-full.jpeg"
-          alt="Innerframe Care Solutions brand illustration"
-          style={{
-            maxHeight: 'calc(100vh - 160px)',
-            maxWidth: '100%',
-            objectFit: 'contain',
-          }}
-        />
       </div>
     </section>
   )

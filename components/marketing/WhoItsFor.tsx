@@ -52,8 +52,8 @@ export function WhoItsFor() {
         <div className="text-center mb-14">
           <div className="inline-block">
             <h2
-              className="text-3xl font-medium gold-underline"
-              style={{ color: '#334739' }}
+              className="text-3xl font-semibold gold-underline"
+              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
             >
               Built for South African Care Facilities
             </h2>
@@ -77,8 +77,8 @@ export function WhoItsFor() {
               style={{ borderColor: '#ddd6c8', boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)' }}
             >
               <h3
-                className="font-medium text-base mb-3"
-                style={{ color: '#334739' }}
+                className="font-semibold text-lg mb-3"
+                style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
               >
                 {audience.title}
               </h3>

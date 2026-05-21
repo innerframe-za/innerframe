@@ -43,8 +43,8 @@ export function HowItWorks() {
         <div className="text-center mb-14">
           <div className="inline-block">
             <h2
-              className="text-3xl font-medium gold-underline"
-              style={{ color: '#334739' }}
+              className="text-3xl font-semibold gold-underline"
+              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
             >
               How It Works
             </h2>
@@ -99,8 +99,8 @@ export function HowItWorks() {
 
                 {/* Content */}
                 <h3
-                  className="text-xl font-medium mb-1"
-                  style={{ color: '#334739' }}
+                  className="text-xl font-semibold mb-1"
+                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
                 >
                   {step.title}
                 </h3>
