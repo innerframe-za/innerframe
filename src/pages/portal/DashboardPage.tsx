@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Users, FileText, ClipboardCheck, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Upload, UserPlus, HeartPulse, Briefcase } from 'lucide-react'
+import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Upload, UserPlus, HeartPulse, Briefcase } from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
@@ -51,10 +51,11 @@ export default function DashboardPage() {
     <div>
       <PageHeader title="Dashboard" subtitle="Manage your facility's operations and compliance" />
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Residents" value={stats.totalResidents} icon={Users} />
         <StatCard label="Total Documents" value={stats.totalDocuments} icon={FileText} />
         <StatCard label="Pending Reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
+        <StatCard label="Compliance" value="—" icon={BarChart2} />
       </div>
 
       <div className="mb-6">
