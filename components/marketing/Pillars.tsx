@@ -132,7 +132,7 @@ export function Pillars() {
                 {/* Content */}
                 <h3
                   className="font-semibold mb-1"
-                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal', fontSize: '21px' }}
+                  style={{ color: '#334739', fontFamily: "'Inter', system-ui, sans-serif", fontSize: '17px' }}
                 >
                   {pillar.name}
                 </h3>
@@ -144,7 +144,7 @@ export function Pillars() {
                 </p>
 
                 {/* Bullet points */}
-                <ul className="mt-auto space-y-2">
+                <ul className="mt-2 space-y-2">
                   {pillar.points.map((point) => (
                     <li
                       key={point}

@@ -20,13 +20,13 @@ export function MarketingNav() {
     >
       <div className="max-w-7xl mx-auto px-8 h-full flex items-center justify-between">
         {/* Wordmark */}
-        <Link to="/" className="flex-shrink-0 flex flex-col leading-none">
+        <Link to="/" className="flex-shrink-0 flex flex-col items-center leading-none">
           <span
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
               fontStyle: 'normal',
-              fontSize: '22px',
+              fontSize: '26px',
               color: '#faf7f0',
               letterSpacing: '0.12em',
             }}
@@ -37,10 +37,10 @@ export function MarketingNav() {
             style={{
               fontFamily: "'Inter', system-ui, sans-serif",
               fontWeight: 400,
-              fontSize: '10px',
+              fontSize: '11px',
               color: 'rgba(250,247,240,0.8)',
               letterSpacing: '0.18em',
-              marginTop: '2px',
+              marginTop: '3px',
             }}
           >
             — CARE SOLUTIONS —

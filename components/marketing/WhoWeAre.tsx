@@ -66,9 +66,8 @@ export function WhoWeAre() {
                   className="font-semibold mb-2"
                   style={{
                     color: '#334739',
-                    fontFamily: "'Cormorant Garamond', Georgia, serif",
-                    fontStyle: 'normal',
-                    fontSize: '20px',
+                    fontFamily: "'Inter', system-ui, sans-serif",
+                    fontSize: '16px',
                   }}
                 >
                   {v.title}
