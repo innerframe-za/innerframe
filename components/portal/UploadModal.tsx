@@ -131,7 +131,7 @@ export function UploadModal({
       // Build storage path: orgId/pillar/uid_filename
       const uid = crypto.randomUUID().slice(0, 8)
       const safeFileName = `${uid}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
-      const storagePath = `${orgId}/${pillar}/${safeFileName}`
+      const storagePath = `${orgId}/${pillar}/uploads/${safeFileName}`
 
       setProgress(30)
 
