@@ -104,8 +104,8 @@ export default function ResidentsPage() {
       </div>
 
       <div className="bg-white rounded-xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
-        <div className="hidden md:grid grid-cols-[1fr_130px_100px_130px_120px_80px] gap-4 px-5 py-3 border-b" style={{ borderColor: '#ddd6c8', backgroundColor: '#F5F0E8' }}>
-          {['Name', 'ID Number', 'Room', 'Admission Date', 'Status', 'Actions'].map(col => (
+        <div className="hidden md:grid grid-cols-[1fr_130px_100px_130px_120px] gap-4 px-5 py-3 border-b" style={{ borderColor: '#ddd6c8', backgroundColor: '#F5F0E8' }}>
+          {['Name', 'ID Number', 'Room', 'Admission Date', 'Status'].map(col => (
             <span key={col} className="text-xs font-medium uppercase tracking-wider" style={{ color: '#5a5a5a' }}>{col}</span>
           ))}
         </div>
@@ -123,11 +123,15 @@ export default function ResidentsPage() {
         ) : (
           filtered.map((resident, index) => {
             const sc = statusConfig[resident.status]
+            const baseBg = index % 2 === 0 ? '#ffffff' : '#fafaf9'
             return (
-              <div
+              <Link
                 key={resident.id}
-                className="grid grid-cols-1 md:grid-cols-[1fr_130px_100px_130px_120px_80px] gap-2 md:gap-4 px-5 py-3.5 border-b last:border-b-0 items-center"
-                style={{ borderColor: '#ddd6c8', backgroundColor: index % 2 === 0 ? '#ffffff' : '#fafaf9' }}
+                to={`/residents/${resident.id}`}
+                className="grid grid-cols-1 md:grid-cols-[1fr_130px_100px_130px_120px] gap-2 md:gap-4 px-5 py-3.5 border-b last:border-b-0 items-center"
+                style={{ borderColor: '#ddd6c8', backgroundColor: baseBg, textDecoration: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = 'rgba(30,58,47,0.04)')}
+                onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = baseBg)}
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -153,16 +157,7 @@ export default function ResidentsPage() {
                     {sc.label}
                   </span>
                 </div>
-                <Link
-                  to={`/residents/${resident.id}`}
-                  className="text-xs font-medium transition-colors"
-                  style={{ color: '#1E3A2F' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = '#D4AF37')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = '#1E3A2F')}
-                >
-                  View →
-                </Link>
-              </div>
+              </Link>
             )
           })
         )}

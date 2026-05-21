@@ -227,29 +227,38 @@ export function Navbar() {
         {/* Search */}
         <form
           onSubmit={handleSearch}
-          className="hidden md:flex items-center flex-shrink-0 ml-auto"
+          className="hidden md:flex items-center flex-shrink-0 ml-3"
         >
           <div className="relative">
             <Search
-              size={13}
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ color: 'rgba(255,255,255,0.35)' }}
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ color: 'rgba(255,255,255,0.5)' }}
               aria-hidden="true"
             />
             <input
               type="search"
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
-              placeholder="Search..."
-              className="w-40 pl-7 pr-3 py-1 text-xs rounded border bg-transparent outline-none transition-all"
-              style={{ borderColor: 'rgba(255,255,255,0.18)', color: '#ffffff' }}
+              placeholder="Search documents and residents..."
+              className="pl-8 pr-4 py-1.5 text-sm rounded-md outline-none transition-all"
+              style={{
+                width: '220px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'rgba(255,255,255,0.3)',
+                backgroundColor: 'rgba(255,255,255,0.12)',
+                color: '#ffffff',
+              }}
               onFocus={e => {
-                e.target.style.borderColor = 'rgba(255,255,255,0.45)'
-                e.target.style.width = '190px'
+                e.target.style.borderColor = '#D4AF37'
+                e.target.style.backgroundColor = 'rgba(255,255,255,0.18)'
+                e.target.style.width = '280px'
               }}
               onBlur={e => {
-                e.target.style.borderColor = 'rgba(255,255,255,0.18)'
-                e.target.style.width = '160px'
+                e.target.style.borderColor = 'rgba(255,255,255,0.3)'
+                e.target.style.backgroundColor = 'rgba(255,255,255,0.12)'
+                e.target.style.width = '220px'
               }}
               aria-label="Search documents and residents"
             />

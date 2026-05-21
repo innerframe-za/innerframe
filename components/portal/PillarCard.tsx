@@ -7,7 +7,7 @@ import type { LucideIcon } from 'lucide-react'
  */
 interface PillarCardProps {
   name: string
-  docCount: number
+  docCount?: number
   icon: LucideIcon
   href: string
   isActive?: boolean
@@ -57,9 +57,11 @@ export function PillarCard({
         >
           {name}
         </p>
-        <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
-          {docCount} docs
-        </p>
+        {docCount !== undefined && (
+          <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
+            {docCount} docs
+          </p>
+        )}
       </div>
     </Link>
   )
