@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/lib/auth/useUser'
 
-export type PillarSlug = 'admin' | 'finance' | 'kitchen' | 'medical' | 'board_governance'
+export type PillarSlug =
+  | 'admin'
+  | 'finance'
+  | 'kitchen'
+  | 'medical'
+  | 'board_governance'
+  | 'medical_residence'
+  | 'hr'
 
 export interface PillarPermission {
   canView: boolean
@@ -16,6 +23,8 @@ const FULL_ACCESS: Record<PillarSlug, PillarPermission> = {
   kitchen: { canView: true, canEdit: true },
   medical: { canView: true, canEdit: true },
   board_governance: { canView: true, canEdit: true },
+  medical_residence: { canView: true, canEdit: true },
+  hr: { canView: true, canEdit: true },
 }
 
 /**

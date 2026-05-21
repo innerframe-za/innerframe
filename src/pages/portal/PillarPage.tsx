@@ -10,6 +10,8 @@ const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: str
   kitchen: { name: 'Kitchen', description: 'Safe Nutrition. Safe Residents. — meal planning, food safety, hygiene, temperature controls', dbKey: 'kitchen' },
   medical: { name: 'Medical', description: 'Resident Safety & Clinical Compliance — medication management, care plans, incident reporting', dbKey: 'medical' },
   'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability — governance structure, board docs, risk registers', dbKey: 'board_governance' },
+  'medical-residence': { name: 'Medical Residence', description: 'Residential Medical Care — ongoing health monitoring, care assessments, clinical notes, chronic disease management', dbKey: 'medical_residence' },
+  hr: { name: 'HR', description: 'Human Resources — staff records, contracts, training, performance management, leave administration', dbKey: 'hr' },
 }
 
 function getMockSections(dbKey: string) {

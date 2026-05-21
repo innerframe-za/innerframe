@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Upload, UserPlus } from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
 import { DocumentRow } from '@/components/portal/DocumentRow'
 import { ResidentRow } from '@/components/portal/ResidentRow'
+import { UploadModal } from '@/components/portal/UploadModal'
+import { AddResidentModal } from '@/components/portal/AddResidentModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
+import { useUser } from '@/lib/auth/useUser'
 
 const mockStats = { totalResidents: 24, totalDocuments: 87, pendingReviews: 3, compliancePercent: 78 }
 
@@ -34,6 +38,9 @@ const pillarCards = [
 
 export default function DashboardPage() {
   const { permissions } = usePermissions()
+  const { user } = useUser()
+  const [uploadOpen, setUploadOpen] = useState(false)
+  const [addResidentOpen, setAddResidentOpen] = useState(false)
 
   const visiblePillars = pillarCards.filter(
     card => permissions[card.value as PillarSlug]?.canView !== false
@@ -93,17 +100,42 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button type="button" className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium transition-colors" style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+        <button
+          type="button"
+          onClick={() => setUploadOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium transition-colors"
+          style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
           onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
-          onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}>
+          onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
+        >
           <Upload size={14} />Upload Document
         </button>
-        <button type="button" className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium border transition-colors" style={{ borderColor: '#1E3A2F', color: '#1E3A2F', backgroundColor: 'transparent' }}
+        <button
+          type="button"
+          onClick={() => setAddResidentOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium border transition-colors"
+          style={{ borderColor: '#1E3A2F', color: '#1E3A2F', backgroundColor: 'transparent' }}
           onMouseEnter={e => { const el = e.currentTarget as HTMLButtonElement; el.style.backgroundColor = '#1E3A2F'; el.style.color = '#ffffff' }}
-          onMouseLeave={e => { const el = e.currentTarget as HTMLButtonElement; el.style.backgroundColor = 'transparent'; el.style.color = '#1E3A2F' }}>
+          onMouseLeave={e => { const el = e.currentTarget as HTMLButtonElement; el.style.backgroundColor = 'transparent'; el.style.color = '#1E3A2F' }}
+        >
           <UserPlus size={14} />Add Resident
         </button>
       </div>
+
+      {/* Modals */}
+      {user?.orgId && (
+        <UploadModal
+          open={uploadOpen}
+          onClose={() => setUploadOpen(false)}
+          orgId={user.orgId}
+          userRole={user.role}
+        />
+      )}
+      <AddResidentModal
+        open={addResidentOpen}
+        onClose={() => setAddResidentOpen(false)}
+        onSuccess={() => setAddResidentOpen(false)}
+      />
     </div>
   )
 }

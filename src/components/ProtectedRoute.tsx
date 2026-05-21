@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { createClient } from '@/lib/supabase/client'
 import { Navbar } from '@/components/portal/Navbar'
+import { PortalFooter } from '@/components/portal/PortalFooter'
 
 type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -100,10 +101,11 @@ export function ProtectedRoute() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F5F0E8' }}>
+    <div className="min-h-screen">
       <Navbar />
-      <main className="pt-[64px]">
-        <div className="p-6"><Outlet /></div>
+      <main className="pt-[100px] min-h-screen flex flex-col" style={{ backgroundColor: '#F5F0E8' }}>
+        <div className="p-6 flex-1"><Outlet /></div>
+        <PortalFooter />
       </main>
     </div>
   )

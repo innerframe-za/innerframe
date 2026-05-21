@@ -29,6 +29,8 @@ const PILLARS = [
   { value: 'finance', label: 'Finance' },
   { value: 'kitchen', label: 'Kitchen' },
   { value: 'medical', label: 'Medical' },
+  { value: 'medical_residence', label: 'Medical Residence' },
+  { value: 'hr', label: 'HR' },
   { value: 'board_governance', label: 'Board Governance' },
 ]
 
@@ -51,6 +53,8 @@ interface UploadModalProps {
   sections?: Section[]
   patients?: Patient[]
   onSuccess?: () => void
+  // When set, locks the resident selector to this patient (e.g. from the resident detail page)
+  preselectedPatientId?: string
 }
 
 /**
@@ -67,11 +71,12 @@ export function UploadModal({
   sections = [],
   patients = [],
   onSuccess,
+  preselectedPatientId,
 }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
   const [pillar, setPillar] = useState(defaultPillar ?? 'admin')
   const [sectionId, setSectionId] = useState('')
-  const [patientId, setPatientId] = useState('')
+  const [patientId, setPatientId] = useState(preselectedPatientId ?? '')
   const [isGlobal, setIsGlobal] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -274,8 +279,8 @@ export function UploadModal({
             </div>
           )}
 
-          {/* Patient selector */}
-          {patients.length > 0 && (
+          {/* Patient selector — hidden when a resident is pre-selected */}
+          {!preselectedPatientId && patients.length > 0 && (
             <div>
               <label
                 className="block text-xs font-medium mb-1.5"

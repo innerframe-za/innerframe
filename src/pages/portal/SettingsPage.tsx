@@ -14,6 +14,8 @@ const ALL_PILLARS: { slug: PillarSlug; label: string }[] = [
   { slug: 'finance', label: 'Finance' },
   { slug: 'kitchen', label: 'Kitchen' },
   { slug: 'medical', label: 'Medical' },
+  { slug: 'medical_residence', label: 'Medical Residence' },
+  { slug: 'hr', label: 'HR' },
   { slug: 'board_governance', label: 'Board Governance' },
 ]
 

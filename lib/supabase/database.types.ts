@@ -70,7 +70,18 @@ export type Database = {
           id_number: string | null
           room_number: string | null
           admission_date: string | null
+          discharge_date: string | null
           status: 'active' | 'discharged' | 'deceased'
+          allergies: string | null
+          chronic_conditions: string | null
+          current_medications: string | null
+          gp_name: string | null
+          gp_contact: string | null
+          medical_aid_scheme: string | null
+          medical_aid_member_number: string | null
+          religion: string | null
+          language: string | null
+          dietary_requirements: string | null
           created_at: string
         }
         Insert: {
@@ -81,7 +92,18 @@ export type Database = {
           id_number?: string | null
           room_number?: string | null
           admission_date?: string | null
+          discharge_date?: string | null
           status?: 'active' | 'discharged' | 'deceased'
+          allergies?: string | null
+          chronic_conditions?: string | null
+          current_medications?: string | null
+          gp_name?: string | null
+          gp_contact?: string | null
+          medical_aid_scheme?: string | null
+          medical_aid_member_number?: string | null
+          religion?: string | null
+          language?: string | null
+          dietary_requirements?: string | null
           created_at?: string
         }
         Update: {
@@ -92,7 +114,87 @@ export type Database = {
           id_number?: string | null
           room_number?: string | null
           admission_date?: string | null
+          discharge_date?: string | null
           status?: 'active' | 'discharged' | 'deceased'
+          allergies?: string | null
+          chronic_conditions?: string | null
+          current_medications?: string | null
+          gp_name?: string | null
+          gp_contact?: string | null
+          medical_aid_scheme?: string | null
+          medical_aid_member_number?: string | null
+          religion?: string | null
+          language?: string | null
+          dietary_requirements?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      patient_contacts: {
+        Row: {
+          id: string
+          patient_id: string
+          org_id: string
+          full_name: string
+          relationship: string | null
+          email: string | null
+          phone: string | null
+          is_primary: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          patient_id: string
+          org_id: string
+          full_name: string
+          relationship?: string | null
+          email?: string | null
+          phone?: string | null
+          is_primary?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          patient_id?: string
+          org_id?: string
+          full_name?: string
+          relationship?: string | null
+          email?: string | null
+          phone?: string | null
+          is_primary?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      patient_notes: {
+        Row: {
+          id: string
+          patient_id: string
+          org_id: string
+          user_id: string | null
+          author_name: string
+          category: 'call' | 'visit' | 'incident' | 'update' | 'general'
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          patient_id: string
+          org_id: string
+          user_id?: string | null
+          author_name: string
+          category: 'call' | 'visit' | 'incident' | 'update' | 'general'
+          content: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          patient_id?: string
+          org_id?: string
+          user_id?: string | null
+          author_name?: string
+          category?: 'call' | 'visit' | 'incident' | 'update' | 'general'
+          content?: string
           created_at?: string
         }
         Relationships: []
