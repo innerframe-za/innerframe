@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -39,7 +39,7 @@
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -108,8 +108,14 @@
   html {
     @apply font-sans;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+  /* Portal headings: Jakarta Sans for h1/h2, Inter for h3+ subheadings.
+     Marketing components override these with inline Cormorant Garamond. */
+  h1, h2 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 600;
+  }
+  h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
     font-weight: 600;
   }
 }
