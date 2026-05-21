@@ -131,13 +131,13 @@ export function Pillars() {
 
                 {/* Content */}
                 <h3
-                  className="font-semibold text-base mb-1"
-                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal', fontSize: '17px' }}
+                  className="font-semibold mb-1"
+                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal', fontSize: '21px' }}
                 >
                   {pillar.name}
                 </h3>
                 <p
-                  className="text-xs mb-4 font-medium leading-snug"
+                  className="text-xs mb-2 font-medium leading-snug"
                   style={{ color: '#d3b24b' }}
                 >
                   {pillar.tagline}

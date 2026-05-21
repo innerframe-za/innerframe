@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { href: '#pillars', label: 'What we do' },
   { href: '#why-innerframe', label: 'Why Innerframe' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#contact', label: 'Blog' },
+  { href: '#contact', label: 'Contact' },
 ]
 
 export function MarketingNav() {
@@ -19,13 +19,32 @@ export function MarketingNav() {
       style={{ backgroundColor: '#698169', height: '78px' }}
     >
       <div className="max-w-7xl mx-auto px-8 h-full flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex-shrink-0">
-          <img
-            src="/logo-full.jpeg"
-            alt="Innerframe Care Solutions"
-            style={{ height: '56px', objectFit: 'contain' }}
-          />
+        {/* Wordmark */}
+        <Link to="/" className="flex-shrink-0 flex flex-col leading-none">
+          <span
+            style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontWeight: 600,
+              fontStyle: 'normal',
+              fontSize: '22px',
+              color: '#faf7f0',
+              letterSpacing: '0.12em',
+            }}
+          >
+            INNERFRAME
+          </span>
+          <span
+            style={{
+              fontFamily: "'Inter', system-ui, sans-serif",
+              fontWeight: 400,
+              fontSize: '10px',
+              color: 'rgba(250,247,240,0.8)',
+              letterSpacing: '0.18em',
+              marginTop: '2px',
+            }}
+          >
+            — CARE SOLUTIONS —
+          </span>
         </Link>
 
         {/* Desktop nav links */}
@@ -59,7 +78,7 @@ export function MarketingNav() {
           </Link>
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger — hide wordmark second line on very small screens if needed */}
         <button
           className="md:hidden p-2"
           onClick={() => setOpen(!open)}
