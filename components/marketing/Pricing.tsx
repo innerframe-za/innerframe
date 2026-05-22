@@ -2,52 +2,54 @@ import { Check } from 'lucide-react'
 
 const PLANS = [
   {
-    name: 'Assessment',
-    price: 'R 3,500',
-    period: 'once-off',
-    tagline: 'Understand where you stand.',
+    name: 'Starter',
+    price: 'R 1,200',
+    period: 'per month',
+    tagline: 'For smaller homes getting structured.',
+    residents: 'Up to 30 residents',
     highlight: false,
     features: [
-      'Full 5-pillar facility audit',
-      'Compliance gap analysis',
-      'Prioritised action report',
-      'DSD readiness score',
-      'Written recommendations',
+      'Resident profiles & CRM',
+      'Staff accounts (up to 10)',
+      'Document storage & management',
+      'Core compliance tools',
+      '5-pillar portal access',
     ],
-    cta: 'Book an Assessment',
+    cta: 'Get Started',
     href: '#contact',
   },
   {
-    name: 'Foundation',
-    price: 'R 12,000',
-    period: 'once-off',
-    tagline: 'Build the systems that last.',
+    name: 'Growth',
+    price: 'R 2,200',
+    period: 'per month',
+    tagline: 'Full compliance, all 5 pillars.',
+    residents: '31–80 residents',
     highlight: true,
     features: [
-      'Everything in Assessment',
-      'Full documentation setup (all 5 pillars)',
-      'Policies, templates & registers',
-      'Staff training session',
-      'DSD-ready file structures',
-      '30-day post-implementation support',
+      'Everything in Starter',
+      'Advanced reporting & DSD compliance tracking',
+      'Unlimited staff accounts',
+      'Inspection preparation tools',
+      'Multi-pillar workflow management',
     ],
     cta: 'Get Started',
     href: '#contact',
   },
   {
     name: 'Partner',
-    price: 'R 2,800',
+    price: 'R 3,500',
     period: 'per month',
-    tagline: 'Stay compliant, always.',
+    tagline: 'Dedicated support and SLA.',
+    residents: '80+ residents',
     highlight: false,
     features: [
-      'Monthly compliance check-in',
-      'Document updates & maintenance',
-      'Inspection preparation support',
-      'Staff query helpline',
-      'Quarterly pillar review',
+      'Everything in Growth',
+      'Dedicated onboarding support',
+      'Priority helpline',
+      'SLA-backed uptime guarantee',
+      'Quarterly compliance review session',
     ],
-    cta: 'Become a Partner',
+    cta: 'Get Started',
     href: '#contact',
   },
 ]
@@ -78,7 +80,7 @@ export function Pricing() {
             className="mt-6 text-base max-w-xl mx-auto"
             style={{ color: '#5a5a5a' }}
           >
-            Transparent, South Africa-focused pricing. No hidden fees, no long-term lock-in. Start where you are.
+            Simple monthly pricing that grows with your facility. Billed via debit order — aligned with your DSD subsidy cycle.
           </p>
         </div>
 
@@ -108,6 +110,17 @@ export function Pricing() {
               >
                 {plan.name}
               </h3>
+
+              {/* Resident range badge */}
+              <span
+                className="inline-block text-xs font-medium mb-3 px-2 py-0.5 rounded-full"
+                style={{
+                  backgroundColor: plan.highlight ? 'rgba(211,178,75,0.18)' : '#f0ece3',
+                  color: plan.highlight ? '#d3b24b' : '#698169',
+                }}
+              >
+                {plan.residents}
+              </span>
 
               <p
                 className="text-xs mb-6"
@@ -177,7 +190,7 @@ export function Pricing() {
           className="text-center text-xs mt-8"
           style={{ color: '#5a5a5a' }}
         >
-          All prices exclude VAT. Custom packages available for groups of facilities.{' '}
+          All prices exclude VAT. A once-off onboarding fee (R 1,500–R 3,000) applies to all new clients — covers data migration, resident capture, and staff setup. Custom pricing available for facility groups.{' '}
           <a href="#contact" style={{ color: '#334739', textDecoration: 'underline' }}>
             Contact us
           </a>{' '}
