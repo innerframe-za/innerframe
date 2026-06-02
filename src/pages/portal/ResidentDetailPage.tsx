@@ -147,7 +147,7 @@ export default function ResidentDetailPage() {
       supabase.from('patients').select('*').eq('id', id).single(),
       supabase.from('patient_contacts').select('*').eq('patient_id', id).order('is_primary', { ascending: false }),
       supabase.from('patient_notes').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
-      supabase.from('documents').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
+      supabase.from('documents_legacy').select('*').eq('patient_id', id).order('created_at', { ascending: false }),
     ])
     if (!patientRes.data) { setNotFound(true); setLoading(false); return }
     setResident(patientRes.data as Patient)

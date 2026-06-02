@@ -147,7 +147,7 @@ export function UploadModal({
       // Store the storage path — NOT a public URL.
       // Bucket must be private; download links are generated as signed URLs at read time.
       // Global documents are stored under the Innerframe internal org.
-      const { error: dbError } = await supabase.from('documents').insert({
+      const { error: dbError } = await supabase.from('documents_legacy').insert({
         org_id: isGlobal ? INNERFRAME_ORG_ID : orgId,
         pillar,
         title: title.trim() || null,

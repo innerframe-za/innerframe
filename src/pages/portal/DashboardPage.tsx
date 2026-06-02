@@ -33,7 +33,7 @@ export default function DashboardPage() {
     const supabase = createClient()
     Promise.all([
       supabase.from('patients').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
-      supabase.from('documents').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
+      supabase.from('documents_legacy').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
     ]).then(([residentsRes, docsRes]) => {
       setStats({
         totalResidents: residentsRes.count ?? 0,

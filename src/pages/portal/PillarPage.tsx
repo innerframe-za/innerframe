@@ -89,7 +89,7 @@ export default function PillarPage() {
         .or(`org_id.eq.${user.orgId},is_global.eq.true`)
         .order('sort_order'),
       supabase
-        .from('documents')
+        .from('documents_legacy')
         .select('id, title, file_name, file_url, pillar, section_id, is_global, created_at, category_id')
         .eq('pillar', pillar.dbKey)
         .or(`org_id.eq.${user.orgId},is_global.eq.true`)

@@ -277,7 +277,7 @@ export default function SettingsPage() {
       const orgIds = orgsData.map(o => o.id)
       const [patientsRes, docsRes] = await Promise.all([
         supabase.from('patients').select('org_id').in('org_id', orgIds),
-        supabase.from('documents').select('org_id').in('org_id', orgIds),
+        supabase.from('documents_legacy').select('org_id').in('org_id', orgIds),
       ])
 
       const patCounts: Record<string, number> = {}

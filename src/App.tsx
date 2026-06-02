@@ -14,6 +14,7 @@ import OrgViewerPage from './pages/portal/OrgViewerPage'
 import FacilitiesPage from './pages/superadmin/FacilitiesPage'
 import FacilityDetailPage from './pages/superadmin/FacilityDetailPage'
 import ChangePasswordPage from './pages/auth/ChangePasswordPage'
+import StaffPermissionsPage from './pages/portal/admin/StaffPermissionsPage'
 
 export default function App() {
   return (
@@ -59,6 +60,14 @@ export default function App() {
           }
         />
         <Route path="/admin/orgs/:orgId" element={<OrgViewerPage />} />
+        <Route
+          path="/admin/staff/:userId/permissions"
+          element={
+            <RoleGuard allowedRoles={['home_admin', 'super_admin']} fallback="/dashboard">
+              <StaffPermissionsPage />
+            </RoleGuard>
+          }
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
