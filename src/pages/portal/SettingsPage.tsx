@@ -54,7 +54,6 @@ function StaffPermissionRow({
   const [permsLoading, setPermsLoading] = useState(false)
 
   const loadPerms = useCallback(async () => {
-    if (member.role !== 'staff') return
     setPermsLoading(true)
     try {
       const supabase = createClient()
@@ -91,7 +90,7 @@ function StaffPermissionRow({
   }
 
   const handleExpand = () => {
-    if (!expanded && member.role === 'staff') loadPerms()
+    if (!expanded) loadPerms()
     setExpanded(!expanded)
   }
 
@@ -139,22 +138,20 @@ function StaffPermissionRow({
           >
             <UserMinus size={14} />
           </button>
-          {member.role === 'staff' && (
-            <button
-              type="button"
-              onClick={handleExpand}
-              className="w-7 h-7 flex items-center justify-center rounded transition-colors"
-              style={{ color: '#5a5a5a' }}
-              aria-label={expanded ? 'Collapse permissions' : 'Expand permissions'}
-            >
-              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleExpand}
+            className="w-7 h-7 flex items-center justify-center rounded transition-colors"
+            style={{ color: '#5a5a5a' }}
+            aria-label={expanded ? 'Collapse permissions' : 'Expand permissions'}
+          >
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
         </div>
       </div>
 
-      {/* Per-pillar toggles — staff only */}
-      {expanded && member.role === 'staff' && (
+      {/* Per-pillar toggles */}
+      {expanded && (
         <div className="border-t px-3 pb-3 pt-3" style={{ borderColor: '#ddd6c8', backgroundColor: '#fafaf9' }}>
           <p className="text-xs font-medium mb-3" style={{ color: '#5a5a5a' }}>Pillar Access</p>
           {permsLoading ? (
