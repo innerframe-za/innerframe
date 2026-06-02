@@ -16,7 +16,7 @@ async function getRoleDestination(supabase: ReturnType<typeof createClient>, use
 }
 
 const schema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  identifier: z.string().min(1, 'Email or username is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   })
 
-  const emailReg = register('email')
+  const identifierReg = register('identifier')
   const passwordReg = register('password')
 
   const onSubmit = async (data: LoginFormData) => {
@@ -62,15 +62,30 @@ export default function LoginPage() {
       setAuthError('App is not configured correctly. Please contact support.')
       return
     }
+
     try {
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.identifier)
+      let loginEmail = data.identifier
+
+      if (!isEmail) {
+        const { data: resolvedEmail } = await supabase.rpc('get_email_by_username', {
+          p_username: data.identifier,
+        })
+        if (!resolvedEmail) {
+          setAuthError('No account found with that username.')
+          return
+        }
+        loginEmail = resolvedEmail as string
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
+        email: loginEmail,
         password: data.password,
       })
       if (error) {
         setAuthError(
           error.message === 'Invalid login credentials'
-            ? 'Incorrect email or password. Please try again.'
+            ? 'Incorrect email/username or password. Please try again.'
             : error.message
         )
         return
@@ -94,17 +109,17 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>
-              Email address
+            <label htmlFor="identifier" className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>
+              Email or Username
             </label>
             <input
-              id="email" type="email" autoComplete="email" placeholder="your@email.co.za"
+              id="identifier" type="text" autoComplete="username" placeholder="your@email.co.za or your username"
               className="w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-colors"
               style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
-              onFocus={borderFocus} aria-invalid={!!errors.email}
-              {...emailReg} onBlur={e => { borderBlur(e); emailReg.onBlur(e) }}
+              onFocus={borderFocus} aria-invalid={!!errors.identifier}
+              {...identifierReg} onBlur={e => { borderBlur(e); identifierReg.onBlur(e) }}
             />
-            {errors.email && <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">{errors.email.message}</p>}
+            {errors.identifier && <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">{errors.identifier.message}</p>}
           </div>
 
           <div>

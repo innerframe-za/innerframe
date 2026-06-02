@@ -6,6 +6,11 @@ import { z } from 'zod'
 
 const schema = z.object({
   fullName: z.string().min(2, 'Full name is required'),
+  username: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(50, 'Username must be 50 characters or less')
+    .regex(/^[a-zA-Z0-9@._-]+$/, 'Only letters, numbers, @ . _ - allowed'),
   email: z.string().email('Enter a valid email address'),
   password: z
     .string()
@@ -20,7 +25,7 @@ type FormData = z.infer<typeof schema>
 interface InviteStaffModalProps {
   orgId: string
   onClose: () => void
-  onSuccess: (member: { id: string; fullName: string; email: string; role: string }) => void
+  onSuccess: (member: { id: string; fullName: string; email: string; role: string; username: string }) => void
 }
 
 const WEBHOOK_URL = import.meta.env.VITE_N8N_ADD_STAFF_WEBHOOK_URL as string | undefined
@@ -57,6 +62,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
           admin_password: data.password,
           role: data.role,
           org_id: orgId,
+          username: data.username,
         }),
       })
 
@@ -71,7 +77,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
       // n8n passes through the Supabase response body under $json
       const newUserId: string = json.id ?? json.user?.id ?? crypto.randomUUID()
 
-      onSuccess({ id: newUserId, fullName: data.fullName, email: data.email, role: data.role })
+      onSuccess({ id: newUserId, fullName: data.fullName, email: data.email, role: data.role, username: data.username })
     } catch {
       setSubmitError('Could not reach the invite service. Check your n8n instance is running.')
     }
@@ -125,6 +131,24 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
               onBlur={e => { e.target.style.borderColor = '#ddd6c8'; register('fullName').onBlur(e) }}
             />
             <FieldError message={errors.fullName?.message} />
+          </div>
+
+          {/* Username */}
+          <div>
+            <label htmlFor="inv-username" className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>Username</label>
+            <input
+              id="inv-username"
+              type="text"
+              placeholder="jane@sunrisecare"
+              autoComplete="off"
+              className="w-full px-3 py-2.5 rounded border text-sm outline-none transition-colors"
+              style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+              {...register('username')}
+              onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
+              onBlur={e => { e.target.style.borderColor = '#ddd6c8'; register('username').onBlur(e) }}
+            />
+            <p className="mt-1 text-xs" style={{ color: '#5a5a5a' }}>Staff will use this to sign in instead of their email.</p>
+            <FieldError message={errors.username?.message} />
           </div>
 
           {/* Email */}

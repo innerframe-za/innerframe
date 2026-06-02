@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { PillarSlug } from '@/lib/auth/usePermissions'
 import { InviteStaffModal } from '@/components/portal/InviteStaffModal'
 
-type NewMember = { id: string; fullName: string; email: string; role: string }
+type NewMember = { id: string; fullName: string; email: string; role: string; username: string }
 
 const ALL_PILLARS: { slug: PillarSlug; label: string }[] = [
   { slug: 'admin', label: 'Admin Office' },
@@ -24,6 +24,7 @@ interface StaffMember {
   fullName: string
   email: string
   role: string
+  username: string | null
 }
 
 interface StaffPerms {
@@ -121,6 +122,7 @@ function StaffPermissionRow({
           <div>
             <p className="text-sm font-medium" style={{ color: '#1a1a1a' }}>{member.fullName}</p>
             <p className="text-xs" style={{ color: '#5a5a5a' }}>
+              {member.username && <><span style={{ color: '#1a1a1a' }}>{member.username}</span> · </>}
               {member.email} ·{' '}
               <span style={{ color: member.role === 'home_admin' ? '#D4AF37' : '#5a5a5a' }}>
                 {member.role === 'home_admin' ? 'Home Admin' : 'Staff'}
@@ -282,13 +284,13 @@ export default function SettingsPage() {
       // Load staff
       const { data: staffData } = await supabase
         .from('users')
-        .select('id, full_name, email, role')
+        .select('id, full_name, email, role, username')
         .eq('org_id', user!.orgId)
         .neq('role', 'super_admin')
         .neq('id', user!.id)
         .order('full_name')
 
-      setStaff((staffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role })))
+      setStaff((staffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, username: u.username ?? null })))
 
       // Load document categories from document_categories table
       const { data: catData } = await supabase

@@ -37,14 +37,17 @@ export type Database = {
         Row: {
           id: string; org_id: string; full_name: string; email: string
           role: 'home_admin' | 'staff' | 'super_admin'; created_at: string
+          username: string | null
         }
         Insert: {
           id: string; org_id: string; full_name: string; email: string
           role: 'home_admin' | 'staff' | 'super_admin'; created_at?: string
+          username?: string | null
         }
         Update: {
           id?: string; org_id?: string; full_name?: string; email?: string
           role?: 'home_admin' | 'staff' | 'super_admin'; created_at?: string
+          username?: string | null
         }
         Relationships: []
       }
@@ -197,14 +200,17 @@ export type Database = {
         Row: {
           id: string; full_name: string | null; email: string | null
           avatar_url: string | null; created_at: string; updated_at: string
+          username: string | null
         }
         Insert: {
           id: string; full_name?: string | null; email?: string | null
           avatar_url?: string | null; created_at?: string; updated_at?: string
+          username?: string | null
         }
         Update: {
           id?: string; full_name?: string | null; email?: string | null
           avatar_url?: string | null; created_at?: string; updated_at?: string
+          username?: string | null
         }
         Relationships: []
       }
@@ -351,7 +357,12 @@ export type Database = {
       }
     }
     Views: Record<string, never>
-    Functions: Record<string, never>
+    Functions: {
+      get_email_by_username: {
+        Args: { p_username: string }
+        Returns: string | null
+      }
+    }
     Enums: {
       permission_level: PermissionLevel
       app_module: AppModule

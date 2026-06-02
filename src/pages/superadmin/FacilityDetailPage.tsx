@@ -29,7 +29,7 @@ interface LegacyOrg {
 }
 
 interface LegacyStaff {
-  id: string; fullName: string; email: string; role: string; createdAt: string
+  id: string; fullName: string; email: string; role: string; createdAt: string; username: string | null
 }
 
 interface Resident {
@@ -133,7 +133,7 @@ export default function FacilityDetailPage() {
       // 2. Fall back to legacy `organisations` table
       const [orgRes, staffRes, residentRes] = await Promise.all([
         supabase.from('organisations').select('*').eq('id', id).single(),
-        supabase.from('users').select('id, full_name, email, role, created_at').eq('org_id', id).neq('role', 'super_admin').order('full_name'),
+        supabase.from('users').select('id, full_name, email, role, created_at, username').eq('org_id', id).neq('role', 'super_admin').order('full_name'),
         supabase.from('patients').select('id, full_name, room_number, status, admission_date').eq('org_id', id).order('full_name'),
       ])
 
@@ -141,7 +141,7 @@ export default function FacilityDetailPage() {
       const o = orgRes.data
       setLegacyOrg({ id: o.id, name: o.name, address: o.address, contactEmail: o.contact_email, contactPhone: o.contact_phone })
       setOrgForm({ name: o.name ?? '', address: o.address ?? '', contactEmail: o.contact_email ?? '', contactPhone: o.contact_phone ?? '' })
-      setLegacyStaff((staffRes.data ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, createdAt: u.created_at })))
+      setLegacyStaff((staffRes.data ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, createdAt: u.created_at, username: u.username ?? null })))
       setResidents((residentRes.data ?? []).map(r => ({ id: r.id, fullName: r.full_name, roomNumber: r.room_number, status: r.status, admissionDate: r.admission_date })))
       setLoading(false)
     }
@@ -403,6 +403,7 @@ export default function FacilityDetailPage() {
                 <div>
                   <p className="text-sm font-medium" style={{ color: '#1a1a1a' }}>{member.fullName}</p>
                   <p className="text-xs" style={{ color: '#5a5a5a' }}>
+                    {member.username && <><span style={{ color: '#1a1a1a' }}>{member.username}</span> · </>}
                     {member.email} ·{' '}
                     <span style={{ color: member.role === 'home_admin' ? '#D4AF37' : '#5a5a5a' }}>
                       {member.role === 'home_admin' ? 'Home Admin' : 'Staff'}
@@ -527,7 +528,7 @@ export default function FacilityDetailPage() {
     {inviteOpen && orgId && !isNewSystem && (
       <InviteStaffModal orgId={orgId} onClose={() => setInviteOpen(false)}
         onSuccess={member => {
-          setLegacyStaff(prev => [...prev, { id: member.id, fullName: member.fullName, email: member.email, role: member.role, createdAt: new Date().toISOString() }])
+          setLegacyStaff(prev => [...prev, { id: member.id, fullName: member.fullName, email: member.email, role: member.role, createdAt: new Date().toISOString(), username: member.username }])
           setInviteOpen(false)
         }}
       />

@@ -8,6 +8,11 @@ import { createClient } from '@/lib/supabase/client'
 const schema = z.object({
   facilityName: z.string().min(2, 'Facility name is required'),
   adminName: z.string().min(2, 'Admin full name is required'),
+  adminUsername: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(50)
+    .regex(/^[a-zA-Z0-9@._-]+$/, 'Only letters, numbers, @ . _ - allowed'),
   adminEmail: z.string().email('Enter a valid email address'),
   adminPassword: z
     .string()
@@ -88,6 +93,7 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
           admin_password: data.adminPassword,
           role: 'home_admin',
           org_id: org.id,
+          admin_username: data.adminUsername,
         }),
       })
 
@@ -183,6 +189,24 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
                   onBlur={e => { e.target.style.borderColor = '#ddd6c8'; register('adminName').onBlur(e) }}
                 />
                 <FieldError message={errors.adminName?.message} />
+              </div>
+
+              {/* Admin username */}
+              <div>
+                <label htmlFor="nf-admin-username" className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>Admin Username</label>
+                <input
+                  id="nf-admin-username"
+                  type="text"
+                  placeholder="jane@sunrisecare"
+                  autoComplete="off"
+                  className="w-full px-3 py-2.5 rounded border text-sm outline-none transition-colors"
+                  style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+                  {...register('adminUsername')}
+                  onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
+                  onBlur={e => { e.target.style.borderColor = '#ddd6c8'; register('adminUsername').onBlur(e) }}
+                />
+                <p className="mt-1 text-xs" style={{ color: '#5a5a5a' }}>The admin will use this to sign in.</p>
+                <FieldError message={errors.adminUsername?.message} />
               </div>
 
               {/* Admin email */}
