@@ -281,8 +281,8 @@ export default function SettingsPage() {
         })
       }
 
-      // Load staff
-      const { data: staffData } = await supabase
+      // Load staff — try with username first; fall back if migration 018 hasn't run yet
+      let { data: staffData, error: staffErr } = await supabase
         .from('users')
         .select('id, full_name, email, role, username')
         .eq('org_id', user!.orgId)
@@ -290,7 +290,18 @@ export default function SettingsPage() {
         .neq('id', user!.id)
         .order('full_name')
 
-      setStaff((staffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, username: u.username ?? null })))
+      if (staffErr) {
+        const res = await supabase
+          .from('users')
+          .select('id, full_name, email, role')
+          .eq('org_id', user!.orgId)
+          .neq('role', 'super_admin')
+          .neq('id', user!.id)
+          .order('full_name')
+        staffData = res.data as unknown as typeof staffData
+      }
+
+      setStaff((staffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, username: (u as { username?: string | null }).username ?? null })))
 
       // Load document categories from document_categories table
       const { data: catData } = await supabase

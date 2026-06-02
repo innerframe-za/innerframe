@@ -141,7 +141,19 @@ export default function FacilityDetailPage() {
       const o = orgRes.data
       setLegacyOrg({ id: o.id, name: o.name, address: o.address, contactEmail: o.contact_email, contactPhone: o.contact_phone })
       setOrgForm({ name: o.name ?? '', address: o.address ?? '', contactEmail: o.contact_email ?? '', contactPhone: o.contact_phone ?? '' })
-      setLegacyStaff((staffRes.data ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, createdAt: u.created_at, username: u.username ?? null })))
+
+      // If the username column doesn't exist yet (migration 018 not applied), fall back
+      let resolvedStaffData = staffRes.data
+      if (staffRes.error) {
+        const fallback = await supabase
+          .from('users')
+          .select('id, full_name, email, role, created_at')
+          .eq('org_id', id)
+          .neq('role', 'super_admin')
+          .order('full_name')
+        resolvedStaffData = fallback.data as unknown as typeof resolvedStaffData
+      }
+      setLegacyStaff((resolvedStaffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role, createdAt: u.created_at, username: (u as { username?: string | null }).username ?? null })))
       setResidents((residentRes.data ?? []).map(r => ({ id: r.id, fullName: r.full_name, roomNumber: r.room_number, status: r.status, admissionDate: r.admission_date })))
       setLoading(false)
     }
