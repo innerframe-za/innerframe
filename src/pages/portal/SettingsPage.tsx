@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
-import { Plus, Trash2, UserMinus, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Trash2, UserMinus, ChevronDown, ChevronUp, KeyRound } from 'lucide-react'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { PillarSlug } from '@/lib/auth/usePermissions'
@@ -52,6 +52,7 @@ function StaffPermissionRow({
   const [expanded, setExpanded] = useState(false)
   const [perms, setPerms] = useState<StaffPerms>({})
   const [permsLoading, setPermsLoading] = useState(false)
+  const [resetStatus, setResetStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   const loadPerms = useCallback(async () => {
     setPermsLoading(true)
@@ -92,6 +93,18 @@ function StaffPermissionRow({
   const handleExpand = () => {
     if (!expanded) loadPerms()
     setExpanded(!expanded)
+  }
+
+  const handleResetPassword = async () => {
+    setResetStatus('sending')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.resetPasswordForEmail(member.email)
+      setResetStatus(error ? 'error' : 'sent')
+    } catch {
+      setResetStatus('error')
+    }
+    setTimeout(() => setResetStatus('idle'), 4000)
   }
 
   return (
@@ -191,6 +204,32 @@ function StaffPermissionRow({
               })}
             </div>
           )}
+
+          {/* Password reset */}
+          <div className="mt-4 pt-3 flex items-center justify-between" style={{ borderTop: '0.5px solid #ddd6c8' }}>
+            <div>
+              <p className="text-xs font-medium" style={{ color: '#1a1a1a' }}>Reset Password</p>
+              <p className="text-xs" style={{ color: '#5a5a5a' }}>Send a password reset link to {member.email}</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleResetPassword}
+              disabled={resetStatus === 'sending' || resetStatus === 'sent'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded border text-xs font-medium transition-colors disabled:opacity-60"
+              style={{
+                borderColor: resetStatus === 'sent' ? '#16a34a' : resetStatus === 'error' ? '#dc2626' : '#ddd6c8',
+                color: resetStatus === 'sent' ? '#16a34a' : resetStatus === 'error' ? '#dc2626' : '#5a5a5a',
+              }}
+              onMouseEnter={e => { if (resetStatus === 'idle') { const el = e.currentTarget as HTMLButtonElement; el.style.borderColor = '#1E3A2F'; el.style.color = '#1E3A2F' } }}
+              onMouseLeave={e => { if (resetStatus === 'idle') { const el = e.currentTarget as HTMLButtonElement; el.style.borderColor = '#ddd6c8'; el.style.color = '#5a5a5a' } }}
+            >
+              <KeyRound size={12} />
+              {resetStatus === 'sending' ? 'Sending…'
+                : resetStatus === 'sent' ? 'Email sent!'
+                : resetStatus === 'error' ? 'Failed — try again'
+                : 'Send Reset Link'}
+            </button>
+          </div>
         </div>
       )}
     </div>
