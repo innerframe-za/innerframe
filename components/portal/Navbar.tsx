@@ -3,16 +3,17 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { createClient } from '@/lib/supabase/client'
 import { Search, Menu, X, LogOut, Settings } from 'lucide-react'
 import { useUser } from '@/lib/auth/useUser'
+import { usePermissions, type PillarSlug } from '@/lib/auth/usePermissions'
 
-const tabItems = [
+const tabItems: { label: string; href: string; pillarSlug?: PillarSlug }[] = [
   { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Admin', href: '/pillar/admin' },
+  { label: 'Admin', href: '/pillar/admin', pillarSlug: 'admin' },
   { label: 'Residence', href: '/residents' },
-  { label: 'Finance', href: '/pillar/finance' },
-  { label: 'Kitchen', href: '/pillar/kitchen' },
-  { label: 'Medical Residence', href: '/pillar/medical-residence' },
-  { label: 'HR', href: '/pillar/hr' },
-  { label: 'Board Governance', href: '/pillar/board-governance' },
+  { label: 'Finance', href: '/pillar/finance', pillarSlug: 'finance' },
+  { label: 'Kitchen', href: '/pillar/kitchen', pillarSlug: 'kitchen' },
+  { label: 'Medical Residence', href: '/pillar/medical-residence', pillarSlug: 'medical_residence' },
+  { label: 'HR', href: '/pillar/hr', pillarSlug: 'hr' },
+  { label: 'Board Governance', href: '/pillar/board-governance', pillarSlug: 'board_governance' },
 ]
 
 function getInitials(name: string): string {
@@ -69,6 +70,13 @@ export function Navbar() {
   }
 
   const isAdmin = user?.role === 'home_admin' || user?.role === 'super_admin'
+
+  const { permissions } = usePermissions()
+
+  // Admins always see all tabs; staff only see tabs they have view access to
+  const visibleTabs = tabItems.filter(item =>
+    !item.pillarSlug || isAdmin || permissions[item.pillarSlug]?.canView !== false
+  )
 
   const isTabActive = (href: string) => {
     if (href === '/dashboard') return location.pathname === '/dashboard'
@@ -195,7 +203,7 @@ export function Navbar() {
           className="hidden md:flex items-center h-full overflow-x-auto gap-0 flex-1"
           style={{ scrollbarWidth: 'none' }}
         >
-          {tabItems.map(item => {
+          {visibleTabs.map(item => {
             const active = isTabActive(item.href)
             return (
               <Link
@@ -272,7 +280,7 @@ export function Navbar() {
           className="fixed left-0 right-0 z-30 px-4 py-4 flex flex-col gap-1 md:hidden"
           style={{ top: '100px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
         >
-          {tabItems.map(item => {
+          {visibleTabs.map(item => {
             const active = isTabActive(item.href)
             return (
               <Link
