@@ -249,6 +249,7 @@ export default function SettingsPage() {
         .select('id, full_name, email, role')
         .eq('org_id', user!.orgId)
         .neq('role', 'super_admin')
+        .neq('id', user!.id)
         .order('full_name')
 
       setStaff((staffData ?? []).map(u => ({ id: u.id, fullName: u.full_name, email: u.email, role: u.role })))
