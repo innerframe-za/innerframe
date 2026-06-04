@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const { permissions } = usePermissions()
   const { user } = useUser()
   const [stats, setStats] = useState<Stats>({ totalResidents: 0, totalDocuments: 0, pendingReviews: 0, compliancePct: null })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user?.orgId) return
@@ -39,8 +40,9 @@ export default function DashboardPage() {
         totalResidents: residentsRes.count ?? 0,
         totalDocuments: docsRes.count ?? 0,
         pendingReviews: 0,
-        compliancePct:  total > 0 ? Math.round((done / total) * 100) : 0,
+        compliancePct: total > 0 ? Math.round((done / total) * 100) : 0,
       })
+      setLoading(false)
     })
   }, [user?.orgId])
 
@@ -50,22 +52,57 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <PageHeader title="Dashboard" subtitle="Manage your facility's operations and compliance" />
+      <PageHeader
+        title="Dashboard"
+        subtitle="Manage your facility's operations and compliance"
+      />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Residents" value={stats.totalResidents} icon={Users} />
-        <StatCard label="Total Documents" value={stats.totalDocuments} icon={FileText} />
-        <StatCard label="Pending Reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
-        <StatCard
-          label="Compliance"
-          value={stats.compliancePct !== null ? `${stats.compliancePct}%` : '—'}
-          icon={BarChart2}
-          href="/compliance"
-        />
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {loading ? (
+          <>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 border" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+                <div className="skeleton h-3 w-20 mb-4" />
+                <div className="skeleton h-9 w-16 mb-2" />
+                <div className="skeleton h-0.5 w-8 mt-5" />
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            <StatCard label="Total residents" value={stats.totalResidents} icon={Users} />
+            <StatCard label="Total documents" value={stats.totalDocuments} icon={FileText} />
+            <StatCard label="Pending reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
+            <StatCard
+              label="Compliance score"
+              value={stats.compliancePct !== null ? `${stats.compliancePct}%` : '—'}
+              icon={BarChart2}
+              href="/compliance"
+            />
+          </>
+        )}
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-sm font-medium mb-3" style={{ color: '#5a5a5a' }}>Pillar Overview</h2>
+      {/* Pillar overview */}
+      <div className="mb-2">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2
+              className="text-sm font-semibold"
+              style={{ color: '#1E3A2F', fontFamily: "'Outfit', system-ui", letterSpacing: '-0.01em' }}
+            >
+              Pillar overview
+            </h2>
+            <div
+              style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '5px', borderRadius: '1px' }}
+              aria-hidden="true"
+            />
+          </div>
+          <span className="text-xs" style={{ color: '#9ca3af' }}>
+            {visiblePillars.length} pillars accessible
+          </span>
+        </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
           {visiblePillars.map(card => (
             <PillarCard
@@ -78,7 +115,6 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
-
     </div>
   )
 }

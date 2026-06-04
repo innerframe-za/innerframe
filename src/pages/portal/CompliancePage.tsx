@@ -100,7 +100,7 @@ function CategorySection({
   const barColour = pct >= 80 ? '#059669' : pct >= 50 ? '#D4AF37' : '#dc2626'
 
   return (
-    <div className="rounded-xl border overflow-hidden" style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}>
+    <div className="rounded-2xl border overflow-hidden transition-shadow duration-200 hover:shadow-sm" style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff', borderWidth: '0.5px' }}>
       {/* Category header */}
       <button
         type="button"
@@ -310,8 +310,22 @@ export default function CompliancePage() {
 
   if (loading) {
     return (
-      <div className="min-h-[300px] flex items-center justify-center">
-        <span className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+      <div>
+        <div className="skeleton h-8 w-48 mb-2" />
+        <div className="skeleton h-0.5 w-12 mb-8" />
+        <div className="bg-white rounded-2xl border p-5 mb-6 flex gap-6 items-center" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+          <div className="skeleton w-24 h-24 rounded-full flex-shrink-0" />
+          <div className="flex-1 space-y-3">
+            <div className="skeleton h-5 w-48" />
+            <div className="skeleton h-3 w-64" />
+            <div className="grid grid-cols-4 gap-4 mt-2">
+              {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-6 w-full" />)}
+            </div>
+          </div>
+        </div>
+        <div className="space-y-3">
+          {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-16 w-full rounded-xl" />)}
+        </div>
       </div>
     )
   }
@@ -338,8 +352,8 @@ export default function CompliancePage() {
 
       {/* Score summary card */}
       <div
-        className="rounded-xl border p-5 mb-6 flex flex-col sm:flex-row items-center gap-6"
-        style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
+        className="rounded-2xl border p-6 mb-6 flex flex-col sm:flex-row items-center gap-6"
+        style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff', borderWidth: '0.5px' }}
       >
         <ScoreRing percent={percent} />
         <div className="flex-1">

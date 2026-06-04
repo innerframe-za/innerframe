@@ -174,8 +174,20 @@ export default function ResidentDetailPage() {
 
   if (loading || !resident) {
     return (
-      <div className="min-h-[300px] flex items-center justify-center">
-        <span className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+      <div className="space-y-4">
+        <div className="skeleton h-9 w-56 mb-2" />
+        <div className="skeleton h-0.5 w-12 mb-8" />
+        <div className="bg-white rounded-2xl border p-6 space-y-4" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+          <div className="skeleton h-4 w-32" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="skeleton h-2.5 w-16" />
+                <div className="skeleton h-4 w-full" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   }
@@ -259,7 +271,7 @@ export default function ResidentDetailPage() {
       />
 
       {/* ── Card 1: Personal Details ─────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="bg-white rounded-2xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>Personal Details</h2>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: sc.bg, color: sc.color }}>
@@ -311,7 +323,7 @@ export default function ResidentDetailPage() {
       </div>
 
       {/* ── Card 2: Contact Persons ──────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="bg-white rounded-2xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>Contact Persons</h2>
           <button
@@ -398,7 +410,7 @@ export default function ResidentDetailPage() {
       </div>
 
       {/* ── Card 3: Documents ────────────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="bg-white rounded-2xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         {/* Card header */}
         <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: '#ddd6c8' }}>
           <div>
@@ -530,7 +542,7 @@ export default function ResidentDetailPage() {
       </div>
 
       {/* ── Card 4: Activity Log ─────────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="bg-white rounded-2xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>Activity Log</h2>
           <button

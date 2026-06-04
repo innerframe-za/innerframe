@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -37,7 +37,7 @@
   --color-input: var(--color-if-border);
   --color-ring: var(--color-if-green-mid);
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Outfit', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
 
@@ -107,20 +107,41 @@
     @apply bg-background text-foreground;
     font-size: 14px;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
-  /* Portal headings: Jakarta Sans for h1/h2, Inter for h3+ subheadings.
+  /* Portal headings: Jakarta Sans for h1/h2, Outfit for h3+ subheadings.
      Marketing components override these with inline Cormorant Garamond. */
   h1, h2 {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     font-weight: 600;
   }
   h3, h4, h5, h6 {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-weight: 600;
   }
+}
+
+/* Tabular numbers for data displays */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0ece3 25%, #e8e3d8 50%, #f0ece3 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.5rem;
 }
 
 /* Falling leaves animation */

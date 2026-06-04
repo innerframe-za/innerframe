@@ -407,7 +407,7 @@ export default function SettingsPage() {
       <PageHeader title="Settings" subtitle="Facility profile, staff management, and document categories" />
 
       {/* 1. Facility Profile */}
-      <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <section className="bg-white rounded-2xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <SectionHeading title="Facility Profile" />
         {orgLoading ? (
           <div className="flex items-center justify-center py-8">
@@ -451,7 +451,7 @@ export default function SettingsPage() {
       </section>
 
       {/* 2. Staff Management */}
-      <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <section className="bg-white rounded-2xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex items-start justify-between mb-5">
           <div>
             <h2 className="text-base font-medium" style={{ color: '#1E3A2F' }}>Staff Management</h2>
@@ -487,7 +487,7 @@ export default function SettingsPage() {
       </section>
 
       {/* 3. Document Categories */}
-      <section className="bg-white rounded-xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <section className="bg-white rounded-2xl border p-6 mb-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <SectionHeading title="Document Categories" />
         <div className="flex flex-wrap gap-2 mb-4">
           {categories.map(cat => (

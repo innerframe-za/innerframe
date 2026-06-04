@@ -104,7 +104,7 @@ export default function ResidentsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+      <div className="bg-white rounded-2xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="hidden md:grid grid-cols-[1fr_130px_100px_130px_120px] gap-4 px-5 py-3 border-b" style={{ borderColor: '#ddd6c8', backgroundColor: '#F5F0E8' }}>
           {['Name', 'ID Number', 'Room', 'Admission Date', 'Status'].map(col => (
             <span key={col} className="text-xs font-medium uppercase tracking-wider" style={{ color: '#5a5a5a' }}>{col}</span>
@@ -112,8 +112,16 @@ export default function ResidentsPage() {
         </div>
 
         {loading ? (
-          <div className="py-12 flex justify-center">
-            <span className="w-5 h-5 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+          <div className="divide-y" style={{ borderColor: '#f0ece3' }}>
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="px-5 py-4 flex items-center gap-3">
+                <div className="skeleton w-8 h-8 rounded-full flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="skeleton h-3 w-40" />
+                  <div className="skeleton h-2.5 w-24" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-12 text-center">

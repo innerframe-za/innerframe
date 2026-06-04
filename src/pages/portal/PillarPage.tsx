@@ -254,8 +254,8 @@ function PillarOverview({ dbKey }: { dbKey: string }) {
 
   return (
     <div
-      className="rounded-xl border mb-6 overflow-hidden"
-      style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
+      className="rounded-2xl border mb-6 overflow-hidden"
+      style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff', borderWidth: '0.5px' }}
     >
       {/* Header row — always visible */}
       <button
@@ -380,8 +380,15 @@ export default function PillarPage() {
 
   if (permLoading || loading) {
     return (
-      <div className="min-h-[200px] flex items-center justify-center">
-        <span className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+      <div>
+        <div className="skeleton h-8 w-48 mb-2" />
+        <div className="skeleton h-0.5 w-12 mb-4" />
+        <div className="skeleton h-4 w-72 mb-8" />
+        <div className="space-y-3">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="skeleton h-14 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     )
   }
@@ -391,7 +398,7 @@ export default function PillarPage() {
     return (
       <div>
         <PageHeader title={pillar.name} subtitle={pillar.description} />
-        <div className="bg-white rounded-xl border p-10 flex flex-col items-center gap-3 text-center" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+        <div className="bg-white rounded-2xl border p-12 flex flex-col items-center gap-3 text-center" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
           <Lock size={32} style={{ color: '#D4AF37' }} />
           <p className="text-sm font-medium" style={{ color: '#1E3A2F' }}>Access Restricted</p>
           <p className="text-xs max-w-xs" style={{ color: '#5a5a5a' }}>

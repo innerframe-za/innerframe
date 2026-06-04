@@ -26,22 +26,29 @@ export function SectionGroup({
 }: SectionGroupProps) {
   return (
     <section className="mb-8">
-      {/* Section heading with gold underline */}
+      {/* Section heading */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-medium" style={{ color: '#1E3A2F' }}>
+          <h2
+            className="text-sm font-semibold"
+            style={{ color: '#1E3A2F', fontFamily: "'Outfit', system-ui", letterSpacing: '-0.01em' }}
+          >
             {title}
           </h2>
           <div
-            style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '4px' }}
+            style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '5px', borderRadius: '1px' }}
             aria-hidden="true"
           />
         </div>
+        {documents.length > 0 && (
+          <span className="text-xs tabular-nums" style={{ color: '#9ca3af' }}>
+            {documents.length} {documents.length === 1 ? 'file' : 'files'}
+          </span>
+        )}
       </div>
 
-      {/* Documents */}
       {documents.length === 0 ? (
-        <p className="text-xs py-4 text-center" style={{ color: '#5a5a5a' }}>
+        <p className="text-xs py-5 text-center" style={{ color: '#9ca3af' }}>
           No documents in this section yet.
         </p>
       ) : (

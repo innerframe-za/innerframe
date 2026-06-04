@@ -75,8 +75,9 @@ export function ProtectedRoute() {
 
   if (authState === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
-        <span className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.2)', borderTopColor: '#1E3A2F' }} />
+      <div className="min-h-dvh flex flex-col items-center justify-center gap-3" style={{ backgroundColor: '#F5F0E8' }}>
+        <span className="w-7 h-7 rounded-full border-2 animate-spin" style={{ borderColor: 'rgba(30,58,47,0.15)', borderTopColor: '#1E3A2F' }} />
+        <p className="text-xs" style={{ color: 'rgba(30,58,47,0.4)', letterSpacing: '0.1em', fontFamily: "'Outfit', system-ui" }}>LOADING</p>
       </div>
     )
   }
@@ -101,10 +102,14 @@ export function ProtectedRoute() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <Navbar />
-      <main className="pt-[56px] md:pt-[100px] min-h-screen flex flex-col" style={{ backgroundColor: '#F5F0E8' }}>
-        <div className="p-6 flex-1"><Outlet /></div>
+      <main className="pt-[56px] md:pt-[100px] min-h-dvh flex flex-col" style={{ backgroundColor: '#F5F0E8' }}>
+        <div className="flex-1">
+          <div className="max-w-screen-xl mx-auto px-6 py-8">
+            <Outlet />
+          </div>
+        </div>
         <PortalFooter />
       </main>
     </div>

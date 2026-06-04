@@ -19,7 +19,6 @@ interface DocumentRowProps {
   onDelete?: () => void
 }
 
-/** Map file extension to icon and color */
 function getFileIcon(fileName: string) {
   const ext = fileName.split('.').pop()?.toLowerCase() ?? ''
   if (['pdf'].includes(ext))
@@ -72,8 +71,6 @@ export function DocumentRow({
   const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
   const displayTitle = title || fileName
 
-  // Fetch the file through the /api/files proxy (served from our own domain,
-  // so ad blockers never see a supabase.co URL in the browser).
   const fetchFileBlob = async (): Promise<Blob | null> => {
     const supabase = createClient()
     const { data: { session } } = await supabase.auth.getSession()
@@ -91,7 +88,6 @@ export function DocumentRow({
     if (!blob) { alert('Could not open document. Please try again.'); return }
     const url = URL.createObjectURL(blob)
     window.open(url, '_blank', 'noopener,noreferrer')
-    // Revoke after 60 s — enough time for the new tab to load the file
     setTimeout(() => URL.revokeObjectURL(url), 60_000)
   }
 
@@ -112,24 +108,18 @@ export function DocumentRow({
       tabIndex={0}
       onClick={handleView}
       onKeyDown={e => e.key === 'Enter' && handleView()}
-      className="flex items-center gap-3 py-3 px-4 rounded-lg border group cursor-pointer transition-colors"
+      className="flex items-center gap-3 py-3 px-4 rounded-xl border group cursor-pointer transition-all duration-150 hover:shadow-sm hover:border-[rgba(30,58,47,0.2)] hover:bg-[rgba(30,58,47,0.02)]"
       style={{
         borderColor: '#ddd6c8',
         borderWidth: '0.5px',
         backgroundColor: '#ffffff',
       }}
-      onMouseEnter={e =>
-        ((e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(30,58,47,0.03)')
-      }
-      onMouseLeave={e =>
-        ((e.currentTarget as HTMLDivElement).style.backgroundColor = '#ffffff')
-      }
       aria-label={`Open ${fileName}`}
       title="Click to open"
     >
       {/* File icon */}
       <div
-        className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+        className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
         style={{ backgroundColor: `${color}12` }}
       >
         <Icon size={16} style={{ color }} aria-hidden="true" />
@@ -137,7 +127,6 @@ export function DocumentRow({
 
       {/* File info */}
       <div className="flex-1 min-w-0">
-        {/* Heading: user title or filename */}
         <p
           className="text-sm font-medium truncate"
           style={{ color: '#1a1a1a' }}
@@ -145,13 +134,12 @@ export function DocumentRow({
         >
           {displayTitle}
         </p>
-        {/* Subheading: original filename when a separate title exists */}
         {title && title !== fileName && (
           <p className="text-xs truncate mt-0.5" style={{ color: '#9ca3af' }} title={fileName}>
             {fileName}
           </p>
         )}
-        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+        <div className="flex items-center gap-2 mt-1 flex-wrap">
           {category && (
             <span
               className="text-xs px-1.5 py-0.5 rounded"
@@ -169,11 +157,11 @@ export function DocumentRow({
             </span>
           )}
           {isGlobal && <GlobalBadge />}
-          <span className="text-xs" style={{ color: '#5a5a5a' }}>{date}</span>
+          <span className="text-xs" style={{ color: '#9ca3af' }}>{date}</span>
         </div>
       </div>
 
-      {/* Actions — stop propagation so clicks don't also trigger row open */}
+      {/* Actions */}
       <div
         className="flex items-center gap-1 flex-shrink-0"
         onClick={e => e.stopPropagation()}
@@ -182,16 +170,8 @@ export function DocumentRow({
         <button
           type="button"
           onClick={handleDownload}
-          className="w-7 h-7 rounded flex items-center justify-center transition-colors"
-          style={{ color: '#5a5a5a' }}
-          onMouseEnter={e =>
-            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-              'rgba(30,58,47,0.07)')
-          }
-          onMouseLeave={e =>
-            ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-              'transparent')
-          }
+          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:bg-[rgba(30,58,47,0.07)]"
+          style={{ color: '#9ca3af' }}
           aria-label={`Download ${fileName}`}
           title="Download"
         >
@@ -201,14 +181,8 @@ export function DocumentRow({
           <button
             type="button"
             onClick={onDelete}
-            className="w-7 h-7 rounded flex items-center justify-center transition-colors"
-            style={{ color: '#5a5a5a' }}
-            onMouseEnter={e =>
-              ((e.currentTarget as HTMLButtonElement).style.color = '#dc2626')
-            }
-            onMouseLeave={e =>
-              ((e.currentTarget as HTMLButtonElement).style.color = '#5a5a5a')
-            }
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:bg-red-50 hover:text-red-500"
+            style={{ color: '#9ca3af' }}
             aria-label={`Delete ${fileName}`}
           >
             <Trash2 size={14} />
