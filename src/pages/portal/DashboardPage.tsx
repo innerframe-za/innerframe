@@ -19,14 +19,14 @@ const pillarCards = [
   { value: 'hr', name: 'HR', icon: Briefcase, href: '/pillar/hr' },
 ]
 
-type Stats = { totalResidents: number; totalDocuments: number; pendingReviews: number }
+type Stats = { totalResidents: number; totalDocuments: number; pendingReviews: number; compliancePct: number | null }
 
 export default function DashboardPage() {
   const { permissions } = usePermissions()
   const { user } = useUser()
   const [uploadOpen, setUploadOpen] = useState(false)
   const [addResidentOpen, setAddResidentOpen] = useState(false)
-  const [stats, setStats] = useState<Stats>({ totalResidents: 0, totalDocuments: 0, pendingReviews: 0 })
+  const [stats, setStats] = useState<Stats>({ totalResidents: 0, totalDocuments: 0, pendingReviews: 0, compliancePct: null })
 
   useEffect(() => {
     if (!user?.orgId) return
@@ -34,11 +34,16 @@ export default function DashboardPage() {
     Promise.all([
       supabase.from('patients').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
       supabase.from('documents_legacy').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
-    ]).then(([residentsRes, docsRes]) => {
+      supabase.from('compliance_items').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('compliance_checks').select('id', { count: 'exact', head: true }).eq('org_id', user.orgId).eq('is_complete', true),
+    ]).then(([residentsRes, docsRes, itemsRes, checksRes]) => {
+      const total = itemsRes.count ?? 0
+      const done  = checksRes.count ?? 0
       setStats({
         totalResidents: residentsRes.count ?? 0,
         totalDocuments: docsRes.count ?? 0,
         pendingReviews: 0,
+        compliancePct:  total > 0 ? Math.round((done / total) * 100) : 0,
       })
     })
   }, [user?.orgId])
@@ -55,7 +60,12 @@ export default function DashboardPage() {
         <StatCard label="Total Residents" value={stats.totalResidents} icon={Users} />
         <StatCard label="Total Documents" value={stats.totalDocuments} icon={FileText} />
         <StatCard label="Pending Reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
-        <StatCard label="Compliance" value="—" icon={BarChart2} />
+        <StatCard
+          label="Compliance"
+          value={stats.compliancePct !== null ? `${stats.compliancePct}%` : '—'}
+          icon={BarChart2}
+          href="/compliance"
+        />
       </div>
 
       <div className="mb-6">

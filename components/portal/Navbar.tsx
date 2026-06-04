@@ -97,13 +97,14 @@ export function Navbar() {
         role="navigation"
         aria-label="Portal top navigation"
       >
-        {/* Wordmark — matches MarketingNav exactly */}
-        <Link to="/dashboard" className="flex-shrink-0 flex flex-col items-center leading-none">
+        {/* Wordmark */}
+        <Link to="/dashboard" className="flex-shrink-0 flex flex-col items-start leading-none min-w-0">
           <span
+            className="whitespace-nowrap"
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 600,
-              fontSize: '26px',
+              fontSize: 'clamp(18px, 5vw, 26px)',
               color: '#faf7f0',
               letterSpacing: '0.12em',
             }}
@@ -111,6 +112,7 @@ export function Navbar() {
             INNERFRAME
           </span>
           <span
+            className="whitespace-nowrap hidden sm:block"
             style={{
               fontFamily: "'Inter', system-ui, sans-serif",
               fontWeight: 400,
@@ -125,7 +127,7 @@ export function Navbar() {
         </Link>
 
         {/* Right section: facility name + avatar + sign out */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           {/* Facility name */}
           {facilityName && (
             <span
@@ -186,9 +188,9 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* ── Second bar: tab navigation + search ── */}
+      {/* ── Second bar: tab navigation + search (desktop only) ── */}
       <nav
-        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4"
+        className="hidden md:flex fixed left-0 right-0 z-40 items-center justify-between px-4"
         style={{
           top: '56px',
           height: '44px',
@@ -198,9 +200,9 @@ export function Navbar() {
         role="navigation"
         aria-label="Portal section navigation"
       >
-        {/* Tab links — horizontally scrollable on small screens */}
+        {/* Tab links — horizontally scrollable */}
         <div
-          className="hidden md:flex items-center h-full overflow-x-auto gap-0 flex-1"
+          className="flex items-center h-full overflow-x-auto gap-0 flex-1"
           style={{ scrollbarWidth: 'none' }}
         >
           {visibleTabs.map(item => {
@@ -235,7 +237,7 @@ export function Navbar() {
         {/* Search */}
         <form
           onSubmit={handleSearch}
-          className="hidden md:flex items-center flex-shrink-0 ml-3"
+          className="flex items-center flex-shrink-0 ml-3"
         >
           <div className="relative">
             <Search
@@ -278,7 +280,7 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="fixed left-0 right-0 z-30 px-4 py-4 flex flex-col gap-1 md:hidden"
-          style={{ top: '100px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
+          style={{ top: '56px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
         >
           {visibleTabs.map(item => {
             const active = isTabActive(item.href)

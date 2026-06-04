@@ -6,16 +6,197 @@ import { UploadModal } from '@/components/portal/UploadModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
-import { Lock, Upload } from 'lucide-react'
+import { Lock, Upload, ChevronDown, ChevronUp } from 'lucide-react'
+import { HRStaffSection } from '@/components/portal/HRStaffSection'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
-  admin: { name: 'Admin Office', description: 'The Structure Behind the Facility — policies, staff files, resident records, compliance systems', dbKey: 'admin' },
-  finance: { name: 'Finance', description: 'Financial Transparency & Sustainability — budgets, DSD allocations, payroll, procurement', dbKey: 'finance' },
-  kitchen: { name: 'Kitchen', description: 'Safe Nutrition. Safe Residents. — meal planning, food safety, hygiene, temperature controls', dbKey: 'kitchen' },
-  medical: { name: 'Medical', description: 'Resident Safety & Clinical Compliance — medication management, care plans, incident reporting', dbKey: 'medical' },
-  'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability — governance structure, board docs, risk registers', dbKey: 'board_governance' },
-  'medical-residence': { name: 'Medical Residence', description: 'Residential Medical Care — ongoing health monitoring, care assessments, clinical notes, chronic disease management', dbKey: 'medical_residence' },
-  hr: { name: 'HR', description: 'Human Resources — staff records, contracts, training, performance management, leave administration', dbKey: 'hr' },
+  admin: { name: 'Admin Office', description: 'The Structure Behind the Facility', dbKey: 'admin' },
+  finance: { name: 'Finance', description: 'Financial Transparency & Sustainability', dbKey: 'finance' },
+  kitchen: { name: 'Kitchen', description: 'Safe Nutrition. Safe Residents.', dbKey: 'kitchen' },
+  medical: { name: 'Medical', description: 'Resident Safety & Clinical Compliance', dbKey: 'medical' },
+  'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability', dbKey: 'board_governance' },
+  'medical-residence': { name: 'Medical Residence', description: 'Ongoing Residential Medical Care', dbKey: 'medical_residence' },
+  hr: { name: 'HR', description: 'People. Structure. Compliance.', dbKey: 'hr' },
+}
+
+type PillarContent = {
+  purpose: string
+  focusAreas: string[]
+  keySystems: { category: string; items: string[] }[]
+}
+
+// Structured pillar content sourced from the InnerFrame website headers guide
+const PILLAR_CONTENT: Record<string, PillarContent> = {
+  admin: {
+    purpose: 'To ensure the facility runs in an organised, compliant, audit-ready, and professional manner.',
+    focusAreas: [
+      'Policies & Procedures', 'Staff Files', 'Resident Files',
+      'Admission & Discharge', 'Daily Operational Control',
+      'Compliance Systems', 'Communication Systems', 'Reporting Structure',
+    ],
+    keySystems: [
+      {
+        category: 'Administration File Structure',
+        items: ['Master Index File', 'Policies & Procedures File', 'Staff Records File', 'Resident Administration File', 'Incident & Complaints File', 'Visitor Register', 'Maintenance Register', 'Asset Register'],
+      },
+      {
+        category: 'Daily Controls',
+        items: ['Attendance registers', 'Shift handover books', 'Daily task checklists', 'Visitor sign-in systems', 'Maintenance reporting system'],
+      },
+      {
+        category: 'Compliance Requirements',
+        items: ['DSD-ready filing', 'Updated organogram', 'Job descriptions', 'Employment contracts', 'Disciplinary procedures', 'Leave tracking'],
+      },
+    ],
+  },
+  finance: {
+    purpose: 'To ensure the facility remains financially healthy, accountable, transparent, and aligned with DSD funding structures.',
+    focusAreas: [
+      'Budgeting', 'Cash Flow Management', 'DSD Allocations', 'Petty Cash',
+      'Procurement', 'Financial Reporting', 'Payroll Controls', 'Stock Accountability',
+    ],
+    keySystems: [
+      {
+        category: 'Financial Controls',
+        items: ['Monthly budget tracking', 'Departmental budgets', 'DSD vs Private funding tracking', 'Petty cash procedures', 'Supplier approval systems'],
+      },
+      {
+        category: 'Reporting',
+        items: ['Monthly financial reports', 'Board finance reports', 'Variance analysis', 'Cost framework alignment', 'Quarterly reporting packs'],
+      },
+      {
+        category: 'Payroll & HR Finance',
+        items: ['Timesheet verification', 'Overtime control', 'Sunday/public holiday structure', 'Leave calculations', 'UIF compliance'],
+      },
+      {
+        category: 'Procurement Controls',
+        items: ['Stock issuing system', 'Purchase request forms', 'Invoice approval workflow', 'Asset tracking'],
+      },
+    ],
+  },
+  kitchen: {
+    purpose: 'To ensure food safety, hygiene, nutritional compliance, and proper kitchen operational control.',
+    focusAreas: [
+      'Meal Planning', 'Food Safety', 'Hygiene', 'Temperature Control',
+      'Expiry Date Management', 'Stock Issuing', 'Cleaning Schedules', 'Dietary Monitoring',
+    ],
+    keySystems: [
+      {
+        category: 'Kitchen Controls',
+        items: ['Daily temperature logs', 'Fridge/freezer monitoring', 'Cleaning schedules', 'Deep cleaning schedule', 'Pest control monitoring'],
+      },
+      {
+        category: 'Food Management',
+        items: ['Weekly menus', 'Special diet lists', 'Resident dietary requirements', 'Food receiving procedures', 'FIFO stock rotation'],
+      },
+      {
+        category: 'Stock Systems',
+        items: ['Cleaning material issue system', 'Food stock issue sheets', 'Monthly stock counts', 'Waste control tracking'],
+      },
+      {
+        category: 'Hygiene Standards',
+        items: ['Handwashing procedures', 'PPE usage', 'Dishwashing systems', 'Sanitising controls'],
+      },
+    ],
+  },
+  medical: {
+    purpose: 'To ensure resident care, medication management, and health monitoring systems are safe, compliant, and resident-focused.',
+    focusAreas: [
+      'Medication Management', 'Care Plans', 'Incident Reporting', 'Fall Prevention',
+      'Health Monitoring', 'Infection Control', 'Nursing Documentation', 'Resident Well-being',
+    ],
+    keySystems: [
+      {
+        category: 'Medical Documentation',
+        items: ['Resident care plans', 'Medication charts', 'Observation charts', 'Weight monitoring', 'Fluid balance charts', 'Doctor visit records'],
+      },
+      {
+        category: 'Safety Systems',
+        items: ['Incident reports', 'Fall registers', 'Emergency procedures', 'Hospital transfer procedures', 'Oxygen monitoring logs'],
+      },
+      {
+        category: 'Infection Control',
+        items: ['PPE protocols', 'Isolation procedures', 'Cleaning controls', 'Waste disposal systems'],
+      },
+      {
+        category: 'Shift Controls',
+        items: ['Nursing handovers', 'Day/night reports', 'Medication checks', 'Resident monitoring systems'],
+      },
+    ],
+  },
+  board_governance: {
+    purpose: "To ensure leadership structures are professional, accountable, sustainable, and aligned with the facility's mission and compliance obligations.",
+    focusAreas: [
+      'Governance Structure', 'Board Oversight', 'Strategic Planning', 'Policy Approval',
+      'Financial Accountability', 'Risk Management', 'Compliance Oversight', 'Sustainability Planning',
+    ],
+    keySystems: [
+      {
+        category: 'Governance Structure',
+        items: ['Board organogram', 'Terms of reference', 'Board meeting schedule', 'Committee structure'],
+      },
+      {
+        category: 'Board Documentation',
+        items: ['Board packs', 'Minutes', 'Strategic plans', 'Risk registers', 'Annual reports'],
+      },
+      {
+        category: 'Oversight Systems',
+        items: ['Financial oversight', 'Operational reporting', 'Compliance monitoring', 'DSD reporting oversight'],
+      },
+      {
+        category: 'Sustainability Planning',
+        items: ['Fundraising strategies', 'Maintenance planning', 'Staffing sustainability', 'Growth planning'],
+      },
+    ],
+  },
+  medical_residence: {
+    purpose: 'To ensure continuous health monitoring, care assessments, and chronic disease management for all residents in residential care.',
+    focusAreas: [
+      'Care Assessments', 'Chronic Disease Management', 'Clinical Notes',
+      'Health Monitoring', 'Therapy & Rehabilitation', 'Palliative Care',
+      'Family Communication', 'Well-being Tracking',
+    ],
+    keySystems: [
+      {
+        category: 'Residential Care Documentation',
+        items: ['Admission assessments', 'Ongoing care plans', 'Clinical progress notes', 'Chronic medication lists', 'Specialist referral records'],
+      },
+      {
+        category: 'Monitoring & Review',
+        items: ['Monthly care reviews', 'Weight & vital signs tracking', 'Therapy session records', 'Family feedback forms'],
+      },
+      {
+        category: 'Communication Systems',
+        items: ['Family communication logs', 'MDT meeting records', 'Discharge planning', 'End-of-life documentation'],
+      },
+    ],
+  },
+  hr: {
+    purpose: 'To ensure all human resources are effectively managed, contracted, trained, and compliant with South African labour law.',
+    focusAreas: [
+      'Staff Records', 'Employment Contracts', 'Training & Development',
+      'Performance Management', 'Leave Administration', 'Labour Law Compliance',
+      'Disciplinary Procedures', 'Payroll Integration',
+    ],
+    keySystems: [
+      {
+        category: 'Staff Records',
+        items: ['Employment contracts', 'Job descriptions', 'ID & qualification copies', 'Police clearance records', 'Emergency contact details'],
+      },
+      {
+        category: 'Leave & Attendance',
+        items: ['Leave application forms', 'Leave balance tracking', 'Attendance registers', 'Sick leave records', 'Maternity/paternity documentation'],
+      },
+      {
+        category: 'Training & Development',
+        items: ['Induction records', 'Training certificates', 'CPD tracking', 'Competency assessments', 'Skills development plans'],
+      },
+      {
+        category: 'Compliance & Discipline',
+        items: ['BCEA compliance checklist', 'Disciplinary records', 'Grievance records', 'CCMA documentation', 'UIF registration'],
+      },
+    ],
+  },
 }
 
 type DbSection = { id: string; title: string; sort_order: number; is_global: boolean }
@@ -65,6 +246,79 @@ function toDisplayDoc(d: DbDocument): DisplayDoc {
   }
 }
 
+// Collapsible pillar overview card sourced from the InnerFrame headers guide
+function PillarOverview({ dbKey }: { dbKey: string }) {
+  const [expanded, setExpanded] = useState(false)
+  const content = PILLAR_CONTENT[dbKey]
+  if (!content) return null
+
+  return (
+    <div
+      className="rounded-xl border mb-6 overflow-hidden"
+      style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff' }}
+    >
+      {/* Header row — always visible */}
+      <button
+        type="button"
+        className="w-full flex items-start justify-between gap-4 px-5 py-4 text-left"
+        onClick={() => setExpanded(v => !v)}
+        aria-expanded={expanded}
+      >
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium mb-1" style={{ color: '#D4AF37', letterSpacing: '0.05em' }}>
+            PILLAR PURPOSE
+          </p>
+          <p className="text-sm leading-relaxed" style={{ color: '#1E3A2F' }}>
+            {content.purpose}
+          </p>
+        </div>
+        <div className="flex-shrink-0 mt-0.5" style={{ color: '#698169' }}>
+          {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </div>
+      </button>
+
+      {/* Focus areas — always visible */}
+      <div className="px-5 pb-4 flex flex-wrap gap-1.5">
+        {content.focusAreas.map(area => (
+          <span
+            key={area}
+            className="text-xs px-2.5 py-1 rounded-full font-medium"
+            style={{ backgroundColor: 'rgba(30,58,47,0.07)', color: '#1E3A2F' }}
+          >
+            {area}
+          </span>
+        ))}
+      </div>
+
+      {/* Key systems — expanded only */}
+      {expanded && (
+        <div className="border-t px-5 py-4" style={{ borderColor: '#ddd6c8', backgroundColor: '#FAFAF8' }}>
+          <p className="text-xs font-semibold mb-3" style={{ color: '#5a5a5a', letterSpacing: '0.05em' }}>
+            KEY SYSTEMS TO IMPLEMENT
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {content.keySystems.map(sys => (
+              <div key={sys.category}>
+                <p className="text-xs font-semibold mb-1.5" style={{ color: '#1E3A2F' }}>
+                  {sys.category}
+                </p>
+                <ul className="space-y-0.5">
+                  {sys.items.map(item => (
+                    <li key={item} className="text-xs flex gap-2" style={{ color: '#5a5a5a' }}>
+                      <span style={{ color: '#D4AF37' }}>•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function PillarPage() {
   const { slug } = useParams<{ slug: string }>()
   const pillar = slug ? PILLAR_MAP[slug] : null
@@ -100,28 +354,20 @@ export default function PillarPage() {
     const fetchedDocs: DbDocument[] = (docsRes.data ?? []) as DbDocument[]
     setDbSections(fetchedSections)
 
-    // Group documents into display sections
     const globalDocs = fetchedDocs.filter(d => d.is_global).map(toDisplayDoc)
     const unsectionedFacilityDocs = fetchedDocs
       .filter(d => !d.is_global && !d.section_id)
       .map(toDisplayDoc)
 
     const built: DisplaySection[] = []
-
-    // 1. Global / Innerframe templates section (always shown)
     built.push({ id: 'global', title: 'Innerframe Templates & Guidelines', documents: globalDocs })
 
-    // 2. Per-section facility buckets (from document_sections table)
     for (const sec of fetchedSections) {
-      const docs = fetchedDocs
-        .filter(d => d.section_id === sec.id)
-        .map(toDisplayDoc)
+      const docs = fetchedDocs.filter(d => d.section_id === sec.id).map(toDisplayDoc)
       built.push({ id: sec.id, title: sec.title, documents: docs })
     }
 
-    // 3. Unsectioned facility documents
     built.push({ id: 'unsectioned', title: 'Facility Documents', documents: unsectionedFacilityDocs })
-
     setSections(built)
     setLoading(false)
   }, [pillar, user?.orgId])
@@ -157,7 +403,7 @@ export default function PillarPage() {
   const handleDelete = async (docId: string, fileUrl: string) => {
     if (!window.confirm('Delete this document? This cannot be undone.')) return
     const supabase = createClient()
-    const { error } = await supabase.from('documents').delete().eq('id', docId)
+    const { error } = await supabase.from('documents_legacy').delete().eq('id', docId)
     if (error) {
       alert('Could not delete document: ' + error.message)
       return
@@ -166,7 +412,6 @@ export default function PillarPage() {
     load()
   }
 
-  // Section items for the UploadModal section selector
   const uploadSections = dbSections.map(s => ({ id: s.id, title: s.title }))
 
   return (
@@ -187,6 +432,9 @@ export default function PillarPage() {
           </button>
         ) : undefined}
       />
+
+      <PillarOverview dbKey={pillar.dbKey} />
+
       <div className="space-y-2">
         {sections.map(section => (
           <SectionGroup
@@ -198,6 +446,8 @@ export default function PillarPage() {
           />
         ))}
       </div>
+
+      {pillar.dbKey === 'hr' && <HRStaffSection />}
 
       {user?.orgId && (
         <UploadModal

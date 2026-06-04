@@ -15,6 +15,7 @@ import FacilitiesPage from './pages/superadmin/FacilitiesPage'
 import FacilityDetailPage from './pages/superadmin/FacilityDetailPage'
 import ChangePasswordPage from './pages/auth/ChangePasswordPage'
 import StaffPermissionsPage from './pages/portal/admin/StaffPermissionsPage'
+import CompliancePage from './pages/portal/CompliancePage'
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
             </RoleGuard>
           }
         />
+        <Route path="/compliance" element={<CompliancePage />} />
         <Route path="/admin/orgs/:orgId" element={<OrgViewerPage />} />
         <Route
           path="/admin/staff/:userId/permissions"

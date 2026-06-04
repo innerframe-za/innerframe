@@ -3,7 +3,6 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { DocumentRow } from '@/components/portal/DocumentRow'
 import { UploadModal } from '@/components/portal/UploadModal'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   User, Calendar, Home, Hash, Heart, Pill, Stethoscope, Phone,
   Mail, Users, MessageSquare, ChevronDown, ChevronUp, Plus, Edit2, Save, X,
@@ -139,6 +138,9 @@ export default function ResidentDetailPage() {
   // Upload modal
   const [uploadOpen, setUploadOpen] = useState(false)
 
+  // Documents — selected pillar filter
+  const [docPillar, setDocPillar] = useState<string>('all')
+
   const load = useCallback(async () => {
     if (!id) return
     setLoading(true)
@@ -162,7 +164,7 @@ export default function ResidentDetailPage() {
   const handleDocDelete = async (docId: string, fileUrl: string) => {
     if (!window.confirm('Delete this document? This cannot be undone.')) return
     const supabase = createClient()
-    const { error } = await supabase.from('documents').delete().eq('id', docId)
+    const { error } = await supabase.from('documents_legacy').delete().eq('id', docId)
     if (error) { alert('Could not delete document: ' + error.message); return }
     await supabase.storage.from('documents').remove([fileUrl])
     setDocuments(prev => prev.filter(d => d.id !== docId))
@@ -396,8 +398,9 @@ export default function ResidentDetailPage() {
       </div>
 
       {/* ── Card 3: Documents ────────────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border p-6" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
-        <div className="flex items-center justify-between mb-5">
+      <div className="bg-white rounded-xl border" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+        {/* Card header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: '#ddd6c8' }}>
           <div>
             <h2 className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>Documents</h2>
             <div style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '4px' }} aria-hidden="true" />
@@ -411,37 +414,119 @@ export default function ResidentDetailPage() {
             <Plus size={12} />Upload Document
           </button>
         </div>
-        <Tabs defaultValue="medical">
-          <TabsList className="mb-4 flex-wrap">
-            {PILLARS.map(p => <TabsTrigger key={p.value} value={p.value} className="text-xs">{p.label}</TabsTrigger>)}
-          </TabsList>
-          {PILLARS.map(p => {
-            const docs = documents.filter(d => d.pillar === p.value)
-            return (
-              <TabsContent key={p.value} value={p.value}>
-                {docs.length === 0 ? (
-                  <p className="text-sm py-6 text-center" style={{ color: '#5a5a5a' }}>No documents uploaded for {p.label} yet.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {docs.map(doc => (
-                      <DocumentRow
-                        key={doc.id}
-                        fileName={doc.file_name}
-                        fileUrl={doc.file_url}
-                        category={doc.category_id ?? ''}
-                        pillar={doc.pillar}
-                        date={formatDate(doc.created_at) ?? doc.created_at}
-                        isGlobal={doc.is_global}
-                        canDelete={true}
-                        onDelete={() => handleDocDelete(doc.id, doc.file_url)}
-                      />
-                    ))}
+
+        {/* Two-column layout: category list + document panel */}
+        <div className="flex flex-col sm:flex-row min-h-[220px]">
+          {/* Left: category list */}
+          <div
+            className="sm:w-44 flex-shrink-0 border-b sm:border-b-0 sm:border-r"
+            style={{ borderColor: '#ddd6c8', backgroundColor: '#fafaf8' }}
+          >
+            <nav className="p-2 flex sm:flex-col gap-1 overflow-x-auto sm:overflow-x-visible" aria-label="Document categories">
+              {/* "All" option */}
+              {(() => {
+                const active = docPillar === 'all'
+                return (
+                  <button
+                    key="all"
+                    type="button"
+                    onClick={() => setDocPillar('all')}
+                    className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap w-full text-left transition-colors flex-shrink-0"
+                    style={{
+                      backgroundColor: active ? '#1E3A2F' : 'transparent',
+                      color: active ? '#ffffff' : '#5a5a5a',
+                    }}
+                  >
+                    <span>All</span>
+                    <span
+                      className="text-xs px-1.5 py-0.5 rounded-full font-medium"
+                      style={{
+                        backgroundColor: active ? 'rgba(255,255,255,0.2)' : 'rgba(30,58,47,0.08)',
+                        color: active ? '#ffffff' : '#1E3A2F',
+                      }}
+                    >
+                      {documents.length}
+                    </span>
+                  </button>
+                )
+              })()}
+
+              {PILLARS.map(p => {
+                const count = documents.filter(d => d.pillar === p.value).length
+                const active = docPillar === p.value
+                return (
+                  <button
+                    key={p.value}
+                    type="button"
+                    onClick={() => setDocPillar(p.value)}
+                    className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap w-full text-left transition-colors flex-shrink-0"
+                    style={{
+                      backgroundColor: active ? '#1E3A2F' : 'transparent',
+                      color: active ? '#ffffff' : '#5a5a5a',
+                    }}
+                  >
+                    <span>{p.label}</span>
+                    {count > 0 && (
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded-full font-medium"
+                        style={{
+                          backgroundColor: active ? 'rgba(255,255,255,0.2)' : 'rgba(212,175,55,0.15)',
+                          color: active ? '#ffffff' : '#b45309',
+                        }}
+                      >
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </nav>
+          </div>
+
+          {/* Right: document list */}
+          <div className="flex-1 p-4">
+            {(() => {
+              const filtered = docPillar === 'all'
+                ? documents
+                : documents.filter(d => d.pillar === docPillar)
+              const label = docPillar === 'all' ? 'any pillar' : (PILLARS.find(p => p.value === docPillar)?.label ?? docPillar)
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="h-full flex flex-col items-center justify-center py-10 text-center">
+                    <p className="text-sm" style={{ color: '#9ca3af' }}>No documents for {label} yet.</p>
+                    <button
+                      type="button"
+                      onClick={() => setUploadOpen(true)}
+                      className="mt-3 text-xs underline"
+                      style={{ color: '#5a5a5a' }}
+                    >
+                      Upload one now
+                    </button>
                   </div>
-                )}
-              </TabsContent>
-            )
-          })}
-        </Tabs>
+                )
+              }
+
+              return (
+                <div className="space-y-2">
+                  {filtered.map(doc => (
+                    <DocumentRow
+                      key={doc.id}
+                      fileName={doc.file_name}
+                      fileUrl={doc.file_url}
+                      category={doc.category_id ?? ''}
+                      pillar={doc.pillar}
+                      date={formatDate(doc.created_at) ?? doc.created_at}
+                      isGlobal={doc.is_global}
+                      canDelete={true}
+                      onDelete={() => handleDocDelete(doc.id, doc.file_url)}
+                    />
+                  ))}
+                </div>
+              )
+            })()}
+          </div>
+        </div>
       </div>
 
       {/* ── Card 4: Activity Log ─────────────────────────────────────────── */}

@@ -175,6 +175,70 @@ export type Database = {
         Relationships: []
       }
 
+      // ── Staff members ──────────────────────────────────────────────────────
+
+      staff_members: {
+        Row: {
+          id: string; org_id: string; full_name: string
+          role: 'nurse'|'care_worker'|'cook'|'cleaning'|'admin'|'management'|'security'|'maintenance'|'physiotherapist'|'social_worker'|'other'
+          id_number: string | null; phone: string | null; email: string | null
+          employment_date: string | null; status: 'active'|'on_leave'|'terminated'
+          notes: string | null; created_at: string; updated_at: string
+        }
+        Insert: {
+          id?: string; org_id: string; full_name: string
+          role: 'nurse'|'care_worker'|'cook'|'cleaning'|'admin'|'management'|'security'|'maintenance'|'physiotherapist'|'social_worker'|'other'
+          id_number?: string | null; phone?: string | null; email?: string | null
+          employment_date?: string | null; status?: 'active'|'on_leave'|'terminated'
+          notes?: string | null; created_at?: string; updated_at?: string
+        }
+        Update: {
+          id?: string; org_id?: string; full_name?: string
+          role?: 'nurse'|'care_worker'|'cook'|'cleaning'|'admin'|'management'|'security'|'maintenance'|'physiotherapist'|'social_worker'|'other'
+          id_number?: string | null; phone?: string | null; email?: string | null
+          employment_date?: string | null; status?: 'active'|'on_leave'|'terminated'
+          notes?: string | null; created_at?: string; updated_at?: string
+        }
+        Relationships: []
+      }
+
+      // ── Compliance tables ───────────────────────────────────────────────────
+
+      compliance_items: {
+        Row: {
+          id: string; category: string; title: string; description: string | null
+          frequency: string; sort_order: number; is_active: boolean; created_at: string
+        }
+        Insert: {
+          id?: string; category: string; title: string; description?: string | null
+          frequency: string; sort_order?: number; is_active?: boolean; created_at?: string
+        }
+        Update: {
+          id?: string; category?: string; title?: string; description?: string | null
+          frequency?: string; sort_order?: number; is_active?: boolean; created_at?: string
+        }
+        Relationships: []
+      }
+
+      compliance_checks: {
+        Row: {
+          id: string; org_id: string; item_id: string; is_complete: boolean
+          completed_at: string | null; completed_by: string | null
+          notes: string | null; updated_at: string
+        }
+        Insert: {
+          id?: string; org_id: string; item_id: string; is_complete?: boolean
+          completed_at?: string | null; completed_by?: string | null
+          notes?: string | null; updated_at?: string
+        }
+        Update: {
+          id?: string; org_id?: string; item_id?: string; is_complete?: boolean
+          completed_at?: string | null; completed_by?: string | null
+          notes?: string | null; updated_at?: string
+        }
+        Relationships: []
+      }
+
       // ── New multi-tenant tables ─────────────────────────────────────────────
 
       facilities: {
