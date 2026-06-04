@@ -57,7 +57,8 @@ export default function ResidentsPage() {
   const filtered = residents.filter(r => {
     const matchSearch =
       r.full_name.toLowerCase().includes(search.toLowerCase()) ||
-      (r.room_number ?? '').includes(search)
+      (r.room_number ?? '').includes(search) ||
+      (r.id_number ?? '').includes(search)
     const matchStatus = filterStatus === 'all' || r.status === filterStatus
     return matchSearch && matchStatus
   })
@@ -84,7 +85,7 @@ export default function ResidentsPage() {
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5a5a5a' }} aria-hidden="true" />
           <input
             type="search" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name or room..."
+            placeholder="Search by name, ID number or room..."
             className="w-full pl-9 pr-3 py-2.5 rounded border text-sm outline-none"
             style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff', color: '#1a1a1a' }}
             onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
