@@ -1,5 +1,4 @@
 import { Check } from 'lucide-react'
-import { useReveal } from '@/lib/hooks/useReveal'
 
 const PLANS = [
   {
@@ -56,34 +55,32 @@ const PLANS = [
 ]
 
 export function Pricing() {
-  const { ref, visible } = useReveal()
-
   return (
     <section
       id="pricing"
-      className="py-24 px-6"
+      className="py-20 px-6"
       style={{ backgroundColor: '#faf7f0' }}
     >
-      <div className="max-w-6xl mx-auto" ref={ref}>
+      <div className="max-w-6xl mx-auto">
         {/* Section heading */}
-        <div className={`text-center mb-14 reveal-section${visible ? ' is-visible' : ''}`}>
-          <h2
-            className="gold-underline inline-block"
-            style={{
-              color: '#334739',
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontWeight: 600,
-              fontSize: 'clamp(28px, 3vw, 36px)',
-              lineHeight: 1.15,
-            }}
-          >
-            Pricing
-          </h2>
+        <div className="text-center mb-14">
+          <div className="inline-block">
+            <h2
+              className="text-3xl font-semibold gold-underline"
+              style={{
+                color: '#334739',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontStyle: 'normal',
+              }}
+            >
+              Pricing
+            </h2>
+          </div>
           <p
             className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: '#5a5a5a', lineHeight: 1.7 }}
+            style={{ color: '#5a5a5a' }}
           >
-            Simple monthly pricing that grows with your facility. Billed via debit order, aligned with your DSD subsidy cycle.
+            Simple monthly pricing that grows with your facility. Billed via debit order — aligned with your DSD subsidy cycle.
           </p>
         </div>
 

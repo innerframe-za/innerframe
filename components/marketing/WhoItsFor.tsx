@@ -1,7 +1,6 @@
 import { Check } from 'lucide-react'
-import { useReveal } from '@/lib/hooks/useReveal'
 
-const AUDIENCES = [
+const audiences = [
   {
     title: 'Registered Old Age Homes',
     description:
@@ -10,24 +9,24 @@ const AUDIENCES = [
       'DSD compliance documentation',
       'Audit-ready file structures',
       'Staff and resident file management',
-      'Section 20 and 21 requirements',
+      'Section 20 & 21 requirements',
     ],
   },
   {
     title: 'Care Facility Managers',
     description:
-      'Managers responsible for day-to-day operations who need proper systems built — and the training to maintain them independently.',
+      'Managers who are responsible for day-to-day operations but lack the time or expertise to build proper systems from scratch.',
     checks: [
       'Operational control frameworks',
       'Staff training materials',
-      'Incident and complaint management',
+      'Incident & complaint management',
       'Monthly reporting packs',
     ],
   },
   {
-    title: 'NPO and Church-Run Facilities',
+    title: 'NPO & Church-Run Facilities',
     description:
-      'Non-profit and faith-based organisations running care homes who need governance structures and financial accountability.',
+      'Non-profit and faith-based organisations running care homes who need governance structures and financial accountability systems.',
     checks: [
       'Board governance frameworks',
       'Financial transparency tools',
@@ -37,75 +36,67 @@ const AUDIENCES = [
   },
 ]
 
+/**
+ * "Built for South African Care Facilities" section —
+ * highlights the three primary target audiences.
+ */
 export function WhoItsFor() {
-  const { ref, visible } = useReveal()
-
   return (
     <section
       id="who-its-for"
-      className="py-24 px-6"
+      className="py-20 px-6"
       style={{ backgroundColor: '#faf7f0' }}
     >
-      <div className="max-w-6xl mx-auto" ref={ref}>
-
+      <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <div className={`text-center mb-14 reveal-section${visible ? ' is-visible' : ''}`}>
-          <h2
-            className="gold-underline inline-block"
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontWeight: 600,
-              fontSize: 'clamp(28px, 3vw, 36px)',
-              color: '#334739',
-              lineHeight: 1.15,
-            }}
-          >
-            Built for South African Care Facilities
-          </h2>
+        <div className="text-center mb-14">
+          <div className="inline-block">
+            <h2
+              className="text-3xl font-semibold gold-underline"
+              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
+            >
+              Built for South African Care Facilities
+            </h2>
+          </div>
           <p
             className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: '#5a5a5a', lineHeight: 1.7 }}
+            style={{ color: '#5a5a5a' }}
           >
-            Innerframe was designed for the South African context — DSD regulations,
-            ZAR-denominated operations, and the unique challenges facing our
-            country&apos;s care homes.
+            Innerframe was designed specifically for the South African context —
+            DSD regulations, ZAR-denominated operations, and the unique
+            challenges facing our country&apos;s care homes.
           </p>
         </div>
 
         {/* Audience cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {AUDIENCES.map((audience, i) => (
+          {audiences.map(audience => (
             <div
               key={audience.title}
-              className={`bg-white rounded-xl p-7 border reveal-section delay-${(i + 1) * 100}${visible ? ' is-visible' : ''}`}
-              style={{
-                borderColor: '#ddd6c8',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04)',
-              }}
+              className="bg-white rounded-xl p-6 border"
+              style={{ borderColor: '#ddd6c8', boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)' }}
             >
               <h3
-                style={{
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontWeight: 600,
-                  fontSize: 'clamp(18px, 2vw, 21px)',
-                  color: '#334739',
-                  lineHeight: 1.2,
-                  marginBottom: '12px',
-                }}
+                className="font-semibold text-lg mb-3"
+                style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
               >
                 {audience.title}
               </h3>
               <p
-                className="text-sm leading-relaxed mb-6"
+                className="text-sm leading-relaxed mb-5"
                 style={{ color: '#5a5a5a' }}
               >
                 {audience.description}
               </p>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {audience.checks.map(check => (
-                  <li key={check} className="flex items-start gap-2.5 text-sm" style={{ color: '#1a1a1a' }}>
+                  <li
+                    key={check}
+                    className="flex items-start gap-2 text-sm"
+                    style={{ color: '#1a1a1a' }}
+                  >
                     <Check
-                      size={13}
+                      size={14}
                       className="flex-shrink-0 mt-0.5"
                       style={{ color: '#d3b24b' }}
                       aria-hidden="true"
@@ -118,33 +109,32 @@ export function WhoItsFor() {
           ))}
         </div>
 
-        {/* SA context note */}
+        {/* Context strip */}
         <div
-          className={`mt-10 rounded-xl p-6 border flex items-start gap-5 reveal-section delay-400${visible ? ' is-visible' : ''}`}
+          className="mt-12 rounded-xl p-6 border flex flex-col md:flex-row items-start md:items-center gap-4"
           style={{
-            borderColor: 'rgba(212,175,55,0.35)',
-            backgroundColor: 'rgba(212,175,55,0.04)',
+            borderColor: 'rgba(212,175,55,0.4)',
+            backgroundColor: 'rgba(212,175,55,0.05)',
           }}
         >
           <div
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: '24px',
-              lineHeight: 1,
-              flexShrink: 0,
-              marginTop: '2px',
-            }}
+            className="w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center text-lg"
+            style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
+            aria-hidden="true"
           >
             🇿🇦
           </div>
           <div>
-            <p className="text-sm font-semibold mb-1" style={{ color: '#334739', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
+            <p
+              className="text-sm font-medium"
+              style={{ color: '#334739' }}
+            >
               Proudly South African
             </p>
-            <p className="text-xs leading-relaxed" style={{ color: '#5a5a5a' }}>
-              We understand the DSD funding model, Section 20 and 21 requirements,
-              local labour law, POPIA compliance, and the everyday realities of running a
-              care facility in South Africa.
+            <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
+              We understand the DSD funding model, Section 20 & 21 requirements,
+              local labour law, and the everyday realities of running a care
+              facility in South Africa.
             </p>
           </div>
         </div>
