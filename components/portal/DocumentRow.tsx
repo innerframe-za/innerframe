@@ -72,51 +72,38 @@ export function DocumentRow({
   const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
   const displayTitle = title || fileName
 
-  /** Office docs need Google Docs Viewer; PDFs/images open directly */
-  const isOfficeDoc = (name: string) => {
-    const ext = name.split('.').pop()?.toLowerCase() ?? ''
-    return ['doc', 'docx', 'xls', 'xlsx'].includes(ext)
-  }
-
-  const getSignedUrl = async (): Promise<string | null> => {
+  // Fetch the file through the /api/files proxy (served from our own domain,
+  // so ad blockers never see a supabase.co URL in the browser).
+  const fetchFileBlob = async (): Promise<Blob | null> => {
     const supabase = createClient()
-    const { data, error } = await supabase.storage
-      .from('documents')
-      .createSignedUrl(fileUrl, 300) // 5-min window — enough for Docs Viewer to fetch
-    if (error || !data?.signedUrl) return null
-    return data.signedUrl
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.access_token) return null
+
+    const res = await fetch(`/api/files/${fileUrl}`, {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) return null
+    return res.blob()
   }
 
   const handleView = async () => {
-    const signedUrl = await getSignedUrl()
-    if (!signedUrl) {
-      alert('Could not open document. Please try again.')
-      return
-    }
-    if (isOfficeDoc(fileName)) {
-      // Google Docs Viewer handles DOC/DOCX/XLS/XLSX
-      window.open(
-        `https://docs.google.com/viewer?url=${encodeURIComponent(signedUrl)}`,
-        '_blank',
-        'noopener,noreferrer'
-      )
-    } else {
-      window.open(signedUrl, '_blank', 'noopener,noreferrer')
-    }
+    const blob = await fetchFileBlob()
+    if (!blob) { alert('Could not open document. Please try again.'); return }
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener,noreferrer')
+    // Revoke after 60 s — enough time for the new tab to load the file
+    setTimeout(() => URL.revokeObjectURL(url), 60_000)
   }
 
   const handleDownload = async () => {
-    const signedUrl = await getSignedUrl()
-    if (!signedUrl) {
-      alert('Could not generate download link. Please try again.')
-      return
-    }
-    // Force download via anchor with download attribute
+    const blob = await fetchFileBlob()
+    if (!blob) { alert('Could not generate download link. Please try again.'); return }
+    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = signedUrl
+    a.href = url
     a.download = fileName
-    a.rel = 'noopener noreferrer'
     a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1_000)
   }
 
   return (
@@ -138,7 +125,7 @@ export function DocumentRow({
         ((e.currentTarget as HTMLDivElement).style.backgroundColor = '#ffffff')
       }
       aria-label={`Open ${fileName}`}
-      title={isOfficeDoc(fileName) ? 'Open in Google Docs Viewer' : 'Click to open'}
+      title="Click to open"
     >
       {/* File icon */}
       <div
