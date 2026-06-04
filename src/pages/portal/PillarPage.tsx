@@ -354,7 +354,9 @@ export default function PillarPage() {
     const fetchedDocs: DbDocument[] = (docsRes.data ?? []) as DbDocument[]
     setDbSections(fetchedSections)
 
-    const globalDocs = fetchedDocs.filter(d => d.is_global).map(toDisplayDoc)
+    // Only unsectioned global docs belong in "Innerframe Templates & Guidelines";
+    // global docs with a section_id are rendered under their named section below.
+    const globalDocs = fetchedDocs.filter(d => d.is_global && !d.section_id).map(toDisplayDoc)
     const unsectionedFacilityDocs = fetchedDocs
       .filter(d => !d.is_global && !d.section_id)
       .map(toDisplayDoc)
