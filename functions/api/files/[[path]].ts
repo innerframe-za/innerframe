@@ -10,11 +10,18 @@
 //   SUPABASE_ANON_KEY — the project's anon/public key
 
 interface Env {
-  SUPABASE_URL: string
-  SUPABASE_ANON_KEY: string
+  // CF Pages makes all dashboard env vars available to Functions.
+  // The project already sets VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY for
+  // the Vite build, so we read those here rather than requiring separate secrets.
+  VITE_SUPABASE_URL: string
+  VITE_SUPABASE_ANON_KEY: string
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, params, env }) => {
+  if (!env.VITE_SUPABASE_URL || !env.VITE_SUPABASE_ANON_KEY) {
+    return new Response('Storage proxy not configured', { status: 503 })
+  }
+
   // Require a valid Bearer token — Supabase RLS will enforce the rest
   const authHeader = request.headers.get('Authorization')
   if (!authHeader?.startsWith('Bearer ')) {
@@ -29,9 +36,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, params, env })
   const { searchParams } = new URL(request.url)
   const downloadParam = searchParams.get('download')
 
+  // Use /authenticated/ path — required for private buckets with bearer token + RLS
   const supabaseUrl = new URL(
-    `/storage/v1/object/documents/${storagePath}`,
-    env.SUPABASE_URL
+    `/storage/v1/object/authenticated/documents/${storagePath}`,
+    env.VITE_SUPABASE_URL
   )
   if (downloadParam) supabaseUrl.searchParams.set('download', downloadParam)
 
@@ -39,7 +47,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, params, env })
   const upstream = await fetch(supabaseUrl.toString(), {
     headers: {
       Authorization: authHeader,
-      apikey: env.SUPABASE_ANON_KEY,
+      apikey: env.VITE_SUPABASE_ANON_KEY,
     },
   })
 
