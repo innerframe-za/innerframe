@@ -1,18 +1,15 @@
-'use client'
-import { Search, Settings, CheckCircle } from 'lucide-react'
+import { useReveal } from '@/lib/hooks/useReveal'
 
-const steps = [
+const STEPS = [
   {
     number: '01',
-    icon: Search,
     title: 'Assess',
     subtitle: 'Full Facility Evaluation',
     description:
-      'We conduct a comprehensive assessment of all 5 pillars — identifying gaps, compliance risks, and operational weaknesses before anything else.',
+      'A comprehensive review of all five pillars — identifying compliance gaps, operational weaknesses, and documentation risks before anything else.',
   },
   {
     number: '02',
-    icon: Settings,
     title: 'Structure',
     subtitle: 'Build Your Systems',
     description:
@@ -20,7 +17,6 @@ const steps = [
   },
   {
     number: '03',
-    icon: CheckCircle,
     title: 'Implement',
     subtitle: 'Train, Monitor & Sustain',
     description:
@@ -28,128 +24,180 @@ const steps = [
   },
 ]
 
-/**
- * How It Works section — 3-step process with gold numbered circles.
- */
 export function HowItWorks() {
+  const { ref, visible } = useReveal()
+
   return (
     <section
       id="how-it-works"
-      className="py-20 px-6"
+      className="py-24 px-6"
       style={{ backgroundColor: '#ffffff' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto" ref={ref}>
+
         {/* Section heading */}
-        <div className="text-center mb-14">
-          <div className="inline-block">
-            <h2
-              className="text-3xl font-semibold gold-underline"
-              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
-            >
-              How It Works
-            </h2>
-          </div>
+        <div className={`text-center mb-16 reveal-section${visible ? ' is-visible' : ''}`}>
+          <h2
+            className="gold-underline inline-block"
+            style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontWeight: 600,
+              fontSize: 'clamp(28px, 3vw, 36px)',
+              color: '#334739',
+              lineHeight: 1.15,
+            }}
+          >
+            How It Works
+          </h2>
           <p
             className="mt-6 text-base max-w-lg mx-auto"
-            style={{ color: '#5a5a5a' }}
+            style={{ color: '#5a5a5a', lineHeight: 1.7 }}
           >
-            A structured three-step process that transforms your facility from
-            reactive to audit-ready.
+            A structured three-step process that transforms your facility from reactive
+            to audit-ready.
           </p>
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => {
-            const Icon = step.icon
-            return (
-              <div key={step.number} className="relative flex flex-col items-center text-center">
-                {/* Connector line between steps */}
-                {index < steps.length - 1 && (
-                  <div
-                    className="hidden md:block absolute top-8 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
-                    style={{ backgroundColor: '#ddd6c8' }}
-                    aria-hidden="true"
-                  />
-                )}
-
-                {/* Gold number circle */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6">
+          {STEPS.map((step, i) => (
+            <div
+              key={step.number}
+              className={`relative flex flex-col items-center text-center reveal-section delay-${(i + 1) * 100}${visible ? ' is-visible' : ''}`}
+            >
+              {/* Connector line */}
+              {i < STEPS.length - 1 && (
                 <div
-                  className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
+                  aria-hidden="true"
+                  className="hidden md:block absolute"
                   style={{
-                    backgroundColor: '#ffffff',
-                    borderColor: '#d3b24b',
+                    top: '28px',
+                    left: 'calc(50% + 36px)',
+                    right: 'calc(-50% + 36px)',
+                    height: '1px',
+                    backgroundColor: '#ddd6c8',
+                  }}
+                />
+              )}
+
+              {/* Step number circle */}
+              <div
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  border: '1.5px solid #d3b24b',
+                  backgroundColor: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
+                    fontWeight: 600,
+                    fontSize: '18px',
                     color: '#d3b24b',
                   }}
                 >
-                  <span className="text-xl font-medium">{step.number}</span>
-                </div>
-
-                {/* Icon */}
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                  style={{ backgroundColor: 'rgba(30,58,47,0.06)' }}
-                >
-                  <Icon
-                    size={20}
-                    style={{ color: '#334739' }}
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {/* Content */}
-                <h3
-                  className="text-xl font-semibold mb-1"
-                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
-                >
-                  {step.title}
-                </h3>
-                <p
-                  className="text-xs font-medium mb-3"
-                  style={{ color: '#d3b24b' }}
-                >
-                  {step.subtitle}
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
-                  {step.description}
-                </p>
+                  {step.number}
+                </span>
               </div>
-            )
-          })}
+
+              <h3
+                style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontWeight: 600,
+                  fontSize: 'clamp(20px, 2.2vw, 24px)',
+                  color: '#334739',
+                  marginBottom: '6px',
+                  lineHeight: 1.2,
+                }}
+              >
+                {step.title}
+              </h3>
+              <p
+                style={{
+                  fontFamily: "'Outfit', system-ui, sans-serif",
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: '#d3b24b',
+                  letterSpacing: '0.04em',
+                  marginBottom: '14px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {step.subtitle}
+              </p>
+              <p
+                style={{
+                  fontFamily: "'Outfit', system-ui, sans-serif",
+                  fontSize: '14px',
+                  lineHeight: 1.7,
+                  color: '#5a5a5a',
+                  maxWidth: '280px',
+                }}
+              >
+                {step.description}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Outcome strip */}
         <div
-          className="mt-16 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 border"
+          className={`mt-16 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 reveal-section delay-400${visible ? ' is-visible' : ''}`}
           style={{
             backgroundColor: '#334739',
-            borderColor: 'rgba(212,175,55,0.3)',
+            border: '1px solid rgba(212,175,55,0.25)',
           }}
         >
           <div>
             <p
-              className="text-xs font-medium uppercase tracking-wider mb-2"
-              style={{ color: '#d3b24b' }}
+              style={{
+                fontFamily: "'Outfit', system-ui, sans-serif",
+                fontSize: '11px',
+                fontWeight: 500,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#d3b24b',
+                marginBottom: '8px',
+              }}
             >
               The Innerframe Outcome
             </p>
             <h3
-              className="text-xl font-medium"
-              style={{ color: '#F5F0E8' }}
+              style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontWeight: 600,
+                fontSize: 'clamp(20px, 2vw, 24px)',
+                color: '#faf7f0',
+                lineHeight: 1.2,
+              }}
             >
               Structured. Compliant. Compassionate.
             </h3>
           </div>
           <a
             href="#contact"
-            className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]"
-            style={{ backgroundColor: '#d3b24b', color: '#334739' }}
-            onMouseEnter={e =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = '#b8972e')
-            }
-            onMouseLeave={e =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = '#d3b24b')
-            }
+            style={{
+              backgroundColor: '#d3b24b',
+              color: '#334739',
+              borderRadius: '40px',
+              padding: '13px 32px',
+              fontSize: '14px',
+              fontFamily: "'Outfit', system-ui, sans-serif",
+              fontWeight: 600,
+              textDecoration: 'none',
+              flexShrink: 0,
+              transition: 'background-color 0.15s ease-out',
+            }}
+            onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#b8972e')}
+            onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#d3b24b')}
           >
             Start the Assessment
           </a>
