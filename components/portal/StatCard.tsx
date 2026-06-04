@@ -21,7 +21,7 @@ export function StatCard({ label, value, icon: Icon, trend, href }: StatCardProp
       </div>
 
       {/* Label */}
-      <p className="text-xs font-medium mb-3 pr-12" style={{ color: '#6b7280', letterSpacing: '0.01em' }}>
+      <p className="text-xs font-medium uppercase tracking-wider mb-3 pr-12" style={{ color: '#5a5a5a' }}>
         {label}
       </p>
 
@@ -34,7 +34,7 @@ export function StatCard({ label, value, icon: Icon, trend, href }: StatCardProp
       </p>
 
       {trend && (
-        <p className="text-xs mt-1.5" style={{ color: '#6b7280' }}>{trend}</p>
+        <p className="text-xs mt-1.5" style={{ color: '#5a5a5a' }}>{trend}</p>
       )}
 
       {/* Gold accent bar */}

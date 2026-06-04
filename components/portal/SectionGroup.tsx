@@ -48,7 +48,7 @@ export function SectionGroup({
       </div>
 
       {documents.length === 0 ? (
-        <p className="text-xs py-5 text-center" style={{ color: '#9ca3af' }}>
+        <p className="text-xs py-4 text-center" style={{ color: '#5a5a5a' }}>
           No documents in this section yet.
         </p>
       ) : (

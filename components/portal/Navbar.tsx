@@ -196,8 +196,8 @@ export function Navbar() {
         style={{
           top: '56px',
           height: '44px',
-          backgroundColor: '#2D5040',
-          borderBottom: '2px solid rgba(212,175,55,0.5)',
+          backgroundColor: '#698169',
+          borderBottom: '2px solid #D4AF37',
         }}
         role="navigation"
         aria-label="Portal section navigation"
@@ -277,7 +277,7 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="fixed left-0 right-0 z-30 px-4 py-3 flex flex-col gap-0.5 md:hidden"
-          style={{ top: '56px', backgroundColor: '#2D5040', borderBottom: '2px solid rgba(212,175,55,0.5)' }}
+          style={{ top: '56px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
         >
           {visibleTabs.map(item => {
             const active = isTabActive(item.href)

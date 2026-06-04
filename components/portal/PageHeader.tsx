@@ -26,7 +26,7 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
           aria-hidden="true"
         />
         {subtitle && (
-          <p className="mt-2.5 text-sm leading-relaxed" style={{ color: '#6b7280', maxWidth: '520px' }}>
+          <p className="mt-3 text-sm" style={{ color: '#5a5a5a' }}>
             {subtitle}
           </p>
         )}

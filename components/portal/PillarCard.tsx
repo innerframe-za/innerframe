@@ -26,29 +26,29 @@ export function PillarCard({
       }}
       aria-current={isActive ? 'page' : undefined}
     >
-      {/* Icon — circular, filled when active */}
+      {/* Icon — circular */}
       <div
         className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200"
         style={{
-          backgroundColor: isActive ? '#1E3A2F' : 'rgba(30,58,47,0.07)',
+          backgroundColor: isActive ? 'rgba(30,58,47,0.1)' : 'rgba(30,58,47,0.05)',
         }}
       >
         <Icon
           size={20}
-          style={{ color: isActive ? '#D4AF37' : '#1E3A2F' }}
+          style={{ color: isActive ? '#1E3A2F' : '#5a5a5a' }}
           aria-hidden="true"
         />
       </div>
 
       <p
         className="text-xs font-medium leading-tight"
-        style={{ color: isActive ? '#1E3A2F' : '#374151' }}
+        style={{ color: isActive ? '#1E3A2F' : '#1a1a1a' }}
       >
         {name}
       </p>
 
       {docCount !== undefined && (
-        <p className="text-xs" style={{ color: '#9ca3af' }}>
+        <p className="text-xs mt-0.5" style={{ color: '#5a5a5a' }}>
           {docCount} docs
         </p>
       )}

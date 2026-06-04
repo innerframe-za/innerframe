@@ -157,7 +157,7 @@ export function DocumentRow({
             </span>
           )}
           {isGlobal && <GlobalBadge />}
-          <span className="text-xs" style={{ color: '#9ca3af' }}>{date}</span>
+          <span className="text-xs" style={{ color: '#5a5a5a' }}>{date}</span>
         </div>
       </div>
 
@@ -171,7 +171,7 @@ export function DocumentRow({
           type="button"
           onClick={handleDownload}
           className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:bg-[rgba(30,58,47,0.07)]"
-          style={{ color: '#9ca3af' }}
+          style={{ color: '#5a5a5a' }}
           aria-label={`Download ${fileName}`}
           title="Download"
         >
@@ -182,7 +182,7 @@ export function DocumentRow({
             type="button"
             onClick={onDelete}
             className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:bg-red-50 hover:text-red-500"
-            style={{ color: '#9ca3af' }}
+            style={{ color: '#5a5a5a' }}
             aria-label={`Delete ${fileName}`}
           >
             <Trash2 size={14} />
