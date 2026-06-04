@@ -142,13 +142,13 @@ export function HowItWorks() {
           </div>
           <a
             href="#contact"
-            className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-colors"
+            className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]"
             style={{ backgroundColor: '#d3b24b', color: '#334739' }}
             onMouseEnter={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#b8972e')
+              ((e.currentTarget as HTMLElement).style.backgroundColor = '#b8972e')
             }
             onMouseLeave={e =>
-              ((e.target as HTMLElement).style.backgroundColor = '#d3b24b')
+              ((e.currentTarget as HTMLElement).style.backgroundColor = '#d3b24b')
             }
           >
             Start the Assessment

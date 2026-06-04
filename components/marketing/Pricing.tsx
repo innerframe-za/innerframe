@@ -170,7 +170,7 @@ export function Pricing() {
               {/* CTA */}
               <a
                 href={plan.href}
-                className="block text-center text-sm font-medium transition-opacity hover:opacity-85"
+                className="block text-center text-sm font-medium transition-[transform,opacity] duration-150 ease-out hover:opacity-85 active:scale-[0.97]"
                 style={{
                   backgroundColor: plan.highlight ? '#d3b24b' : '#334739',
                   color: plan.highlight ? '#334739' : '#faf7f0',

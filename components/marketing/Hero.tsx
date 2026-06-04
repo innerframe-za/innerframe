@@ -65,7 +65,7 @@ export function Hero() {
         <div className="flex flex-wrap gap-4">
           <a
             href="#contact"
-            className="font-medium transition-opacity hover:opacity-85"
+            className="font-medium transition-[transform,opacity] duration-150 ease-out hover:opacity-85 active:scale-[0.97]"
             style={{
               backgroundColor: '#334739',
               color: '#faf7f0',
@@ -80,7 +80,7 @@ export function Hero() {
           </a>
           <a
             href="#pillars"
-            className="font-medium transition-opacity hover:opacity-75"
+            className="font-medium transition-[transform,opacity] duration-150 ease-out hover:opacity-75 active:scale-[0.97]"
             style={{
               border: '2px solid #334739',
               color: '#334739',

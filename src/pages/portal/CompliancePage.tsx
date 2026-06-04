@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/lib/auth/useUser'
 import { PageHeader } from '@/components/portal/PageHeader'
-import { ArrowLeft, CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Circle, ChevronDown } from 'lucide-react'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -75,7 +75,7 @@ function ScoreRing({ percent }: { percent: number }) {
         strokeDasharray={`${dash} ${circ}`}
         strokeLinecap="round"
         transform="rotate(-90 50 50)"
-        style={{ transition: 'stroke-dasharray 0.6s ease' }}
+        style={{ transition: 'stroke-dasharray 0.5s cubic-bezier(0.23, 1, 0.32, 1)' }}
       />
       <text x="50" y="46" textAnchor="middle" fontSize="18" fontWeight="600" fill={colour}>{percent}%</text>
       <text x="50" y="60" textAnchor="middle" fontSize="9" fill="#5a5a5a">compliant</text>
@@ -117,15 +117,20 @@ function CategorySection({
           {/* Mini progress bar */}
           <div className="flex-1 max-w-[120px] h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#ddd6c8' }}>
             <div
-              className="h-full rounded-full transition-all duration-500"
+              className="h-full rounded-full transition-[width] duration-500"
               style={{ width: `${pct}%`, backgroundColor: barColour }}
             />
           </div>
           <span className="text-xs font-medium" style={{ color: barColour }}>{pct}%</span>
         </div>
-        <span style={{ color: '#698169' }}>
-          {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </span>
+        <ChevronDown
+          size={16}
+          style={{
+            color: '#698169',
+            transform: open ? 'rotate(180deg)' : 'none',
+            transition: 'transform 0.2s cubic-bezier(0.23, 1, 0.32, 1)',
+          }}
+        />
       </button>
 
       {/* Items */}

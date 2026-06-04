@@ -497,7 +497,7 @@ export function HRStaffSection() {
                           </div>
                         </div>
                       </div>
-                      <ChevronDown size={15} style={{ color: '#5a5a5a', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
+                      <ChevronDown size={15} style={{ color: '#5a5a5a', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s cubic-bezier(0.23, 1, 0.32, 1)', flexShrink: 0 }} />
                     </button>
 
                     {isExpanded && (

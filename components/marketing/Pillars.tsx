@@ -108,7 +108,7 @@ export function Pillars() {
             return (
               <article
                 key={pillar.name}
-                className="bg-white rounded-xl p-6 border transition-transform hover:-translate-y-0.5 flex flex-col"
+                className="bg-white rounded-xl p-6 border transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 flex flex-col"
                 style={{
                   borderColor: '#ddd6c8',
                   borderTopWidth: '3px',

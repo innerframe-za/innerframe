@@ -327,7 +327,7 @@ export function ContactForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded text-sm font-medium transition-[transform,background-color] duration-150 ease-out disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.97]"
                 style={{ backgroundColor: '#334739', color: '#ffffff' }}
                 onMouseEnter={e => {
                   if (!isSubmitting)
