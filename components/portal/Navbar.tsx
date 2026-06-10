@@ -51,6 +51,8 @@ export function Navbar() {
   const [avatarHovered, setAvatarHovered] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const hrButtonRef = useRef<HTMLButtonElement>(null)
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
 
   useEffect(() => {
     if (!user?.orgId) return
@@ -73,6 +75,7 @@ export function Navbar() {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setOpenDropdown(null)
+        setDropdownPos(null)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -244,6 +247,7 @@ export function Navbar() {
               return (
                 <div key={item.label} ref={dropdownRef} className="relative flex items-center h-full">
                   <button
+                    ref={hrButtonRef}
                     type="button"
                     className="relative flex items-center gap-1 h-full px-3.5 text-xs font-medium whitespace-nowrap transition-colors duration-150 flex-shrink-0"
                     style={{
@@ -251,7 +255,16 @@ export function Navbar() {
                       fontFamily: "'Outfit', system-ui",
                       letterSpacing: '0.01em',
                     }}
-                    onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                    onClick={() => {
+                      if (isOpen) {
+                        setOpenDropdown(null)
+                        setDropdownPos(null)
+                      } else {
+                        const rect = hrButtonRef.current?.getBoundingClientRect()
+                        if (rect) setDropdownPos({ top: rect.bottom, left: rect.left })
+                        setOpenDropdown(item.label)
+                      }
+                    }}
                     aria-expanded={isOpen}
                     aria-haspopup="true"
                   >
@@ -272,10 +285,13 @@ export function Navbar() {
                     )}
                   </button>
 
-                  {isOpen && (
+                  {isOpen && dropdownPos && (
                     <div
-                      className="absolute top-full left-0 min-w-[160px] overflow-hidden rounded-b-lg shadow-lg"
+                      className="min-w-[160px] overflow-hidden rounded-b-lg shadow-lg"
                       style={{
+                        position: 'fixed',
+                        top: dropdownPos.top,
+                        left: dropdownPos.left,
                         backgroundColor: '#5a7060',
                         border: '1px solid rgba(212,175,55,0.3)',
                         borderTop: 'none',
@@ -294,7 +310,7 @@ export function Navbar() {
                               backgroundColor: subActive ? 'rgba(212,175,55,0.1)' : 'transparent',
                               fontFamily: "'Outfit', system-ui",
                             }}
-                            onClick={() => setOpenDropdown(null)}
+                            onClick={() => { setOpenDropdown(null); setDropdownPos(null) }}
                             onMouseEnter={e => {
                               if (!subActive) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'
                             }}
