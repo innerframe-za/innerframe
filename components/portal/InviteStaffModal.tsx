@@ -50,7 +50,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
     const { data: { session } } = await supabase.auth.getSession()
 
     try {
-      const res = await fetch('/api/create-user', {
+      const res = await fetch('/api/provision-member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
