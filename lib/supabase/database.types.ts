@@ -133,18 +133,21 @@ export type Database = {
       documents_legacy: {
         Row: {
           id: string; org_id: string; patient_id: string | null
+          staff_member_id: string | null
           category_id: string | null; section_id: string | null; pillar: string
           title: string | null; file_name: string; file_url: string
           uploaded_by: string | null; is_global: boolean; created_at: string
         }
         Insert: {
           id?: string; org_id: string; patient_id?: string | null
+          staff_member_id?: string | null
           category_id?: string | null; section_id?: string | null; pillar: string
           title?: string | null; file_name: string; file_url: string
           uploaded_by?: string | null; is_global?: boolean; created_at?: string
         }
         Update: {
           id?: string; org_id?: string; patient_id?: string | null
+          staff_member_id?: string | null
           category_id?: string | null; section_id?: string | null; pillar?: string
           title?: string | null; file_name?: string; file_url?: string
           uploaded_by?: string | null; is_global?: boolean; created_at?: string

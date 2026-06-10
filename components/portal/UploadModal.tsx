@@ -55,6 +55,8 @@ interface UploadModalProps {
   onSuccess?: () => void
   // When set, locks the resident selector to this patient (e.g. from the resident detail page)
   preselectedPatientId?: string
+  // When set, links the upload to a specific staff member
+  preselectedStaffMemberId?: string
 }
 
 /**
@@ -72,6 +74,7 @@ export function UploadModal({
   patients = [],
   onSuccess,
   preselectedPatientId,
+  preselectedStaffMemberId,
 }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState('')
@@ -155,6 +158,7 @@ export function UploadModal({
         file_url: storagePath,
         section_id: sectionId || null,
         patient_id: patientId || null,
+        staff_member_id: preselectedStaffMemberId || null,
         is_global: isGlobal,
       })
 
