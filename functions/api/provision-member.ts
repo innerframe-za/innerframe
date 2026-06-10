@@ -66,8 +66,32 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ ok: false, error: 'Unauthorized.' }, { status: 401 })
   }
 
-  const meData = await meRes.json() as { user_metadata?: { role?: string } }
-  const callerRole = meData.user_metadata?.role ?? ''
+  // Extract caller's auth user ID from the JWT validation response
+  const meData = await meRes.json() as { id?: string; user_metadata?: { role?: string } }
+  const callerId = meData.id ?? ''
+
+  if (!callerId) {
+    return Response.json({ ok: false, error: 'Unauthorized.' }, { status: 401 })
+  }
+
+  // Look up the role from public.users — the source of truth.
+  // user_metadata is not reliably set on manually-created accounts.
+  const roleRes = await fetch(
+    `${env.VITE_SUPABASE_URL}/rest/v1/users?id=eq.${callerId}&select=role`,
+    {
+      headers: {
+        apikey:        env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+      },
+    }
+  )
+
+  if (!roleRes.ok) {
+    return Response.json({ ok: false, error: 'Unauthorized.' }, { status: 401 })
+  }
+
+  const roleData = await roleRes.json() as Array<{ role?: string }>
+  const callerRole = roleData[0]?.role ?? ''
 
   if (callerRole !== 'super_admin' && callerRole !== 'home_admin') {
     return Response.json({ ok: false, error: 'Forbidden.' }, { status: 403 })
