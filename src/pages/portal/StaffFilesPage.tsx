@@ -5,7 +5,7 @@ export default function StaffFilesPage() {
   return (
     <div>
       <PageHeader
-        title="Staff Files"
+        title="Staff"
         subtitle="Staff directory and employment records"
       />
       <HRStaffSection />

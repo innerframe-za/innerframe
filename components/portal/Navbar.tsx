@@ -25,7 +25,7 @@ const tabItems: NavItem[] = [
     pillarSlug: 'hr',
     dropdown: [
       { label: 'HR Documents', href: '/pillar/hr' },
-      { label: 'Staff Files', href: '/staff-files' },
+      { label: 'Staff', href: '/staff-files' },
     ],
   },
   { label: 'Board Governance', href: '/pillar/board-governance', pillarSlug: 'board_governance' },
