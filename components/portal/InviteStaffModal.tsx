@@ -3,6 +3,7 @@ import { X, Eye, EyeOff, UserPlus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/client'
 
 const schema = z.object({
   fullName: z.string().min(2, 'Full name is required'),
@@ -28,8 +29,6 @@ interface InviteStaffModalProps {
   onSuccess: (member: { id: string; fullName: string; email: string; role: string; username: string }) => void
 }
 
-const WEBHOOK_URL = import.meta.env.VITE_N8N_ADD_STAFF_WEBHOOK_URL as string | undefined
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">{message}</p>
@@ -47,39 +46,37 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
   const onSubmit = async (data: FormData) => {
     setSubmitError(null)
 
-    if (!WEBHOOK_URL) {
-      setSubmitError('Add staff webhook is not configured. Set VITE_N8N_ADD_STAFF_WEBHOOK_URL in .env.local')
-      return
-    }
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
 
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      const res = await fetch('/api/create-user', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
-          admin_email: data.email,
-          admin_full_name: data.fullName,
-          admin_password: data.password,
+          email: data.email,
+          password: data.password,
+          full_name: data.fullName,
           role: data.role,
           org_id: orgId,
           username: data.username,
         }),
       })
 
-      const json = await res.json().catch(() => ({}))
+      const json = await res.json().catch(() => ({})) as { ok?: boolean; id?: string; error?: string }
 
       if (!res.ok || json.ok === false) {
-        setSubmitError(json.error ?? `Request failed (${res.status}). Check n8n logs.`)
+        setSubmitError(json.error ?? `Failed to create account (${res.status}).`)
         return
       }
 
-      // Supabase returns the created user — extract the id from the n8n response
-      // n8n passes through the Supabase response body under $json
-      const newUserId: string = json.id ?? json.user?.id ?? crypto.randomUUID()
-
+      const newUserId: string = json.id ?? crypto.randomUUID()
       onSuccess({ id: newUserId, fullName: data.fullName, email: data.email, role: data.role, username: data.username })
     } catch {
-      setSubmitError('Could not reach the invite service. Check your n8n instance is running.')
+      setSubmitError('Could not reach the user creation service. Please try again.')
     }
   }
 

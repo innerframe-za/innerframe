@@ -32,6 +32,11 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, params, env })
   const pathSegments = Array.isArray(params.path) ? params.path : [params.path as string]
   const storagePath = pathSegments.join('/')
 
+  // Reject path traversal attempts
+  if (storagePath.includes('..')) {
+    return new Response('Bad Request', { status: 400 })
+  }
+
   // Optional ?download=filename triggers Content-Disposition: attachment
   const { searchParams } = new URL(request.url)
   const downloadParam = searchParams.get('download')

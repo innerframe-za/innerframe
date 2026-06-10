@@ -1,4 +1,14 @@
-# n8n Workflow: User Invite (Staff & Facilities)
+# User Creation: CF Pages Function + n8n Reference
+
+> **Active implementation:** User creation now goes through the Cloudflare Pages
+> Function at `functions/api/create-user.ts` (`POST /api/create-user`).
+> The n8n webhook approach below is kept as a reference but is no longer used.
+> The CF Function uses `SUPABASE_SERVICE_ROLE_KEY` (a CF Pages env var) to call
+> the Supabase Admin API directly — no n8n dependency required.
+
+---
+
+# n8n Workflow Reference: User Invite (Staff & Facilities)
 
 One webhook handles all three invite scenarios in Innerframe:
 

@@ -38,8 +38,6 @@ interface Props {
   onSuccess: (facility: NewFacilityResult) => void
 }
 
-const WEBHOOK_URL = import.meta.env.VITE_N8N_INVITE_WEBHOOK_URL as string | undefined
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">{message}</p>
@@ -55,11 +53,6 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(null)
-
-    if (!WEBHOOK_URL) {
-      setSubmitError('Invite webhook is not configured. Set VITE_N8N_INVITE_WEBHOOK_URL in .env.local')
-      return
-    }
 
     let supabase: ReturnType<typeof createClient>
     try {
@@ -81,33 +74,37 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
       return
     }
 
-    // Step 2 — invite the home_admin via n8n (keeps service role key off the frontend)
+    // Step 2 — create the home_admin auth user via the CF Pages Function
+    // (keeps the service role key off the browser; session JWT proves caller is super_admin)
+    const { data: { session } } = await supabase.auth.getSession()
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      const res = await fetch('/api/create-user', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
-          facility_name: data.facilityName,
-          admin_email: data.adminEmail,
-          admin_full_name: data.adminName,
-          admin_password: data.adminPassword,
+          email: data.adminEmail,
+          password: data.adminPassword,
+          full_name: data.adminName,
           role: 'home_admin',
           org_id: org.id,
-          admin_username: data.adminUsername,
+          username: data.adminUsername,
         }),
       })
 
-      const json = await res.json().catch(() => ({}))
+      const json = await res.json().catch(() => ({})) as { ok?: boolean; error?: string }
 
       if (!res.ok || json.ok === false) {
         // Clean up the orphaned org so the super admin can retry cleanly
         await supabase.from('organisations').delete().eq('id', org.id)
-        setSubmitError(json.error ?? `Invite failed (${res.status}). Facility was not saved. Check n8n logs.`)
+        setSubmitError(json.error ?? `Failed to create admin account (${res.status}). Facility was not saved.`)
         return
       }
     } catch {
       await supabase.from('organisations').delete().eq('id', org.id)
-      setSubmitError('Could not reach the invite service. Facility was not saved. Check your n8n instance.')
+      setSubmitError('Could not reach the user creation service. Facility was not saved.')
       return
     }
 
@@ -117,7 +114,7 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
       contactEmail: org.contact_email,
       contactPhone: org.contact_phone,
       createdAt: org.created_at,
-      staffCount: 1, // the new home_admin counts as staff
+      staffCount: 1,
       residentCount: 0,
     })
   }

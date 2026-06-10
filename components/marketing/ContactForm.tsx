@@ -33,7 +33,7 @@ function handleBlurStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElem
 }
 
 /**
- * Contact form that POSTs to the n8n webhook URL via NEXT_PUBLIC_N8N_WEBHOOK_URL.
+ * Contact form that POSTs to the n8n webhook URL via VITE_N8N_WEBHOOK_URL.
  * Validates with zod before submitting. Never exposes the webhook URL in source.
  */
 export function ContactForm() {

@@ -99,8 +99,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#F5F0E8' }}>
-      <div className="w-full max-w-[400px] bg-white rounded-2xl border p-8" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#ffffff' }}>
+      <div className="w-full max-w-[400px] rounded-2xl border p-8" style={{ backgroundColor: '#F5F0E8', borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex flex-col items-center mb-8">
           <img src="/logo.jpeg" alt="Innerframe Care Solutions" width={120} height={60} className="object-contain rounded mb-4" />
           <h1 className="text-lg font-medium" style={{ color: '#1E3A2F' }}>Welcome back</h1>
@@ -115,7 +115,7 @@ export default function LoginPage() {
             <input
               id="identifier" type="text" autoComplete="username" placeholder="your@email.co.za or your username"
               className="w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-colors"
-              style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+              style={{ borderColor: '#ddd6c8', color: '#1a1a1a', backgroundColor: '#ffffff' }}
               onFocus={borderFocus} aria-invalid={!!errors.identifier}
               {...identifierReg} onBlur={e => { borderBlur(e); identifierReg.onBlur(e) }}
             />
@@ -130,7 +130,7 @@ export default function LoginPage() {
               <input
                 id="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" placeholder="••••••••"
                 className="w-full px-3 py-2.5 pr-10 rounded-lg border text-sm outline-none transition-colors"
-                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+                style={{ borderColor: '#ddd6c8', color: '#1a1a1a', backgroundColor: '#ffffff' }}
                 onFocus={borderFocus} aria-invalid={!!errors.password}
                 {...passwordReg} onBlur={e => { borderBlur(e); passwordReg.onBlur(e) }}
               />
