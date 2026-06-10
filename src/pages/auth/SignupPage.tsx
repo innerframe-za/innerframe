@@ -45,8 +45,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#F5F0E8' }}>
-      <div className="w-full max-w-[400px] bg-white rounded-2xl border p-8" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#ffffff' }}>
+      <div className="w-full max-w-[400px] rounded-2xl border p-8" style={{ backgroundColor: '#F5F0E8', borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
         <div className="flex flex-col items-center mb-8">
           <img src="/logo.jpeg" alt="Innerframe Care Solutions" width={120} height={60} className="object-contain rounded mb-4" />
           <h1 className="text-lg font-medium" style={{ color: '#1E3A2F' }}>Create an account</h1>
@@ -69,7 +69,7 @@ export default function SignupPage() {
               <label htmlFor="email" className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>Email address</label>
               <input id="email" type="email" autoComplete="email" placeholder="your@email.co.za"
                 className="w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-colors"
-                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+                style={{ borderColor: '#ddd6c8', color: '#1a1a1a', backgroundColor: '#ffffff' }}
                 onFocus={borderFocus} {...emailReg} onBlur={e => { borderBlur(e); emailReg.onBlur(e) }}
               />
               {errors.email && <p className="mt-1 text-xs" style={{ color: '#dc2626' }} role="alert">{errors.email.message}</p>}
@@ -80,7 +80,7 @@ export default function SignupPage() {
               <div className="relative">
                 <input id="password" type={showPassword ? 'text' : 'password'} autoComplete="new-password" placeholder="Min. 8 characters"
                   className="w-full px-3 py-2.5 pr-10 rounded-lg border text-sm outline-none transition-colors"
-                  style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+                  style={{ borderColor: '#ddd6c8', color: '#1a1a1a', backgroundColor: '#ffffff' }}
                   onFocus={borderFocus} {...passwordReg} onBlur={e => { borderBlur(e); passwordReg.onBlur(e) }}
                 />
                 <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2" onClick={() => setShowPassword(!showPassword)} style={{ color: '#5a5a5a' }}>
@@ -95,7 +95,7 @@ export default function SignupPage() {
               <div className="relative">
                 <input id="confirmPassword" type={showConfirm ? 'text' : 'password'} autoComplete="new-password" placeholder="••••••••"
                   className="w-full px-3 py-2.5 pr-10 rounded-lg border text-sm outline-none transition-colors"
-                  style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
+                  style={{ borderColor: '#ddd6c8', color: '#1a1a1a', backgroundColor: '#ffffff' }}
                   onFocus={borderFocus} {...confirmReg} onBlur={e => { borderBlur(e); confirmReg.onBlur(e) }}
                 />
                 <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2" onClick={() => setShowConfirm(!showConfirm)} style={{ color: '#5a5a5a' }}>
