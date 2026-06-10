@@ -7,7 +7,6 @@ import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { Lock, Upload, ChevronDown, ChevronUp } from 'lucide-react'
-import { HRStaffSection } from '@/components/portal/HRStaffSection'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
   admin: { name: 'Admin Office', description: 'The Structure Behind the Facility', dbKey: 'admin' },
@@ -15,7 +14,6 @@ const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: str
   kitchen: { name: 'Kitchen', description: 'Safe Nutrition. Safe Residents.', dbKey: 'kitchen' },
   medical: { name: 'Medical', description: 'Resident Safety & Clinical Compliance', dbKey: 'medical' },
   'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability', dbKey: 'board_governance' },
-  'medical-residence': { name: 'Medical Residence', description: 'Ongoing Residential Medical Care', dbKey: 'medical_residence' },
   hr: { name: 'HR', description: 'People. Structure. Compliance.', dbKey: 'hr' },
 }
 
@@ -146,28 +144,6 @@ const PILLAR_CONTENT: Record<string, PillarContent> = {
       {
         category: 'Sustainability Planning',
         items: ['Fundraising strategies', 'Maintenance planning', 'Staffing sustainability', 'Growth planning'],
-      },
-    ],
-  },
-  medical_residence: {
-    purpose: 'To ensure continuous health monitoring, care assessments, and chronic disease management for all residents in residential care.',
-    focusAreas: [
-      'Care Assessments', 'Chronic Disease Management', 'Clinical Notes',
-      'Health Monitoring', 'Therapy & Rehabilitation', 'Palliative Care',
-      'Family Communication', 'Well-being Tracking',
-    ],
-    keySystems: [
-      {
-        category: 'Residential Care Documentation',
-        items: ['Admission assessments', 'Ongoing care plans', 'Clinical progress notes', 'Chronic medication lists', 'Specialist referral records'],
-      },
-      {
-        category: 'Monitoring & Review',
-        items: ['Monthly care reviews', 'Weight & vital signs tracking', 'Therapy session records', 'Family feedback forms'],
-      },
-      {
-        category: 'Communication Systems',
-        items: ['Family communication logs', 'MDT meeting records', 'Discharge planning', 'End-of-life documentation'],
       },
     ],
   },
@@ -455,8 +431,6 @@ export default function PillarPage() {
           />
         ))}
       </div>
-
-      {pillar.dbKey === 'hr' && <HRStaffSection />}
 
       {user?.orgId && (
         <UploadModal

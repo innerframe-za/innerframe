@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, HeartPulse, Briefcase } from 'lucide-react'
+import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Briefcase } from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
@@ -13,7 +13,6 @@ const pillarCards = [
   { value: 'kitchen', name: 'Kitchen', icon: UtensilsCrossed, href: '/pillar/kitchen' },
   { value: 'medical', name: 'Medical', icon: Stethoscope, href: '/pillar/medical' },
   { value: 'board_governance', name: 'Board Governance', icon: Scale, href: '/pillar/board-governance' },
-  { value: 'medical_residence', name: 'Medical Residence', icon: HeartPulse, href: '/pillar/medical-residence' },
   { value: 'hr', name: 'HR', icon: Briefcase, href: '/pillar/hr' },
 ]
 

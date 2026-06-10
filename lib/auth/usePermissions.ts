@@ -8,7 +8,6 @@ export type PillarSlug =
   | 'kitchen'
   | 'medical'
   | 'board_governance'
-  | 'medical_residence'
   | 'hr'
 
 export interface PillarPermission {
@@ -23,7 +22,6 @@ const FULL_ACCESS: Record<PillarSlug, PillarPermission> = {
   kitchen: { canView: true, canEdit: true },
   medical: { canView: true, canEdit: true },
   board_governance: { canView: true, canEdit: true },
-  medical_residence: { canView: true, canEdit: true },
   hr: { canView: true, canEdit: true },
 }
 

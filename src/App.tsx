@@ -16,6 +16,7 @@ import FacilityDetailPage from './pages/superadmin/FacilityDetailPage'
 import ChangePasswordPage from './pages/auth/ChangePasswordPage'
 import StaffPermissionsPage from './pages/portal/admin/StaffPermissionsPage'
 import CompliancePage from './pages/portal/CompliancePage'
+import StaffFilesPage from './pages/portal/StaffFilesPage'
 
 export default function App() {
   return (
@@ -61,6 +62,7 @@ export default function App() {
           }
         />
         <Route path="/compliance" element={<CompliancePage />} />
+        <Route path="/staff-files" element={<StaffFilesPage />} />
         <Route path="/admin/orgs/:orgId" element={<OrgViewerPage />} />
         <Route
           path="/admin/staff/:userId/permissions"

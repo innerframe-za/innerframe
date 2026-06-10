@@ -1,18 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { createClient } from '@/lib/supabase/client'
-import { Search, Menu, X, LogOut, Settings } from 'lucide-react'
+import { Search, Menu, X, LogOut, Settings, ChevronDown } from 'lucide-react'
 import { useUser } from '@/lib/auth/useUser'
 import { usePermissions, type PillarSlug } from '@/lib/auth/usePermissions'
 
-const tabItems: { label: string; href: string; pillarSlug?: PillarSlug }[] = [
+type DropdownItem = { label: string; href: string }
+
+type NavItem = {
+  label: string
+  href?: string
+  pillarSlug?: PillarSlug
+  dropdown?: DropdownItem[]
+}
+
+const tabItems: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Admin', href: '/pillar/admin', pillarSlug: 'admin' },
   { label: 'Residence', href: '/residents' },
   { label: 'Finance', href: '/pillar/finance', pillarSlug: 'finance' },
   { label: 'Kitchen', href: '/pillar/kitchen', pillarSlug: 'kitchen' },
-  { label: 'Medical Residence', href: '/pillar/medical-residence', pillarSlug: 'medical_residence' },
-  { label: 'HR', href: '/pillar/hr', pillarSlug: 'hr' },
+  {
+    label: 'HR',
+    pillarSlug: 'hr',
+    dropdown: [
+      { label: 'HR Documents', href: '/pillar/hr' },
+      { label: 'Staff Files', href: '/staff-files' },
+    ],
+  },
   { label: 'Board Governance', href: '/pillar/board-governance', pillarSlug: 'board_governance' },
 ]
 
@@ -34,6 +49,8 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [facilityName, setFacilityName] = useState<string | null>(null)
   const [avatarHovered, setAvatarHovered] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!user?.orgId) return
@@ -49,6 +66,18 @@ export function Navbar() {
       }, () => {})
     return () => { cancelled = true }
   }, [user?.orgId])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!openDropdown) return
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [openDropdown])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -208,11 +237,87 @@ export function Navbar() {
           style={{ scrollbarWidth: 'none' }}
         >
           {visibleTabs.map(item => {
-            const active = isTabActive(item.href)
+            // Dropdown item (HR)
+            if (item.dropdown) {
+              const isOpen = openDropdown === item.label
+              const isActive = item.dropdown.some(sub => location.pathname.startsWith(sub.href))
+              return (
+                <div key={item.label} ref={dropdownRef} className="relative flex items-center h-full">
+                  <button
+                    type="button"
+                    className="relative flex items-center gap-1 h-full px-3.5 text-xs font-medium whitespace-nowrap transition-colors duration-150 flex-shrink-0"
+                    style={{
+                      color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.55)',
+                      fontFamily: "'Outfit', system-ui",
+                      letterSpacing: '0.01em',
+                    }}
+                    onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <ChevronDown
+                      size={10}
+                      style={{
+                        transition: 'transform 0.15s',
+                        transform: isOpen ? 'rotate(180deg)' : 'none',
+                      }}
+                    />
+                    {isActive && (
+                      <span
+                        className="absolute bottom-0 left-2 right-2 h-[2px] rounded-t-sm"
+                        style={{ backgroundColor: '#D4AF37' }}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+
+                  {isOpen && (
+                    <div
+                      className="absolute top-full left-0 min-w-[160px] overflow-hidden rounded-b-lg shadow-lg"
+                      style={{
+                        backgroundColor: '#5a7060',
+                        border: '1px solid rgba(212,175,55,0.3)',
+                        borderTop: 'none',
+                        zIndex: 60,
+                      }}
+                    >
+                      {item.dropdown.map(sub => {
+                        const subActive = location.pathname.startsWith(sub.href)
+                        return (
+                          <Link
+                            key={sub.href}
+                            to={sub.href}
+                            className="flex items-center px-4 py-2.5 text-xs font-medium transition-colors duration-150"
+                            style={{
+                              color: subActive ? '#D4AF37' : 'rgba(255,255,255,0.85)',
+                              backgroundColor: subActive ? 'rgba(212,175,55,0.1)' : 'transparent',
+                              fontFamily: "'Outfit', system-ui",
+                            }}
+                            onClick={() => setOpenDropdown(null)}
+                            onMouseEnter={e => {
+                              if (!subActive) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'
+                            }}
+                            onMouseLeave={e => {
+                              if (!subActive) e.currentTarget.style.backgroundColor = 'transparent'
+                            }}
+                          >
+                            {sub.label}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+
+            // Regular link
+            const active = isTabActive(item.href!)
             return (
               <Link
                 key={item.href}
-                to={item.href}
+                to={item.href!}
                 className="relative flex items-center h-full px-3.5 text-xs font-medium whitespace-nowrap transition-colors duration-150 flex-shrink-0"
                 style={{
                   color: active ? '#D4AF37' : 'rgba(255,255,255,0.55)',
@@ -280,11 +385,43 @@ export function Navbar() {
           style={{ top: '56px', backgroundColor: '#698169', borderBottom: '2px solid #D4AF37' }}
         >
           {visibleTabs.map(item => {
-            const active = isTabActive(item.href)
+            // Dropdown items shown as a labelled group on mobile
+            if (item.dropdown) {
+              return (
+                <div key={item.label}>
+                  <p
+                    className="px-3 pt-2 pb-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: 'rgba(255,255,255,0.35)', fontFamily: "'Outfit', system-ui" }}
+                  >
+                    {item.label}
+                  </p>
+                  {item.dropdown.map(sub => {
+                    const subActive = location.pathname.startsWith(sub.href)
+                    return (
+                      <Link
+                        key={sub.href}
+                        to={sub.href}
+                        className="flex items-center pl-5 pr-3 py-2 rounded-lg text-sm transition-colors duration-150"
+                        style={{
+                          color: subActive ? '#D4AF37' : 'rgba(255,255,255,0.7)',
+                          backgroundColor: subActive ? 'rgba(212,175,55,0.08)' : 'transparent',
+                          fontFamily: "'Outfit', system-ui",
+                        }}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {sub.label}
+                      </Link>
+                    )
+                  })}
+                </div>
+              )
+            }
+
+            const active = isTabActive(item.href!)
             return (
               <Link
                 key={item.href}
-                to={item.href}
+                to={item.href!}
                 className="flex items-center px-3 py-2.5 rounded-lg text-sm transition-colors duration-150"
                 style={{
                   color: active ? '#D4AF37' : 'rgba(255,255,255,0.7)',
