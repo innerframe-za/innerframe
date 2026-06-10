@@ -105,15 +105,6 @@ export default function LoginPage() {
           }}
         />
 
-        {/* Logo mark */}
-        <div className="relative z-10">
-          <img
-            src="/logo.jpeg"
-            alt="Innerframe"
-            className="w-11 h-11 rounded-lg object-cover"
-          />
-        </div>
-
         {/* Tagline */}
         <div className="relative z-10">
           <p
