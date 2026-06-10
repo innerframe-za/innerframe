@@ -70,6 +70,16 @@ const EMPTY_DRAFT = {
   email: '', employment_date: '', status: 'active' as StaffStatus, notes: '',
 }
 
+// Must be at module scope — defining inside StaffModal causes remount on every keystroke
+function F({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium mb-1" style={{ color: '#5a5a5a' }}>{label}</label>
+      {children}
+    </div>
+  )
+}
+
 function formatDate(iso: string | null) {
   if (!iso) return '—'
   return new Date(iso).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -158,13 +168,6 @@ function StaffModal({
       setSaving(false)
     }
   }
-
-  const F = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <div>
-      <label className="block text-xs font-medium mb-1" style={{ color: '#5a5a5a' }}>{label}</label>
-      {children}
-    </div>
-  )
 
   const inputCls = "w-full text-sm border rounded px-2.5 py-1.5 outline-none"
   const inputStyle = { borderColor: '#ddd6c8', color: '#1a1a1a' }
