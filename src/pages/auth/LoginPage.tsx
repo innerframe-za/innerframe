@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,18 +33,6 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
-
-  // Redirect to the correct portal if already logged in
-  useEffect(() => {
-    let supabase: ReturnType<typeof createClient>
-    try { supabase = createClient() } catch { return }
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session) {
-        const dest = await getRoleDestination(supabase, session.user.id).catch(() => '/dashboard')
-        navigate(dest, { replace: true })
-      }
-    }).catch(() => {})
-  }, [navigate])
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
