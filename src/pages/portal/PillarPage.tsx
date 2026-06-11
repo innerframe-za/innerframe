@@ -305,6 +305,7 @@ export default function PillarPage() {
   const [dbSections, setDbSections] = useState<DbSection[]>([])
   const [loading, setLoading] = useState(true)
   const [uploadOpen, setUploadOpen] = useState(false)
+  const [uploadSectionId, setUploadSectionId] = useState<string | undefined>(undefined)
 
   const load = useCallback(async () => {
     if (!pillar || !user?.orgId) return
@@ -428,6 +429,11 @@ export default function PillarPage() {
             documents={section.documents}
             canDelete={perm.canEdit}
             onDelete={handleDelete}
+            onUpload={perm.canEdit && section.id !== 'global' ? () => {
+              // Real DB sections pass their UUID; the virtual 'unsectioned' bucket passes undefined
+              setUploadSectionId(section.id === 'unsectioned' ? undefined : section.id)
+              setUploadOpen(true)
+            } : undefined}
           />
         ))}
       </div>
@@ -435,12 +441,13 @@ export default function PillarPage() {
       {user?.orgId && (
         <UploadModal
           open={uploadOpen}
-          onClose={() => setUploadOpen(false)}
+          onClose={() => { setUploadOpen(false); setUploadSectionId(undefined) }}
           orgId={user.orgId}
           userRole={user.role}
           defaultPillar={pillar.dbKey}
           sections={uploadSections}
-          onSuccess={() => { setUploadOpen(false); load() }}
+          defaultSectionId={uploadSectionId}
+          onSuccess={() => { setUploadOpen(false); setUploadSectionId(undefined); load() }}
         />
       )}
     </div>

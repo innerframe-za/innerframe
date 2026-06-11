@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -57,6 +57,8 @@ interface UploadModalProps {
   preselectedPatientId?: string
   // When set, links the upload to a specific staff member
   preselectedStaffMemberId?: string
+  // When set, pre-selects a section in the section dropdown
+  defaultSectionId?: string
 }
 
 /**
@@ -75,11 +77,12 @@ export function UploadModal({
   onSuccess,
   preselectedPatientId,
   preselectedStaffMemberId,
+  defaultSectionId,
 }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState('')
   const [pillar, setPillar] = useState(defaultPillar ?? 'admin')
-  const [sectionId, setSectionId] = useState('')
+  const [sectionId, setSectionId] = useState(defaultSectionId ?? '')
   const [patientId, setPatientId] = useState(preselectedPatientId ?? '')
   const [isGlobal, setIsGlobal] = useState(false)
   const [dragging, setDragging] = useState(false)
@@ -88,6 +91,11 @@ export function UploadModal({
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const isSuperAdmin = userRole === 'super_admin'
+
+  // Sync section selection whenever the modal opens with a (possibly different) defaultSectionId
+  useEffect(() => {
+    if (open) setSectionId(defaultSectionId ?? '')
+  }, [open, defaultSectionId])
 
   const validateFile = (f: File): string | null => {
     if (!ACCEPTED_TYPES.includes(f.type))
@@ -184,7 +192,7 @@ export function UploadModal({
     setError(null)
     setProgress(0)
     setPillar(defaultPillar ?? 'admin')
-    setSectionId('')
+    setSectionId(defaultSectionId ?? '')
     setPatientId('')
     setIsGlobal(false)
     onClose()

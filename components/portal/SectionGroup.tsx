@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react'
 import { DocumentRow } from './DocumentRow'
 
 interface Document {
@@ -16,6 +17,7 @@ interface SectionGroupProps {
   documents: Document[]
   canDelete?: boolean
   onDelete?: (id: string, fileUrl: string) => void
+  onUpload?: () => void
 }
 
 export function SectionGroup({
@@ -23,6 +25,7 @@ export function SectionGroup({
   documents,
   canDelete = false,
   onDelete,
+  onUpload,
 }: SectionGroupProps) {
   return (
     <section className="mb-8">
@@ -40,11 +43,32 @@ export function SectionGroup({
             aria-hidden="true"
           />
         </div>
-        {documents.length > 0 && (
-          <span className="text-xs tabular-nums" style={{ color: '#9ca3af' }}>
-            {documents.length} {documents.length === 1 ? 'file' : 'files'}
-          </span>
-        )}
+        <div className="flex items-center gap-2.5">
+          {onUpload && (
+            <button
+              type="button"
+              onClick={onUpload}
+              aria-label={`Add document to ${title}`}
+              className="flex items-center justify-center w-6 h-6 rounded-full transition-colors"
+              style={{ color: '#1E3A2F', border: '1.5px solid rgba(30,58,47,0.3)', backgroundColor: 'transparent' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(30,58,47,0.08)'
+                e.currentTarget.style.borderColor = '#1E3A2F'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.borderColor = 'rgba(30,58,47,0.3)'
+              }}
+            >
+              <Plus size={12} strokeWidth={2.5} />
+            </button>
+          )}
+          {documents.length > 0 && (
+            <span className="text-xs tabular-nums" style={{ color: '#9ca3af' }}>
+              {documents.length} {documents.length === 1 ? 'file' : 'files'}
+            </span>
+          )}
+        </div>
       </div>
 
       {documents.length === 0 ? (
