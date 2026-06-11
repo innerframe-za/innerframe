@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { SectionGroup } from '@/components/portal/SectionGroup'
@@ -6,7 +6,7 @@ import { UploadModal } from '@/components/portal/UploadModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
 import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
-import { Lock, Upload, ChevronDown, ChevronUp } from 'lucide-react'
+import { Lock, Upload, ChevronDown, ChevronUp, FileText, FolderOpen, Building2 } from 'lucide-react'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
   admin: { name: 'Admin Office', description: 'The Structure Behind the Facility', dbKey: 'admin' },
@@ -222,6 +222,68 @@ function toDisplayDoc(d: DbDocument): DisplayDoc {
   }
 }
 
+// Returns the appropriate icon component for a section based on its ID
+function sectionIcon(id: string) {
+  if (id === 'global') return FileText
+  if (id === 'unsectioned') return Building2
+  return FolderOpen
+}
+
+// Sticky left sidebar — mirrors SettingsPage sidebar pattern
+function PillarSidebar({
+  sections,
+  active,
+  onNav,
+}: {
+  sections: DisplaySection[]
+  active: string
+  onNav: (id: string) => void
+}) {
+  return (
+    <aside
+      className="hidden lg:flex flex-col flex-shrink-0 sticky self-start"
+      style={{ width: '200px', top: '108px', maxHeight: 'calc(100dvh - 130px)', overflowY: 'auto' }}
+    >
+      <p
+        className="text-[10px] font-semibold tracking-[0.14em] mb-3 px-2"
+        style={{ color: '#9ca3af', fontFamily: "'Outfit', system-ui" }}
+      >
+        SECTIONS
+      </p>
+      <nav className="flex flex-col gap-0.5">
+        {sections.map(({ id, title }) => {
+          const isActive = active === id
+          const Icon = sectionIcon(id)
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onNav(id)}
+              className="relative flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-left w-full"
+              style={{
+                color: isActive ? '#1E3A2F' : '#5a5a5a',
+                backgroundColor: isActive ? 'rgba(30,58,47,0.06)' : 'transparent',
+                fontFamily: "'Outfit', system-ui",
+                fontWeight: isActive ? 500 : 400,
+              }}
+            >
+              {isActive && (
+                <span
+                  className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full"
+                  style={{ width: '2.5px', height: '16px', backgroundColor: '#D4AF37' }}
+                  aria-hidden="true"
+                />
+              )}
+              <Icon size={14} style={{ color: isActive ? '#1E3A2F' : '#9ca3af', flexShrink: 0 }} />
+              <span className="truncate">{title}</span>
+            </button>
+          )
+        })}
+      </nav>
+    </aside>
+  )
+}
+
 // Collapsible pillar overview card sourced from the InnerFrame headers guide
 function PillarOverview({ dbKey }: { dbKey: string }) {
   const [expanded, setExpanded] = useState(false)
@@ -306,6 +368,8 @@ export default function PillarPage() {
   const [loading, setLoading] = useState(true)
   const [uploadOpen, setUploadOpen] = useState(false)
   const [uploadSectionId, setUploadSectionId] = useState<string | undefined>(undefined)
+  const [activeSection, setActiveSection] = useState<string>('')
+  const obsRef = useRef<IntersectionObserver[]>([])
 
   const load = useCallback(async () => {
     if (!pillar || !user?.orgId) return
@@ -352,6 +416,27 @@ export default function PillarPage() {
   }, [pillar, user?.orgId])
 
   useEffect(() => { load() }, [load])
+
+  // Re-initialise scroll-spy observers whenever sections finish loading
+  useEffect(() => {
+    obsRef.current.forEach(o => o.disconnect())
+    obsRef.current = []
+    sections.forEach(sec => {
+      const el = document.getElementById(sec.id)
+      if (!el) return
+      const obs = new IntersectionObserver(
+        ([e]) => { if (e.isIntersecting) setActiveSection(sec.id) },
+        { rootMargin: '-15% 0px -75% 0px', threshold: 0 }
+      )
+      obs.observe(el)
+      obsRef.current.push(obs)
+    })
+    return () => obsRef.current.forEach(o => o.disconnect())
+  }, [loading, sections])
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   if (!pillar) return <Navigate to="/dashboard" replace />
 
@@ -421,21 +506,25 @@ export default function PillarPage() {
 
       <PillarOverview dbKey={pillar.dbKey} />
 
-      <div className="space-y-2">
-        {sections.map(section => (
-          <SectionGroup
-            key={section.id}
-            title={section.title}
-            documents={section.documents}
-            canDelete={perm.canEdit}
-            onDelete={handleDelete}
-            onUpload={perm.canEdit && section.id !== 'global' ? () => {
-              // Real DB sections pass their UUID; the virtual 'unsectioned' bucket passes undefined
-              setUploadSectionId(section.id === 'unsectioned' ? undefined : section.id)
-              setUploadOpen(true)
-            } : undefined}
-          />
-        ))}
+      <div className="flex gap-8 items-start">
+        <PillarSidebar sections={sections} active={activeSection} onNav={scrollTo} />
+        <div className="flex-1 min-w-0 space-y-2">
+          {sections.map(section => (
+            <section key={section.id} id={section.id} className="scroll-mt-8">
+              <SectionGroup
+                title={section.title}
+                documents={section.documents}
+                canDelete={perm.canEdit}
+                onDelete={handleDelete}
+                onUpload={perm.canEdit && section.id !== 'global' ? () => {
+                  // Real DB sections pass their UUID; the virtual 'unsectioned' bucket passes undefined
+                  setUploadSectionId(section.id === 'unsectioned' ? undefined : section.id)
+                  setUploadOpen(true)
+                } : undefined}
+              />
+            </section>
+          ))}
+        </div>
       </div>
 
       {user?.orgId && (
