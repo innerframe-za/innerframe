@@ -15,7 +15,6 @@ export default defineConfig({
           if (!id.includes('node_modules')) return
           if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/react-router')) return 'react-vendor'
           if (id.includes('@supabase/')) return 'supabase'
-          if (id.includes('/lucide-react/') || id.includes('@base-ui/')) return 'ui-vendor'
         },
       },
     },
