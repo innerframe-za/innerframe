@@ -1,15 +1,15 @@
 const VALUES = [
   {
     title: 'Structure First',
-    body: 'We believe great care starts with great systems. Before anything else, we build the foundations that hold everything together.',
+    body: 'Great care starts with great systems. We build the operational foundations that hold everything together before anything else.',
   },
   {
     title: 'Compliance as a Culture',
-    body: "DSD compliance isn't a once-off event — it's a way of operating. We embed it into daily workflows so your team lives it, not just audits it.",
+    body: 'DSD compliance is not a once-off event. We embed it into daily workflows so your team lives it year-round, not only when an inspection is scheduled.',
   },
   {
     title: 'SA-Rooted Expertise',
-    body: 'We understand the realities of running an old age home in South Africa — the funding constraints, the regulations, and the human element.',
+    body: 'We understand the realities of running an old age home in South Africa: the funding constraints, the regulations, and the human element.',
   },
 ]
 
@@ -17,7 +17,7 @@ export function WhoWeAre() {
   return (
     <section
       id="who-we-are"
-      className="py-20 px-6"
+      className="py-24 px-6"
       style={{ backgroundColor: '#ffffff' }}
     >
       <div className="max-w-6xl mx-auto">
@@ -49,32 +49,43 @@ export function WhoWeAre() {
             </p>
           </div>
 
-          {/* Right — values */}
-          <div className="flex flex-col gap-6 lg:pt-2">
+          {/* Right — values as a numbered divider list */}
+          <div className="lg:pt-2">
             {VALUES.map((v, i) => (
               <div
                 key={v.title}
-                className="rounded-xl p-6 border"
+                className="flex gap-5 py-7"
                 style={{
-                  borderColor: '#ddd6c8',
-                  borderLeftWidth: '3px',
-                  borderLeftColor: i % 2 === 0 ? '#334739' : '#d3b24b',
-                  backgroundColor: '#faf7f0',
+                  borderTop: i > 0 ? '1px solid #ddd6c8' : 'none',
                 }}
               >
-                <h3
-                  className="font-semibold mb-2"
+                <span
+                  className="flex-shrink-0 leading-none mt-1"
                   style={{
-                    color: '#334739',
-                    fontFamily: "'Inter', system-ui, sans-serif",
-                    fontSize: '16px',
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
+                    fontWeight: 600,
+                    fontSize: '22px',
+                    color: i % 2 === 0 ? '#334739' : '#d3b24b',
+                    minWidth: '2rem',
                   }}
                 >
-                  {v.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
-                  {v.body}
-                </p>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h3
+                    className="font-semibold mb-2"
+                    style={{
+                      color: '#334739',
+                      fontFamily: "'Outfit', system-ui, sans-serif",
+                      fontSize: '16px',
+                    }}
+                  >
+                    {v.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
+                    {v.body}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

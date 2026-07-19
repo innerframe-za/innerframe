@@ -44,22 +44,20 @@ export function WhoItsFor() {
   return (
     <section
       id="who-its-for"
-      className="py-20 px-6"
+      className="py-16 px-6"
       style={{ backgroundColor: '#faf7f0' }}
     >
       <div className="max-w-6xl mx-auto">
-        {/* Heading */}
-        <div className="text-center mb-14">
-          <div className="inline-block">
-            <h2
-              className="text-3xl font-semibold gold-underline"
-              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
-            >
-              Built for South African Care Facilities
-            </h2>
-          </div>
+        {/* Heading — left-aligned */}
+        <div className="mb-10">
+          <h2
+            className="text-3xl font-semibold mb-4"
+            style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
+          >
+            Built for South African Care Facilities
+          </h2>
           <p
-            className="mt-6 text-base max-w-xl mx-auto"
+            className="text-base max-w-xl"
             style={{ color: '#5a5a5a' }}
           >
             Innerframe was designed specifically for the South African context —

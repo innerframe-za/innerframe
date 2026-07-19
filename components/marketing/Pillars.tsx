@@ -77,28 +77,30 @@ export function Pillars() {
   return (
     <section
       id="pillars"
-      className="py-20 px-6"
+      className="py-16 px-6"
       style={{ backgroundColor: '#faf7f0' }}
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section heading */}
-        <div className="text-center mb-14">
-          <div className="inline-block">
+        {/* Section heading — split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end mb-12">
+          <div>
             <h2
-              className="text-3xl font-semibold gold-underline"
+              className="text-3xl font-semibold"
               style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
             >
               The 5 Pillars
             </h2>
           </div>
-          <p
-            className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: '#5a5a5a' }}
-          >
-            Every well-run care facility needs five operational foundations.
-            Innerframe assesses, structures, and implements all five — so
-            nothing falls through the cracks.
-          </p>
+          <div>
+            <p
+              className="text-base"
+              style={{ color: '#5a5a5a' }}
+            >
+              Every well-run care facility needs five operational foundations.
+              Innerframe assesses, structures, and implements all five — so
+              nothing falls through the cracks.
+            </p>
+          </div>
         </div>
 
         {/* Pillar cards grid — all 5 side by side on large screens */}
@@ -111,20 +113,20 @@ export function Pillars() {
                 className="bg-white rounded-xl p-6 border transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 flex flex-col"
                 style={{
                   borderColor: '#ddd6c8',
-                  borderTopWidth: '3px',
-                  borderTopColor: index % 2 === 0 ? '#334739' : '#d3b24b',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04)',
-                  minHeight: '340px',
+                  minHeight: '320px',
                 }}
               >
-                {/* Icon */}
+                {/* Icon with alternating brand colors */}
                 <div
                   className="w-11 h-11 rounded-lg flex items-center justify-center mb-5"
-                  style={{ backgroundColor: 'rgba(30,58,47,0.07)' }}
+                  style={{
+                    backgroundColor: index % 2 === 0 ? '#334739' : '#d3b24b',
+                  }}
                 >
                   <Icon
                     size={22}
-                    style={{ color: '#334739' }}
+                    style={{ color: index % 2 === 0 ? '#faf7f0' : '#334739' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -132,7 +134,7 @@ export function Pillars() {
                 {/* Content */}
                 <h3
                   className="font-semibold mb-1"
-                  style={{ color: '#334739', fontFamily: "'Inter', system-ui, sans-serif", fontSize: '17px' }}
+                  style={{ color: '#334739', fontFamily: "'Outfit', system-ui, sans-serif", fontSize: '17px' }}
                 >
                   {pillar.name}
                 </h3>

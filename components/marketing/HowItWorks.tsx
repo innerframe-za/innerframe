@@ -1,10 +1,8 @@
 'use client'
-import { Search, Settings, CheckCircle } from 'lucide-react'
 
 const steps = [
   {
     number: '01',
-    icon: Search,
     title: 'Assess',
     subtitle: 'Full Facility Evaluation',
     description:
@@ -12,7 +10,6 @@ const steps = [
   },
   {
     number: '02',
-    icon: Settings,
     title: 'Structure',
     subtitle: 'Build Your Systems',
     description:
@@ -20,7 +17,6 @@ const steps = [
   },
   {
     number: '03',
-    icon: CheckCircle,
     title: 'Implement',
     subtitle: 'Train, Monitor & Sustain',
     description:
@@ -35,87 +31,74 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-20 px-6"
+      className="py-24 px-6"
       style={{ backgroundColor: '#ffffff' }}
     >
       <div className="max-w-6xl mx-auto">
-        {/* Section heading */}
-        <div className="text-center mb-14">
-          <div className="inline-block">
+        {/* Section heading — split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end mb-16">
+          <div>
             <h2
-              className="text-3xl font-semibold gold-underline"
+              className="text-3xl font-semibold"
               style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
             >
               How It Works
             </h2>
           </div>
-          <p
-            className="mt-6 text-base max-w-lg mx-auto"
-            style={{ color: '#5a5a5a' }}
-          >
-            A structured three-step process that transforms your facility from
-            reactive to audit-ready.
-          </p>
+          <div>
+            <p
+              className="text-base"
+              style={{ color: '#5a5a5a' }}
+            >
+              A structured three-step process that transforms your facility from
+              reactive to audit-ready.
+            </p>
+          </div>
         </div>
 
         {/* Steps */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => {
-            const Icon = step.icon
-            return (
-              <div key={step.number} className="relative flex flex-col items-center text-center">
-                {/* Connector line between steps */}
-                {index < steps.length - 1 && (
-                  <div
-                    className="hidden md:block absolute top-8 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
-                    style={{ backgroundColor: '#ddd6c8' }}
-                    aria-hidden="true"
-                  />
-                )}
-
-                {/* Gold number circle */}
+          {steps.map((step, index) => (
+            <div key={step.number} className="relative flex flex-col items-center text-center">
+              {/* Connector line between steps */}
+              {index < steps.length - 1 && (
                 <div
-                  className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    borderColor: '#d3b24b',
-                    color: '#d3b24b',
-                  }}
-                >
-                  <span className="text-xl font-medium">{step.number}</span>
-                </div>
+                  className="hidden md:block absolute top-8 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
+                  style={{ backgroundColor: '#ddd6c8' }}
+                  aria-hidden="true"
+                />
+              )}
 
-                {/* Icon */}
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                  style={{ backgroundColor: 'rgba(30,58,47,0.06)' }}
-                >
-                  <Icon
-                    size={20}
-                    style={{ color: '#334739' }}
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {/* Content */}
-                <h3
-                  className="text-xl font-semibold mb-1"
-                  style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
-                >
-                  {step.title}
-                </h3>
-                <p
-                  className="text-xs font-medium mb-3"
-                  style={{ color: '#d3b24b' }}
-                >
-                  {step.subtitle}
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
-                  {step.description}
-                </p>
+              {/* Gold number circle */}
+              <div
+                className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderColor: '#d3b24b',
+                  color: '#d3b24b',
+                }}
+              >
+                <span className="text-xl font-medium">{step.number}</span>
               </div>
-            )
-          })}
+
+              {/* Content */}
+              <h3
+                className="text-xl font-semibold mb-1"
+                style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
+              >
+                {step.title}
+              </h3>
+              <p
+                className="text-xs font-medium mb-3"
+                style={{ color: '#d3b24b' }}
+              >
+                {step.subtitle}
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
+                {step.description}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Outcome strip */}

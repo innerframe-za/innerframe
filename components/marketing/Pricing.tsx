@@ -58,15 +58,15 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="py-20 px-6"
-      style={{ backgroundColor: '#faf7f0' }}
+      className="py-24 px-6"
+      style={{ backgroundColor: '#ffffff' }}
     >
       <div className="max-w-6xl mx-auto">
-        {/* Section heading */}
-        <div className="text-center mb-14">
-          <div className="inline-block">
+        {/* Section heading — split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end mb-12">
+          <div>
             <h2
-              className="text-3xl font-semibold gold-underline"
+              className="text-3xl font-semibold"
               style={{
                 color: '#334739',
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
@@ -76,12 +76,14 @@ export function Pricing() {
               Pricing
             </h2>
           </div>
-          <p
-            className="mt-6 text-base max-w-xl mx-auto"
-            style={{ color: '#5a5a5a' }}
-          >
-            Simple monthly pricing that grows with your facility. Billed via debit order — aligned with your DSD subsidy cycle.
-          </p>
+          <div>
+            <p
+              className="text-base"
+              style={{ color: '#5a5a5a' }}
+            >
+              Simple monthly pricing that grows with your facility. Billed via debit order — aligned with your DSD subsidy cycle.
+            </p>
+          </div>
         </div>
 
         {/* Pricing cards */}
