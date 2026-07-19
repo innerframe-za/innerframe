@@ -97,7 +97,7 @@ export function Hero() {
             src="/Logo_Transparent.png"
             alt="Innerframe Care Solutions"
             style={{
-              width: 'min(520px, 90vw)',
+              width: 'min(720px, 95vw)',
               height: 'auto',
               objectFit: 'contain',
             }}
