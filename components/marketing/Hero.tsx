@@ -19,122 +19,6 @@ const PILLARS = [
   { Icon: Sprout,         label: 'Growth'      },
 ]
 
-// Leaf templates: all point upward from (0,0). Rotate/translate via SVG transform.
-const LEAF_LG  = 'M 0 0 C -42 -28 -30 -85 0 -120 C 30 -85 40 -30 0 0 Z'
-const LEAF_MD  = 'M 0 0 C -30 -20 -20 -62 0 -88  C 20 -62 28 -22 0 0 Z'
-const LEAF_SM  = 'M 0 0 C -18 -12 -12 -38 0 -56  C 12 -38 16 -13 0 0 Z'
-
-function DesktopBotanical() {
-  return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: '560px', height: '620px' }}>
-      {/* Leaf + background SVG layer sits behind the logo */}
-      <svg
-        viewBox="0 0 600 650"
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-        aria-hidden="true"
-        overflow="visible"
-      >
-        {/* Soft organic background blobs */}
-        <ellipse cx="490" cy="490" rx="195" ry="120"
-          fill="rgba(120,144,124,0.07)" transform="rotate(-28 490 490)" />
-        <ellipse cx="545" cy="195" rx="145" ry="85"
-          fill="rgba(120,144,124,0.05)" transform="rotate(18 545 195)" />
-        <ellipse cx="120" cy="525" rx="155" ry="88"
-          fill="rgba(120,144,124,0.06)" transform="rotate(42 120 525)" />
-
-        {/* Main vine — thin gold, winding from lower-left to upper-right */}
-        <path d="M 225 645 C 255 540 280 440 305 360 C 338 275 392 198 460 132"
-          stroke="#B89C69" strokeWidth="1.3" fill="none" strokeOpacity="0.40" />
-        {/* Side branch stubs */}
-        <path d="M 318 382 C 365 364 418 357 468 352"
-          stroke="#B89C69" strokeWidth="0.8" fill="none" strokeOpacity="0.28" />
-        <path d="M 344 300 C 392 283 444 278 485 275"
-          stroke="#B89C69" strokeWidth="0.8" fill="none" strokeOpacity="0.28" />
-        <path d="M 292 445 C 338 438 390 450 428 462"
-          stroke="#B89C69" strokeWidth="0.8" fill="none" strokeOpacity="0.28" />
-
-        {/* === LARGE LEAVES === */}
-
-        {/* Upper-right — points NE */}
-        <g transform="translate(418, 242) rotate(-52)">
-          <path d={LEAF_LG} fill="#496353" fillOpacity="0.72" />
-          <path d="M 0 0 L 0 -120" stroke="#496353" strokeWidth="0.6" strokeOpacity="0.20" fill="none" />
-        </g>
-
-        {/* Right — points E, partially off viewport (clipped by section) */}
-        <g transform="translate(470, 330) rotate(38)">
-          <path d={LEAF_LG} fill="#78907C" fillOpacity="0.65" />
-          <path d="M 0 0 L 0 -120" stroke="#78907C" strokeWidth="0.6" strokeOpacity="0.20" fill="none" />
-        </g>
-
-        {/* Upper-left — points slightly NW */}
-        <g transform="translate(248, 192) rotate(22)">
-          <path d={LEAF_LG} fill="#496353" fillOpacity="0.65" />
-          <path d="M 0 0 L 0 -120" stroke="#496353" strokeWidth="0.6" strokeOpacity="0.20" fill="none" />
-        </g>
-
-        {/* Far right large — half off-screen */}
-        <g transform="translate(552, 308) rotate(-32)">
-          <path d="M 0 0 C -50 -34 -36 -105 0 -148 C 36 -105 46 -36 0 0 Z"
-            fill="#78907C" fillOpacity="0.58" />
-        </g>
-
-        {/* === MEDIUM LEAVES === */}
-
-        {/* Lower-right */}
-        <g transform="translate(452, 435) rotate(28)">
-          <path d={LEAF_MD} fill="#496353" fillOpacity="0.55" />
-        </g>
-
-        {/* Left — points W */}
-        <g transform="translate(200, 352) rotate(-122)">
-          <path d={LEAF_MD} fill="#78907C" fillOpacity="0.52" />
-        </g>
-
-        {/* Lower-center, slight SE lean */}
-        <g transform="translate(330, 485) rotate(12)">
-          <path d={LEAF_MD} fill="#496353" fillOpacity="0.46" />
-        </g>
-
-        {/* === SMALL ACCENT LEAVES === */}
-
-        {/* Upper-right accent */}
-        <g transform="translate(505, 152) rotate(-42)">
-          <path d={LEAF_SM} fill="#B89C69" fillOpacity="0.50" />
-        </g>
-
-        {/* Left accent */}
-        <g transform="translate(158, 272) rotate(162)">
-          <path d={LEAF_SM} fill="#496353" fillOpacity="0.38" />
-        </g>
-
-        {/* Lower accent */}
-        <g transform="translate(488, 492) rotate(58)">
-          <path d={LEAF_SM} fill="#78907C" fillOpacity="0.34" />
-        </g>
-      </svg>
-
-      {/* Logo centered over the botanical layer */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '90px 55px 110px 35px',
-          zIndex: 1,
-        }}
-      >
-        <img
-          src="/Logo_Transparent.png"
-          alt="Innerframe Care Solutions"
-          style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-        />
-      </div>
-    </div>
-  )
-}
 
 function MobileBotanical() {
   return (
@@ -378,9 +262,14 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT: botanical composition (desktop only) ── */}
+        {/* ── RIGHT: hero illustration (desktop only) ── */}
         <div className="hidden lg:flex items-center justify-end">
-          <DesktopBotanical />
+          <img
+            src="/hero-desktop.svg"
+            alt=""
+            aria-hidden="true"
+            style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block' }}
+          />
         </div>
 
       </div>
