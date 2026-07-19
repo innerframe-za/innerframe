@@ -20,43 +20,6 @@ const PILLARS = [
 ]
 
 
-function MobileBotanical() {
-  return (
-    <svg
-      viewBox="0 0 200 520"
-      width="200"
-      height="520"
-      aria-hidden="true"
-      style={{ overflow: 'visible' }}
-    >
-      {/* Thin gold branch */}
-      <path d="M 100 520 C 112 415 122 315 135 215 C 148 125 165 62 185 20"
-        stroke="#B89C69" strokeWidth="1" fill="none" strokeOpacity="0.35" />
-
-      {/* Leaves along the branch */}
-      <g transform="translate(148, 205) rotate(-42)">
-        <path d="M 0 0 C -35 -22 -25 -68 0 -95 C 25 -68 32 -24 0 0 Z"
-          fill="#496353" fillOpacity="0.60" />
-      </g>
-      <g transform="translate(165, 295) rotate(32)">
-        <path d="M 0 0 C -28 -18 -18 -55 0 -78 C 18 -55 24 -20 0 0 Z"
-          fill="#78907C" fillOpacity="0.55" />
-      </g>
-      <g transform="translate(132, 368) rotate(-18)">
-        <path d="M 0 0 C -26 -17 -17 -52 0 -72 C 17 -52 22 -19 0 0 Z"
-          fill="#496353" fillOpacity="0.50" />
-      </g>
-      <g transform="translate(158, 440) rotate(44)">
-        <path d="M 0 0 C -20 -13 -14 -40 0 -58 C 14 -40 18 -14 0 0 Z"
-          fill="#78907C" fillOpacity="0.44" />
-      </g>
-      <g transform="translate(178, 148) rotate(-58)">
-        <path d="M 0 0 C -17 -11 -12 -36 0 -52 C 12 -36 16 -12 0 0 Z"
-          fill="#B89C69" fillOpacity="0.40" />
-      </g>
-    </svg>
-  )
-}
 
 export function Hero() {
   return (
@@ -65,20 +28,51 @@ export function Hero() {
       style={{ backgroundColor: C.ivory, minHeight: 'calc(100vh - 72px)' }}
       className="relative overflow-hidden px-6 flex items-center"
     >
-      {/* Mobile botanical — floats on the right edge behind content */}
+      {/* Mobile hero image — floats on the right edge behind content */}
       <div
         className="lg:hidden"
         style={{
           position: 'absolute',
           right: '-16px',
           top: '32px',
-          opacity: 0.72,
+          opacity: 0.85,
           zIndex: 0,
           pointerEvents: 'none',
         }}
         aria-hidden="true"
       >
-        <MobileBotanical />
+        <img
+          src="/hero-mobile.svg"
+          alt=""
+          style={{ width: '200px', height: 'auto', display: 'block' }}
+        />
+      </div>
+
+      {/* Desktop hero image — absolutely fills the right half of the section */}
+      <div
+        className="hidden lg:block"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: '50%',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+        aria-hidden="true"
+      >
+        <img
+          src="/hero-desktop.svg"
+          alt=""
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center right',
+            display: 'block',
+          }}
+        />
       </div>
 
       <div
@@ -262,15 +256,8 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT: hero illustration (desktop only) ── */}
-        <div className="hidden lg:flex items-center justify-end">
-          <img
-            src="/hero-desktop.svg"
-            alt=""
-            aria-hidden="true"
-            style={{ width: '100%', maxWidth: '560px', height: 'auto', display: 'block' }}
-          />
-        </div>
+        {/* ── RIGHT: spacer — image is absolutely positioned below ── */}
+        <div className="hidden lg:block" aria-hidden="true" />
 
       </div>
     </section>
