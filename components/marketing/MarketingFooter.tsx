@@ -1,96 +1,181 @@
 import { Link } from 'react-router-dom'
 
+const C = {
+  evergreen: '#496353',
+  gold: '#B89C69',
+  ivory: '#F8F5EF',
+  sageSoft: '#C8D4C8',
+}
+
+const INTER = "'Inter', system-ui, sans-serif"
+const CORMORANT = "'Cormorant Garamond', Georgia, serif"
+
+const SERVICES_LINKS = [
+  'Governance & Board Support',
+  'Regulatory Compliance',
+  'Operational Structure',
+  'Financial Sustainability',
+  'Staff Development',
+  'Strategic Advisory',
+]
+
+const LEGAL_ITEMS = ['Privacy Policy', 'Terms of Service', 'POPIA Notice', 'Medical Disclaimer']
+
 export function MarketingFooter() {
   const year = new Date().getFullYear()
 
   return (
     <footer
-      className="py-12 px-6 border-t"
-      style={{ backgroundColor: '#1a1a1a', borderColor: '#333333' }}
+      style={{ backgroundColor: C.evergreen }}
+      className="px-6"
     >
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/logo.jpeg"
-                alt="Innerframe Care Solutions"
-                width={36}
-                height={36}
-                className="rounded object-contain"
-              />
-              <div>
-                <div className="font-medium text-sm tracking-wide" style={{ color: '#F5F0E8' }}>
-                  INNERFRAME
-                </div>
-                <div className="text-xs" style={{ color: '#5a5a5a' }}>
-                  CARE SOLUTIONS
-                </div>
+      {/* Main footer body */}
+      <div
+        className="max-w-7xl mx-auto py-16"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+
+          {/* Brand column */}
+          <div className="lg:col-span-1">
+            <div style={{ marginBottom: '20px' }}>
+              <div
+                style={{
+                  fontFamily: CORMORANT,
+                  fontWeight: 600,
+                  fontSize: '22px',
+                  color: C.ivory,
+                  letterSpacing: '0.1em',
+                  marginBottom: '4px',
+                }}
+              >
+                INNERFRAME
+              </div>
+              <div
+                style={{
+                  fontFamily: INTER,
+                  fontSize: '10px',
+                  color: 'rgba(248,245,239,0.5)',
+                  letterSpacing: '0.2em',
+                }}
+              >
+                CARE SOLUTIONS
               </div>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#5a5a5a' }}>
-              Stronger Structures. Better Care. Brighter Futures.
+            <p
+              style={{
+                fontFamily: INTER,
+                fontSize: '14px',
+                lineHeight: 1.7,
+                color: 'rgba(248,245,239,0.6)',
+                maxWidth: '220px',
+              }}
+            >
+              Building stronger foundations for care organisations across South Africa.
             </p>
           </div>
 
-          {/* Quick links */}
+          {/* Services column */}
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: '#d3b24b' }}>
-              Quick Links
+            <p
+              style={{
+                fontFamily: INTER,
+                fontWeight: 600,
+                fontSize: '11px',
+                color: C.gold,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                marginBottom: '20px',
+              }}
+            >
+              Services
             </p>
-            <ul className="space-y-2">
-              {[
-                { href: '#pillars', label: 'What We Do' },
-                { href: '#how-it-works', label: 'How It Works' },
-                { href: '#who-its-for', label: "Who It's For" },
-                { href: '#contact', label: 'Contact Us' },
-              ].map(link => (
-                <li key={link.href}>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {SERVICES_LINKS.map(item => (
+                <li key={item}>
                   <a
-                    href={link.href}
-                    className="text-xs transition-colors"
-                    style={{ color: '#5a5a5a' }}
-                    onMouseEnter={e => ((e.target as HTMLElement).style.color = '#F5F0E8')}
-                    onMouseLeave={e => ((e.target as HTMLElement).style.color = '#5a5a5a')}
+                    href="#services"
+                    style={{
+                      fontFamily: INTER,
+                      fontSize: '14px',
+                      color: 'rgba(248,245,239,0.65)',
+                      transition: 'color 150ms ease',
+                    }}
+                    onMouseEnter={e => ((e.target as HTMLElement).style.color = C.ivory)}
+                    onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(248,245,239,0.65)')}
                   >
-                    {link.label}
+                    {item}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Portal */}
+          {/* Portal / Clients column */}
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: '#d3b24b' }}>
+            <p
+              style={{
+                fontFamily: INTER,
+                fontWeight: 600,
+                fontSize: '11px',
+                color: C.gold,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                marginBottom: '20px',
+              }}
+            >
               Clients
             </p>
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 text-xs transition-colors"
-              style={{ color: '#F5F0E8' }}
+              style={{
+                fontFamily: INTER,
+                fontSize: '14px',
+                color: C.ivory,
+                display: 'block',
+                marginBottom: '10px',
+              }}
             >
               Client Portal Login →
             </Link>
-            <p className="text-xs mt-3" style={{ color: '#5a5a5a' }}>
-              Already a client? Sign in to access your facility's documents,
-              residents, and compliance tools.
+            <p
+              style={{
+                fontFamily: INTER,
+                fontSize: '13px',
+                lineHeight: 1.6,
+                color: 'rgba(248,245,239,0.5)',
+                maxWidth: '200px',
+              }}
+            >
+              Existing clients: sign in to access documents, residents, and compliance tools.
             </p>
           </div>
 
-          {/* Legal */}
+          {/* Legal column */}
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: '#d3b24b' }}>
+            <p
+              style={{
+                fontFamily: INTER,
+                fontWeight: 600,
+                fontSize: '11px',
+                color: C.gold,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                marginBottom: '20px',
+              }}
+            >
               Legal
             </p>
-            <ul className="space-y-2">
-              {['Privacy Policy', 'Terms of Service', 'Medical Disclaimer', 'Confidentiality Notice'].map(item => (
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {LEGAL_ITEMS.map(item => (
                 <li key={item}>
                   <span
-                    className="text-xs cursor-default"
-                    style={{ color: '#5a5a5a' }}
-                    title="Documentation coming soon"
+                    style={{
+                      fontFamily: INTER,
+                      fontSize: '14px',
+                      color: 'rgba(248,245,239,0.45)',
+                      cursor: 'default',
+                    }}
+                    title="Coming soon"
                   >
                     {item}
                   </span>
@@ -98,32 +183,55 @@ export function MarketingFooter() {
               ))}
             </ul>
           </div>
-        </div>
 
-        {/* POPIA notice strip */}
+        </div>
+      </div>
+
+      {/* POPIA notice strip */}
+      <div
+        style={{
+          borderTop: '1px solid rgba(248,245,239,0.1)',
+          borderBottom: '1px solid rgba(248,245,239,0.1)',
+        }}
+      >
         <div
-          className="py-4 border-t border-b text-xs text-center leading-relaxed"
-          style={{ borderColor: '#2a2a2a', color: '#404040' }}
+          className="max-w-7xl mx-auto py-5"
+          style={{
+            fontFamily: INTER,
+            fontSize: '12px',
+            lineHeight: 1.6,
+            color: 'rgba(248,245,239,0.38)',
+            textAlign: 'center',
+          }}
         >
           Personal information is collected and processed in accordance with the{' '}
-          <strong style={{ color: '#555555' }}>
+          <strong style={{ color: 'rgba(248,245,239,0.5)', fontWeight: 500 }}>
             Protection of Personal Information Act (POPIA), Act 4 of 2013
           </strong>
-          . All resident data is treated as confidential.{' '}
-          This platform does not constitute medical advice — all clinical decisions must be made by qualified healthcare professionals.
+          . All resident data is treated as confidential. This platform does not constitute medical advice.
         </div>
+      </div>
 
-        {/* Bottom bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs" style={{ color: '#5a5a5a' }}>
-            &copy; {year} Innerframe Care Solutions. All rights reserved.
-          </p>
-          <p className="text-xs" style={{ color: '#3a3a3a' }}>
-            Made by{' '}
-            <span style={{ color: '#5a5a5a' }}>Cortex Analytics</span>
-            {' '}· South Africa
-          </p>
-        </div>
+      {/* Bottom bar */}
+      <div className="max-w-7xl mx-auto py-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p
+          style={{
+            fontFamily: INTER,
+            fontSize: '13px',
+            color: 'rgba(248,245,239,0.4)',
+          }}
+        >
+          &copy; {year} Innerframe Care Solutions. All rights reserved.
+        </p>
+        <p
+          style={{
+            fontFamily: INTER,
+            fontSize: '13px',
+            color: 'rgba(248,245,239,0.3)',
+          }}
+        >
+          Built by <span style={{ color: 'rgba(248,245,239,0.45)' }}>Cortex Analytics</span> · South Africa
+        </p>
       </div>
     </footer>
   )

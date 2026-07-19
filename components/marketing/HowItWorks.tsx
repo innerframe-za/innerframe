@@ -1,100 +1,148 @@
-'use client'
+const C = {
+  evergreen: '#496353',
+  sage: '#78907C',
+  sageSoft: '#C8D4C8',
+  gold: '#B89C69',
+  ivory: '#F8F5EF',
+  slate: '#38423D',
+}
 
-const steps = [
+const INTER = "'Inter', system-ui, sans-serif"
+const CORMORANT = "'Cormorant Garamond', Georgia, serif"
+
+const STEPS = [
   {
     number: '01',
     title: 'Assess',
     subtitle: 'Full Facility Evaluation',
     description:
-      'We conduct a comprehensive assessment of all 5 pillars — identifying gaps, compliance risks, and operational weaknesses before anything else.',
+      'A comprehensive assessment across all operational areas — governance, compliance, finance, staffing, and systems. We identify gaps, risks, and opportunities before recommending anything.',
   },
   {
     number: '02',
     title: 'Structure',
-    subtitle: 'Build Your Systems',
+    subtitle: 'Build Your Frameworks',
     description:
-      'We create the files, policies, controls, and workflows your facility needs. Every document is DSD-compliant and tailored to your specific context.',
+      'We design and implement the policies, controls, documentation, and workflows your organisation needs. Every framework is DSD-aligned and tailored to your specific context.',
   },
   {
     number: '03',
-    title: 'Implement',
-    subtitle: 'Train, Monitor & Sustain',
+    title: 'Sustain',
+    subtitle: 'Monitor, Train & Support',
     description:
-      'We train your staff, monitor the new systems, and give you the tools to maintain compliance long after the initial engagement ends.',
+      'Ongoing coaching, staff training, periodic reviews, and continuous improvement to ensure your systems stay effective long after the initial engagement ends.',
   },
 ]
 
-/**
- * How It Works section — 3-step process with gold numbered circles.
- */
 export function HowItWorks() {
   return (
     <section
-      id="how-it-works"
-      className="py-24 px-6"
-      style={{ backgroundColor: '#ffffff' }}
+      id="how-we-work"
+      style={{
+        backgroundColor: '#ffffff',
+        paddingTop: 'clamp(80px, 10vw, 120px)',
+        paddingBottom: 'clamp(80px, 10vw, 120px)',
+      }}
+      className="px-6"
     >
-      <div className="max-w-6xl mx-auto">
-        {/* Section heading — split layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end mb-16">
-          <div>
-            <h2
-              className="text-3xl font-semibold"
-              style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
-            >
-              How It Works
-            </h2>
-          </div>
-          <div>
-            <p
-              className="text-base"
-              style={{ color: '#5a5a5a' }}
-            >
-              A structured three-step process that transforms your facility from
-              reactive to audit-ready.
-            </p>
-          </div>
+      <div className="max-w-7xl mx-auto">
+        {/* Heading */}
+        <div style={{ marginBottom: '72px' }}>
+          <h2
+            style={{
+              fontFamily: CORMORANT,
+              fontWeight: 600,
+              fontSize: 'clamp(32px, 4vw, 42px)',
+              lineHeight: 1.15,
+              color: C.slate,
+              marginBottom: '16px',
+            }}
+          >
+            How we work
+          </h2>
+          <div style={{ width: '36px', height: '2px', backgroundColor: C.gold, marginBottom: '20px' }} />
+          <p
+            style={{
+              fontFamily: INTER,
+              fontSize: '18px',
+              lineHeight: 1.75,
+              color: C.slate,
+              opacity: 0.72,
+              maxWidth: '520px',
+            }}
+          >
+            A structured three-phase process that moves your organisation from where it is to where it needs to be.
+          </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => (
-            <div key={step.number} className="relative flex flex-col items-center text-center">
-              {/* Connector line between steps */}
-              {index < steps.length - 1 && (
-                <div
-                  className="hidden md:block absolute top-8 left-[calc(50%+2.5rem)] right-[calc(-50%+2.5rem)] h-px"
-                  style={{ backgroundColor: '#ddd6c8' }}
-                  aria-hidden="true"
-                />
-              )}
-
-              {/* Gold number circle */}
-              <div
-                className="relative w-16 h-16 rounded-full flex items-center justify-center mb-6 border-2 z-10"
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderColor: '#d3b24b',
-                  color: '#d3b24b',
-                }}
-              >
-                <span className="text-xl font-medium">{step.number}</span>
+        {/* Steps — horizontal on desktop, stacked on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+          {STEPS.map((step, index) => (
+            <div
+              key={step.number}
+              style={{
+                paddingRight: index < STEPS.length - 1 ? 'clamp(24px, 4vw, 48px)' : '0',
+                paddingBottom: index < STEPS.length - 1 ? '48px' : '0',
+              }}
+              className={
+                [
+                  index > 0 ? 'md:pl-12' : '',
+                  index > 0 ? 'pt-12 md:pt-0 border-t md:border-t-0' : '',
+                  index < STEPS.length - 1 ? 'md:border-r' : '',
+                ].join(' ')
+              }
+            >
+              {/* Step number */}
+              <div style={{ marginBottom: '24px' }}>
+                <span
+                  style={{
+                    fontFamily: CORMORANT,
+                    fontWeight: 600,
+                    fontSize: '48px',
+                    lineHeight: 1,
+                    color: C.gold,
+                    opacity: 0.6,
+                  }}
+                >
+                  {step.number}
+                </span>
               </div>
 
               {/* Content */}
               <h3
-                className="text-xl font-semibold mb-1"
-                style={{ color: '#334739', fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'normal' }}
+                style={{
+                  fontFamily: CORMORANT,
+                  fontWeight: 600,
+                  fontSize: '28px',
+                  lineHeight: 1.2,
+                  color: C.slate,
+                  marginBottom: '8px',
+                }}
               >
                 {step.title}
               </h3>
               <p
-                className="text-xs font-medium mb-3"
-                style={{ color: '#d3b24b' }}
+                style={{
+                  fontFamily: INTER,
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  color: C.gold,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  marginBottom: '16px',
+                }}
               >
                 {step.subtitle}
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: '#5a5a5a' }}>
+              <p
+                style={{
+                  fontFamily: INTER,
+                  fontSize: '16px',
+                  lineHeight: 1.75,
+                  color: C.slate,
+                  opacity: 0.72,
+                }}
+              >
                 {step.description}
               </p>
             </div>
@@ -103,36 +151,62 @@ export function HowItWorks() {
 
         {/* Outcome strip */}
         <div
-          className="mt-16 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 border"
           style={{
-            backgroundColor: '#334739',
-            borderColor: 'rgba(212,175,55,0.3)',
+            marginTop: '72px',
+            backgroundColor: C.ivory,
+            borderRadius: '20px',
+            padding: '40px 48px',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '32px',
+            flexWrap: 'wrap',
+            border: `1px solid rgba(200,212,200,0.5)`,
           }}
         >
           <div>
             <p
-              className="text-xs font-medium uppercase tracking-wider mb-2"
-              style={{ color: '#d3b24b' }}
+              style={{
+                fontFamily: INTER,
+                fontWeight: 500,
+                fontSize: '12px',
+                color: C.gold,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                marginBottom: '8px',
+              }}
             >
-              The Innerframe Outcome
+              The Innerframe outcome
             </p>
             <h3
-              className="text-xl font-medium"
-              style={{ color: '#F5F0E8' }}
+              style={{
+                fontFamily: CORMORANT,
+                fontWeight: 600,
+                fontSize: '26px',
+                lineHeight: 1.3,
+                color: C.slate,
+              }}
             >
-              Structured. Compliant. Compassionate.
+              Structured. Compliant. Sustainable.
             </h3>
           </div>
           <a
             href="#contact"
-            className="flex-shrink-0 px-6 py-3 rounded-full text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]"
-            style={{ backgroundColor: '#d3b24b', color: '#334739' }}
-            onMouseEnter={e =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = '#b8972e')
-            }
-            onMouseLeave={e =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = '#d3b24b')
-            }
+            style={{
+              fontFamily: INTER,
+              fontWeight: 600,
+              fontSize: '15px',
+              flexShrink: 0,
+              backgroundColor: C.evergreen,
+              color: '#ffffff',
+              borderRadius: '12px',
+              padding: '14px 28px',
+              display: 'inline-block',
+              transition: 'background-color 150ms ease',
+            }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = '#3A5445')}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = C.evergreen)}
           >
             Start the Assessment
           </a>

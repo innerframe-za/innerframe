@@ -1,25 +1,23 @@
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
-import { WhoWeAre } from '@/components/marketing/WhoWeAre'
-import { Pillars } from '@/components/marketing/Pillars'
+import { About } from '@/components/marketing/About'
+import { Services } from '@/components/marketing/Services'
 import { HowItWorks } from '@/components/marketing/HowItWorks'
-import { WhoItsFor } from '@/components/marketing/WhoItsFor'
-import { Pricing } from '@/components/marketing/Pricing'
-import { ContactForm } from '@/components/marketing/ContactForm'
+import { StatsSection } from '@/components/marketing/StatsSection'
+import { ContactSection } from '@/components/marketing/ContactSection'
 import { MarketingFooter } from '@/components/marketing/MarketingFooter'
 
 export default function MarketingPage() {
   return (
     <>
       <MarketingNav />
-      <main className="pt-[78px]">
+      <main className="pt-[72px]">
         <Hero />
-        <WhoWeAre />
-        <Pillars />
+        <About />
+        <Services />
         <HowItWorks />
-        <WhoItsFor />
-        <Pricing />
-        <ContactForm />
+        <StatsSection />
+        <ContactSection />
       </main>
       <MarketingFooter />
     </>

@@ -1,49 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
+const C = {
+  evergreen: '#496353',
+  ivory: '#F8F5EF',
+  gold: '#B89C69',
+}
+
+const INTER = "'Inter', system-ui, sans-serif"
+const CORMORANT = "'Cormorant Garamond', Georgia, serif"
+
 const NAV_LINKS = [
-  { href: '#who-we-are', label: 'Who we are' },
-  { href: '#pillars', label: 'What we do' },
-  { href: '#why-innerframe', label: 'Why Innerframe' },
-  { href: '#pricing', label: 'Pricing' },
+  { href: '#about', label: 'About' },
+  { href: '#services', label: 'Services' },
+  { href: '#how-we-work', label: 'How We Work' },
   { href: '#contact', label: 'Contact' },
 ]
 
 export function MarketingNav() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 w-full"
-      style={{ backgroundColor: '#698169', height: '78px' }}
+      className="fixed top-0 left-0 right-0 z-50 w-full transition-shadow duration-300"
+      style={{
+        backgroundColor: C.evergreen,
+        height: '72px',
+        boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.15)' : 'none',
+      }}
     >
       <div className="max-w-7xl mx-auto px-8 h-full flex items-center justify-between">
         {/* Wordmark */}
-        <Link to="/" className="flex-shrink-0 flex flex-col items-center leading-none">
-          <span
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontWeight: 600,
-              fontStyle: 'normal',
-              fontSize: '26px',
-              color: '#faf7f0',
-              letterSpacing: '0.12em',
-            }}
-          >
+        <Link to="/" className="flex-shrink-0 flex flex-col items-start leading-none" aria-label="Innerframe Care Solutions home">
+          <span style={{ fontFamily: CORMORANT, fontWeight: 600, fontSize: '24px', color: C.ivory, letterSpacing: '0.1em' }}>
             INNERFRAME
           </span>
-          <span
-            style={{
-              fontFamily: "'Inter', system-ui, sans-serif",
-              fontWeight: 400,
-              fontSize: '11px',
-              color: 'rgba(250,247,240,0.8)',
-              letterSpacing: '0.18em',
-              marginTop: '3px',
-            }}
-          >
-            — CARE SOLUTIONS —
+          <span style={{ fontFamily: INTER, fontWeight: 400, fontSize: '10px', color: 'rgba(248,245,239,0.65)', letterSpacing: '0.2em', marginTop: '2px' }}>
+            CARE SOLUTIONS
           </span>
         </Link>
 
@@ -53,54 +54,65 @@ export function MarketingNav() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm transition-opacity hover:opacity-70"
-              style={{ color: '#faf7f0', letterSpacing: '0.05em' }}
+              style={{ fontFamily: INTER, fontWeight: 500, fontSize: '15px', color: 'rgba(248,245,239,0.85)', letterSpacing: '0.02em', transition: 'color 150ms ease' }}
+              onMouseEnter={e => ((e.target as HTMLElement).style.color = C.ivory)}
+              onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(248,245,239,0.85)')}
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        {/* Portal pill button */}
+        {/* Portal button */}
         <div className="hidden md:block">
           <Link
             to="/login"
-            className="text-sm font-medium transition-opacity hover:opacity-85"
             style={{
-              backgroundColor: '#334739',
-              color: '#faf7f0',
-              borderRadius: '30px',
-              padding: '12px 28px',
+              fontFamily: INTER,
+              fontWeight: 500,
+              fontSize: '15px',
+              color: C.ivory,
+              border: `1.5px solid rgba(248,245,239,0.5)`,
+              borderRadius: '12px',
+              padding: '10px 24px',
               display: 'inline-block',
+              transition: 'border-color 150ms ease, background-color 150ms ease',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.borderColor = C.ivory
+              ;(e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(248,245,239,0.08)'
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(248,245,239,0.5)'
+              ;(e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
             }}
           >
-            Portal
+            Client Portal
           </Link>
         </div>
 
-        {/* Mobile hamburger — hide wordmark second line on very small screens if needed */}
+        {/* Mobile hamburger */}
         <button
           className="md:hidden p-2"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-          style={{ color: '#faf7f0' }}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          style={{ color: C.ivory }}
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
         </button>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* Mobile drawer */}
       {open && (
         <div
           className="md:hidden px-8 py-6 flex flex-col gap-5 border-t"
-          style={{ backgroundColor: '#698169', borderColor: 'rgba(250,247,240,0.15)' }}
+          style={{ backgroundColor: C.evergreen, borderColor: 'rgba(248,245,239,0.12)' }}
         >
           {NAV_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm transition-opacity hover:opacity-70"
-              style={{ color: '#faf7f0', letterSpacing: '0.05em' }}
+              style={{ fontFamily: INTER, fontWeight: 500, fontSize: '16px', color: 'rgba(248,245,239,0.85)' }}
               onClick={() => setOpen(false)}
             >
               {link.label}
@@ -108,17 +120,21 @@ export function MarketingNav() {
           ))}
           <Link
             to="/login"
-            className="text-sm font-medium self-start"
             style={{
-              backgroundColor: '#334739',
-              color: '#faf7f0',
-              borderRadius: '30px',
-              padding: '12px 28px',
+              fontFamily: INTER,
+              fontWeight: 500,
+              fontSize: '15px',
+              color: C.ivory,
+              border: `1.5px solid rgba(248,245,239,0.4)`,
+              borderRadius: '12px',
+              padding: '12px 24px',
               display: 'inline-block',
+              alignSelf: 'flex-start',
+              marginTop: '4px',
             }}
             onClick={() => setOpen(false)}
           >
-            Portal
+            Client Portal
           </Link>
         </div>
       )}
