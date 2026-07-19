@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Shield,
   FileCheck,
@@ -36,7 +37,7 @@ const SERVICES = [
     Icon: Settings2,
     title: 'Operational Structure',
     description:
-      'Policies, processes, workflows, and quality-management systems tailored to your facility — built to run without constant intervention.',
+      'Policies, processes, workflows, and quality-management systems tailored to your facility — built to run reliably without constant intervention.',
   },
   {
     Icon: TrendingUp,
@@ -59,6 +60,8 @@ const SERVICES = [
 ]
 
 export function Services() {
+  const [hovered, setHovered] = useState<number | null>(null)
+
   return (
     <section
       id="services"
@@ -70,6 +73,7 @@ export function Services() {
       className="px-6"
     >
       <div className="max-w-7xl mx-auto">
+
         {/* Section heading — split layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16">
           <div>
@@ -81,7 +85,8 @@ export function Services() {
                 lineHeight: 1.15,
                 color: C.slate,
                 marginBottom: '16px',
-              }}
+                textWrap: 'balance',
+              } as React.CSSProperties}
             >
               What we do
             </h2>
@@ -94,7 +99,7 @@ export function Services() {
                 fontSize: '18px',
                 lineHeight: 1.75,
                 color: C.slate,
-                opacity: 0.72,
+                opacity: 0.78,
               }}
             >
               Six areas of practice, each addressing a critical dimension of care-organisation management. Applied together, they create the operational foundation that excellent care requires.
@@ -102,60 +107,59 @@ export function Services() {
           </div>
         </div>
 
-        {/* Service cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES.map(({ Icon, title, description }) => (
+        {/* Service list — editorial horizontal rules, no cards */}
+        <div style={{ borderTop: '1px solid rgba(200,212,200,0.7)' }}>
+          {SERVICES.map(({ Icon, title, description }, index) => (
             <article
               key={title}
+              onMouseEnter={() => setHovered(index)}
+              onMouseLeave={() => setHovered(null)}
               style={{
-                backgroundColor: '#ffffff',
-                borderRadius: '20px',
-                padding: '32px',
-                border: '1px solid rgba(200,212,200,0.5)',
-                boxShadow: '0 2px 8px rgba(73,99,83,0.06), 0 8px 24px rgba(73,99,83,0.05)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
+                borderBottom: '1px solid rgba(200,212,200,0.7)',
+                padding: 'clamp(28px, 3vw, 40px) 0',
+                backgroundColor: hovered === index ? 'rgba(200,212,200,0.12)' : 'transparent',
+                transition: 'background-color 200ms ease',
               }}
             >
-              {/* Icon */}
+              {/*
+               * Mobile:  icon + title side by side (top row), description full-width below
+               * Desktop: icon | title | description — 3-column grid
+               *
+               * Achieved with:
+               *   grid-cols-[auto_1fr]      → mobile: icon / title
+               *   description: col-span-2   → mobile: spans both cols
+               *   lg:grid-cols-[40px_1fr_1.4fr] → desktop: 3 equal-weight columns
+               *   lg:col-span-1             → description back to 1 col on desktop
+               */}
               <div
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  backgroundColor: 'rgba(200,212,200,0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
+                className="grid grid-cols-[auto_1fr] lg:grid-cols-[40px_1fr_1.4fr] gap-x-5 gap-y-3 lg:gap-x-10 lg:items-center"
               >
-                <Icon size={20} strokeWidth={1.5} style={{ color: C.evergreen }} aria-hidden="true" />
-              </div>
-
-              <div>
-                {/* Thin gold rule accent */}
-                <div style={{ width: '24px', height: '1.5px', backgroundColor: C.gold, marginBottom: '12px' }} />
+                <Icon
+                  size={22}
+                  strokeWidth={1.5}
+                  style={{ color: C.evergreen }}
+                  aria-hidden="true"
+                />
                 <h3
                   style={{
                     fontFamily: CORMORANT,
                     fontWeight: 600,
-                    fontSize: '22px',
-                    lineHeight: 1.25,
+                    fontSize: 'clamp(22px, 2.2vw, 26px)',
+                    lineHeight: 1.2,
                     color: C.slate,
-                    marginBottom: '12px',
-                  }}
+                    textWrap: 'balance',
+                  } as React.CSSProperties}
                 >
                   {title}
                 </h3>
                 <p
+                  className="col-span-2 lg:col-span-1"
                   style={{
                     fontFamily: INTER,
                     fontSize: '15px',
-                    lineHeight: 1.7,
+                    lineHeight: 1.75,
                     color: C.slate,
-                    opacity: 0.72,
+                    opacity: 0.82,
                   }}
                 >
                   {description}
@@ -165,12 +169,12 @@ export function Services() {
           ))}
         </div>
 
-        {/* CTA below cards */}
+        {/* CTA strip */}
         <div
           style={{
             marginTop: '56px',
             paddingTop: '40px',
-            borderTop: `1px solid rgba(200,212,200,0.6)`,
+            borderTop: '1px solid rgba(200,212,200,0.6)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
@@ -183,7 +187,7 @@ export function Services() {
               fontSize: '18px',
               lineHeight: 1.6,
               color: C.slate,
-              opacity: 0.7,
+              opacity: 0.80,
               maxWidth: '520px',
             }}
           >
@@ -208,6 +212,7 @@ export function Services() {
             Request an Assessment
           </a>
         </div>
+
       </div>
     </section>
   )
