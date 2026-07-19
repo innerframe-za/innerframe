@@ -6,6 +6,7 @@ import { SuperAdminShell } from './components/superadmin/SuperAdminShell'
 
 // Route-level code splitting: each page loads only when first visited
 const MarketingPage = lazy(() => import('./pages/marketing/MarketingPage'))
+const Landing2Page = lazy(() => import('./pages/marketing/Landing2Page'))
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'))
 const ChangePasswordPage = lazy(() => import('./pages/auth/ChangePasswordPage'))
 const DashboardPage = lazy(() => import('./pages/portal/DashboardPage'))
@@ -29,6 +30,7 @@ export default function App() {
     <Suspense fallback={PageFallback}>
       <Routes>
         <Route path="/" element={<MarketingPage />} />
+        <Route path="/landing2" element={<Landing2Page />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Navigate to="/login" replace />} />
 
