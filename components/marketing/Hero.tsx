@@ -45,16 +45,6 @@ export function Hero() {
             />
           </div>
 
-          {/* Gold accent rule */}
-          <div
-            style={{
-              width: '40px',
-              height: '2px',
-              backgroundColor: C.gold,
-              marginBottom: '28px',
-            }}
-          />
-
           {/* H1 — roman + italic gold */}
           <h1
             style={{
@@ -139,17 +129,18 @@ export function Hero() {
             </a>
           </div>
 
-          {/* 4-pillar strip — grid keeps all 4 in one row at every width */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          {/* 4-pillar strip — flex, left-aligned */}
+          <div style={{ display: 'flex' }}>
             {PILLARS.map(({ Icon, label }, i) => (
               <div
                 key={label}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '7px',
-                  paddingLeft: i > 0 ? '12px' : 0,
+                  paddingLeft: i > 0 ? '20px' : 0,
+                  paddingRight: i < PILLARS.length - 1 ? '20px' : 0,
                   borderLeft: i > 0 ? '1px solid rgba(73,99,83,0.22)' : 'none',
                 }}
               >
@@ -168,7 +159,6 @@ export function Hero() {
                     textTransform: 'uppercase',
                     color: C.slate,
                     opacity: 0.70,
-                    textAlign: 'center',
                   }}
                 >
                   {label}

@@ -80,7 +80,6 @@ export function About() {
             padding: '28px 36px',
             backgroundColor: 'rgba(200,212,200,0.15)',
             borderRadius: '16px',
-            maxWidth: '680px',
           }}
         >
           <p
