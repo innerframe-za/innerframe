@@ -492,10 +492,7 @@ export default function PillarPage() {
           <button
             type="button"
             onClick={() => setUploadOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium"
-            style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
-            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-[#1E3A2F] hover:bg-[#2D5A3D] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#698169] focus-visible:ring-offset-1"
           >
             <Upload size={14} />Upload Document
           </button>
@@ -506,7 +503,7 @@ export default function PillarPage() {
 
       <div className="flex gap-8 items-start">
         <PillarSidebar sections={sections} active={activeSection} onNav={scrollTo} />
-        <div className="flex-1 min-w-0 space-y-10">
+        <div className="flex-1 min-w-0 space-y-0">
           {sections.map(section => (
             <section key={section.id} id={section.id} className="scroll-mt-8">
               <SectionGroup

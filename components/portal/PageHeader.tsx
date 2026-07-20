@@ -15,6 +15,7 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
             fontSize: 'clamp(1.5rem, 3vw, 1.875rem)',
             color: '#1E3A2F',
             letterSpacing: '-0.025em',
+            textWrap: 'balance',
           }}
         >
           {title}

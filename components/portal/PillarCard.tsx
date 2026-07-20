@@ -45,14 +45,14 @@ export function PillarCard({
           <p className="text-sm font-semibold leading-tight" style={{ color: '#1E3A2F' }}>
             {name}
           </p>
-          <p className="text-xs mt-0.5 leading-snug" style={{ color: '#5a5a5a' }}>
+          <p className="text-xs mt-0.5 leading-snug line-clamp-2" style={{ color: '#5a5a5a' }}>
             {description}
           </p>
         </div>
 
         <ChevronRight
           size={14}
-          className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 -translate-x-1 group-hover:translate-x-0 transition-transform"
+          className="flex-shrink-0 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-150"
           style={{ color: '#698169' }}
           aria-hidden="true"
         />

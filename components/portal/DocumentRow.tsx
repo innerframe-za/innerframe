@@ -107,7 +107,7 @@ export function DocumentRow({
       role="button"
       tabIndex={0}
       onClick={handleView}
-      onKeyDown={e => e.key === 'Enter' && handleView()}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleView()}
       className="flex items-center gap-3 py-3 px-4 rounded-xl border group cursor-pointer transition-all duration-150 hover:shadow-sm hover:border-[rgba(30,58,47,0.2)] hover:bg-[rgba(30,58,47,0.02)]"
       style={{
         borderColor: '#ddd6c8',

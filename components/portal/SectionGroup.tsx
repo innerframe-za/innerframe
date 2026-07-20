@@ -28,7 +28,7 @@ export function SectionGroup({
   onUpload,
 }: SectionGroupProps) {
   return (
-    <section className="mb-8">
+    <section className="mb-10">
       {/* Section heading */}
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -49,16 +49,7 @@ export function SectionGroup({
               type="button"
               onClick={onUpload}
               aria-label={`Add document to ${title}`}
-              className="flex items-center justify-center w-6 h-6 rounded-full transition-colors"
-              style={{ color: '#1E3A2F', border: '1.5px solid rgba(30,58,47,0.3)', backgroundColor: 'transparent' }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = 'rgba(30,58,47,0.08)'
-                e.currentTarget.style.borderColor = '#1E3A2F'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.borderColor = 'rgba(30,58,47,0.3)'
-              }}
+              className="flex items-center justify-center w-6 h-6 rounded-full border border-[rgba(30,58,47,0.3)] text-[#1E3A2F] hover:bg-[rgba(30,58,47,0.08)] hover:border-[#1E3A2F] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#698169] focus-visible:ring-offset-1"
             >
               <Plus size={12} strokeWidth={2.5} />
             </button>
@@ -74,12 +65,12 @@ export function SectionGroup({
       {documents.length === 0 ? (
         <div
           className="py-8 text-center rounded-xl border"
-          style={{ borderColor: '#ddd6c8', borderWidth: '0.5px', borderStyle: 'dashed' }}
+          style={{ borderColor: '#ddd6c8', borderWidth: '0.5px', borderStyle: 'dashed', backgroundColor: 'rgba(255,255,255,0.5)' }}
         >
-          <p className="text-sm" style={{ color: '#9ca3af' }}>No documents yet</p>
+          <p className="text-sm" style={{ color: '#5a5a5a' }}>No documents yet</p>
           {onUpload && (
-            <p className="text-xs mt-1" style={{ color: '#9ca3af' }}>
-              Use the + button above to upload the first file.
+            <p className="text-xs mt-1" style={{ color: '#5a5a5a' }}>
+              Select the + next to the heading to add the first document.
             </p>
           )}
         </div>
