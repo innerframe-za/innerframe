@@ -75,7 +75,7 @@ export function Hero() {
         <div style={{ position: 'relative', zIndex: 3 }}>
 
           {/* Mobile logo — centered above the text, hidden on desktop */}
-          <div className="lg:hidden mb-10" style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="lg:hidden mb-10 flex justify-center">
             <img
               src="/Logo_Transparent.png"
               alt="Innerframe Care Solutions"
