@@ -122,7 +122,7 @@ export function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center"
         style={{
           height: '64px',
-          backgroundColor: '#1E3A2F',
+          backgroundColor: '#334739',
           boxShadow: '0 1px 0 rgba(212,175,55,0.18), 0 2px 12px rgba(0,0,0,0.18)',
         }}
         role="navigation"
@@ -152,7 +152,7 @@ export function Navbar() {
               fontFamily: "'Outfit', system-ui, sans-serif",
               fontWeight: 400,
               fontSize: '9.5px',
-              color: 'rgba(250,247,240,0.38)',
+              color: 'rgba(250,247,240,0.58)',
               letterSpacing: '0.24em',
               marginTop: '4px',
               textTransform: 'uppercase',
@@ -173,7 +173,7 @@ export function Navbar() {
             <span
               className="text-[11px] truncate max-w-[148px]"
               style={{
-                color: 'rgba(250,247,240,0.38)',
+                color: 'rgba(250,247,240,0.62)',
                 fontFamily: "'Outfit', system-ui",
                 letterSpacing: '0.01em',
               }}
@@ -205,7 +205,7 @@ export function Navbar() {
                       fontSize: '13px',
                       fontWeight: 500,
                       fontFamily: "'Outfit', system-ui",
-                      color: isActive ? '#FAF7F0' : 'rgba(250,247,240,0.52)',
+                      color: isActive ? '#FAF7F0' : 'rgba(250,247,240,0.65)',
                     }}
                     onClick={() => {
                       if (isOpen) {
@@ -247,8 +247,8 @@ export function Navbar() {
                         top: dropdownPos.top,
                         left: dropdownPos.left,
                         minWidth: '172px',
-                        backgroundColor: '#162C20',
-                        border: '1px solid rgba(212,175,55,0.18)',
+                        backgroundColor: '#253328',
+                        border: '1px solid rgba(212,175,55,0.22)',
                         borderTop: 'none',
                         boxShadow: '0 12px 32px rgba(0,0,0,0.28)',
                         zIndex: 60,
@@ -291,7 +291,7 @@ export function Navbar() {
                   fontSize: '13px',
                   fontWeight: 500,
                   fontFamily: "'Outfit', system-ui",
-                  color: active ? '#FAF7F0' : 'rgba(250,247,240,0.52)',
+                  color: active ? '#FAF7F0' : 'rgba(250,247,240,0.65)',
                 }}
                 aria-current={active ? 'page' : undefined}
               >
@@ -316,7 +316,7 @@ export function Navbar() {
               <Search
                 size={12}
                 className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                style={{ color: 'rgba(250,247,240,0.38)' }}
+                style={{ color: 'rgba(250,247,240,0.55)' }}
                 aria-hidden="true"
               />
               <input
@@ -364,7 +364,7 @@ export function Navbar() {
             type="button"
             onClick={handleLogout}
             className="w-8 h-8 flex items-center justify-center rounded-md transition-colors duration-150 hover:text-[rgba(250,247,240,0.8)]"
-            style={{ color: 'rgba(250,247,240,0.32)' }}
+            style={{ color: 'rgba(250,247,240,0.52)' }}
             aria-label="Sign out"
             title="Sign out"
           >
@@ -403,7 +403,7 @@ export function Navbar() {
           className="fixed left-0 right-0 z-40 md:hidden"
           style={{
             top: '64px',
-            backgroundColor: '#162C20',
+            backgroundColor: '#2B3A30',
             borderBottom: '1px solid rgba(212,175,55,0.18)',
             boxShadow: '0 8px 24px rgba(0,0,0,0.24)',
           }}
@@ -417,7 +417,7 @@ export function Navbar() {
             >
               <p
                 className="text-xs"
-                style={{ color: 'rgba(250,247,240,0.35)', fontFamily: "'Outfit', system-ui" }}
+                style={{ color: 'rgba(250,247,240,0.58)', fontFamily: "'Outfit', system-ui" }}
               >
                 {facilityName}
               </p>
@@ -431,7 +431,7 @@ export function Navbar() {
                   <div key={item.label}>
                     <p
                       className="px-3 pt-2 pb-1 text-xs font-medium"
-                      style={{ color: 'rgba(250,247,240,0.32)', fontFamily: "'Outfit', system-ui" }}
+                      style={{ color: 'rgba(250,247,240,0.52)', fontFamily: "'Outfit', system-ui" }}
                     >
                       {item.label}
                     </p>
@@ -481,7 +481,7 @@ export function Navbar() {
                 <Search
                   size={13}
                   className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: 'rgba(250,247,240,0.4)' }}
+                  style={{ color: 'rgba(250,247,240,0.55)' }}
                   aria-hidden="true"
                 />
                 <input
@@ -505,7 +505,7 @@ export function Navbar() {
               type="button"
               onClick={handleLogout}
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm mt-1 transition-colors duration-150 hover:text-[rgba(250,247,240,0.65)]"
-              style={{ color: 'rgba(250,247,240,0.38)', fontFamily: "'Outfit', system-ui" }}
+              style={{ color: 'rgba(250,247,240,0.58)', fontFamily: "'Outfit', system-ui" }}
             >
               <LogOut size={15} />
               Sign out
