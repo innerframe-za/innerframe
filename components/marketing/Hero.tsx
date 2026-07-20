@@ -229,9 +229,9 @@ export function Hero() {
             />
           </div>
           <img
-            src="/Logo_Transparent.png"
+            src="/logo_without_leav.png"
             alt="Innerframe Care Solutions"
-            style={{ width: '100%', height: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
+            style={{ width: '115%', height: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
           />
         </div>
 
