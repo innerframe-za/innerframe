@@ -29,7 +29,7 @@ export function Hero() {
       className="relative overflow-hidden px-6 flex items-center"
     >
       <div
-        className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center py-16 lg:py-24"
+        className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-8 pb-16 lg:pt-10 lg:pb-24"
         style={{ position: 'relative', zIndex: 1 }}
       >
 
