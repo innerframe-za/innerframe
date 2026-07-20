@@ -242,7 +242,7 @@ function PillarSidebar({
   return (
     <aside
       className="hidden lg:flex flex-col flex-shrink-0 sticky self-start"
-      style={{ width: '200px', top: '108px', maxHeight: 'calc(100dvh - 130px)', overflowY: 'auto' }}
+      style={{ width: '200px', top: '80px', maxHeight: 'calc(100dvh - 96px)', overflowY: 'auto' }}
     >
       <nav className="flex flex-col gap-0.5">
         {sections.map(({ id, title }) => {
@@ -505,7 +505,7 @@ export default function PillarPage() {
         <PillarSidebar sections={sections} active={activeSection} onNav={scrollTo} />
         <div className="flex-1 min-w-0 space-y-0">
           {sections.map(section => (
-            <section key={section.id} id={section.id} className="scroll-mt-8">
+            <section key={section.id} id={section.id} className="scroll-mt-24">
               <SectionGroup
                 title={section.title}
                 documents={section.documents}

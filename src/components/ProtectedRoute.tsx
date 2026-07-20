@@ -104,7 +104,7 @@ export function ProtectedRoute() {
   return (
     <div className="min-h-dvh">
       <Navbar />
-      <main className="pt-[56px] md:pt-[100px] min-h-dvh flex flex-col" style={{ backgroundColor: '#F5F0E8' }}>
+      <main className="pt-[64px] min-h-dvh flex flex-col" style={{ backgroundColor: '#F5F0E8' }}>
         <div className="flex-1">
           <div className="max-w-screen-xl mx-auto px-6 py-8">
             <Outlet />
