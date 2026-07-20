@@ -28,27 +28,7 @@ export function Hero() {
       style={{ backgroundColor: C.ivory, minHeight: 'calc(100vh - 72px)' }}
       className="relative overflow-hidden px-6 flex items-center"
     >
-      {/* Mobile hero image — floats on the right edge behind content */}
-      <div
-        className="lg:hidden"
-        style={{
-          position: 'absolute',
-          right: '-16px',
-          top: '32px',
-          opacity: 0.85,
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <img
-          src="/hero-mobile.svg"
-          alt=""
-          style={{ width: '200px', height: 'auto', display: 'block' }}
-        />
-      </div>
-
-      {/* Mobile leaf decoration — bottom-right corner, below the hero SVG */}
+      {/* Mobile leaf decoration — bottom-right corner */}
       <div
         className="lg:hidden"
         style={{
@@ -67,34 +47,7 @@ export function Hero() {
         />
       </div>
 
-      {/* Desktop hero image — absolutely fills the right half of the section */}
-      <div
-        className="hidden lg:block"
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: '50%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <img
-          src="/hero-desktop.svg"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain',
-            objectPosition: 'center right',
-            display: 'block',
-          }}
-        />
-      </div>
-
-      {/* Desktop leaf decoration — top-right corner, layered over the hero illustration */}
+      {/* Desktop leaf decoration — top-right corner */}
       <div
         className="hidden lg:block"
         style={{
