@@ -231,7 +231,7 @@ export function Hero() {
           <img
             src="/logo_without_leav.png"
             alt="Innerframe Care Solutions"
-            style={{ width: '115%', height: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
+            style={{ width: '150%', height: 'auto', display: 'block', position: 'relative', zIndex: 1, marginTop: '60px' }}
           />
         </div>
 
