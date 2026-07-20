@@ -47,14 +47,14 @@ export function Hero() {
         />
       </div>
 
-      {/* Desktop leaf decoration — top-right corner */}
+      {/* Desktop leaf decoration — top-right corner, in front of logo */}
       <div
         className="hidden lg:block"
         style={{
           position: 'absolute',
           top: 0,
           right: 0,
-          zIndex: 1,
+          zIndex: 2,
           pointerEvents: 'none',
         }}
         aria-hidden="true"
@@ -71,8 +71,8 @@ export function Hero() {
         style={{ position: 'relative', zIndex: 1 }}
       >
 
-        {/* ── LEFT: content ── */}
-        <div>
+        {/* ── LEFT: content — sits above the leaf on desktop ── */}
+        <div style={{ position: 'relative', zIndex: 3 }}>
 
           {/* Mobile logo — centered above the text, hidden on desktop */}
           <div className="lg:hidden mb-10" style={{ display: 'flex', justifyContent: 'center' }}>
@@ -247,8 +247,14 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT: spacer — image is absolutely positioned below ── */}
-        <div className="hidden lg:block" aria-hidden="true" />
+        {/* ── RIGHT: large logo (desktop only) ── */}
+        <div className="hidden lg:flex items-center justify-center" style={{ zIndex: 1 }}>
+          <img
+            src="/Logo_Transparent.png"
+            alt="Innerframe Care Solutions"
+            style={{ width: 'min(460px, 42vw)', height: 'auto', display: 'block' }}
+          />
+        </div>
 
       </div>
     </section>
