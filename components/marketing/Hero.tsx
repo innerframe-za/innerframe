@@ -39,31 +39,10 @@ export function Hero() {
           {/* Mobile: logo centred above the text (Logo_Transparent already contains the leaf) */}
           <div className="lg:hidden mb-10 flex justify-center">
             <img
-              src="/Logo_Transparent.png"
+              src="/logo-full.jpeg"
               alt="Innerframe Care Solutions"
-              style={{ width: 'min(260px, 68vw)', height: 'auto' }}
+              style={{ width: 'min(340px, 88vw)', height: 'auto' }}
             />
-          </div>
-
-          {/* Brand tagline — 3-line stacked, middle line in gold */}
-          <div style={{ marginBottom: '20px', lineHeight: 1.95 }}>
-            {(['Stronger Structures.', 'Better Care.', 'Brighter Futures.'] as const).map(
-              (line, i) => (
-                <div
-                  key={line}
-                  style={{
-                    fontFamily: INTER,
-                    fontWeight: 600,
-                    fontSize: '11.5px',
-                    letterSpacing: '0.20em',
-                    textTransform: 'uppercase',
-                    color: i === 1 ? C.gold : C.slate,
-                  }}
-                >
-                  {line}
-                </div>
-              )
-            )}
           </div>
 
           {/* Gold accent rule */}
