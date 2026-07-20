@@ -28,58 +28,26 @@ export function Hero() {
       style={{ backgroundColor: C.ivory, minHeight: 'calc(100vh - 72px)' }}
       className="relative overflow-hidden px-6 flex items-center"
     >
-      {/* Mobile leaf decoration — bottom-right corner */}
-      <div
-        className="lg:hidden"
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <img
-          src="/mobile-leaf-branch.png"
-          alt=""
-          style={{ width: '200px', height: 'auto', display: 'block' }}
-        />
-      </div>
-
-      {/* Desktop leaf decoration — top-right corner, in front of logo */}
-      <div
-        className="hidden lg:block"
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          zIndex: 2,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <img
-          src="/leaf-branch.png"
-          alt=""
-          style={{ width: '420px', height: 'auto', display: 'block' }}
-        />
-      </div>
-
       <div
         className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center py-16 lg:py-24"
         style={{ position: 'relative', zIndex: 1 }}
       >
 
-        {/* ── LEFT: content — sits above the leaf on desktop ── */}
-        <div style={{ position: 'relative', zIndex: 3 }}>
+        {/* ── LEFT: content ── */}
+        <div>
 
-          {/* Mobile logo — centered above the text, hidden on desktop */}
-          <div className="lg:hidden mb-10 flex justify-center">
+          {/* Mobile: logo + leaf side by side, above the text */}
+          <div className="lg:hidden mb-10 flex items-center justify-center gap-4">
             <img
               src="/Logo_Transparent.png"
               alt="Innerframe Care Solutions"
-              style={{ width: 'min(230px, 62vw)', height: 'auto' }}
+              style={{ width: 'min(200px, 50vw)', height: 'auto' }}
+            />
+            <img
+              src="/mobile-leaf-branch.png"
+              alt=""
+              aria-hidden="true"
+              style={{ width: 'min(110px, 28vw)', height: 'auto' }}
             />
           </div>
 
@@ -247,12 +215,23 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT: large logo (desktop only) ── */}
-        <div className="hidden lg:flex items-center justify-center" style={{ zIndex: 1 }}>
+        {/* ── RIGHT: large logo + leaf anchored to this column (desktop only) ── */}
+        <div className="hidden lg:flex items-center justify-center" style={{ position: 'relative', zIndex: 1 }}>
+          {/* Leaf anchored to the column's top-right — moves with content, not the viewport */}
+          <div
+            style={{ position: 'absolute', top: 0, right: 0, zIndex: 2, pointerEvents: 'none' }}
+            aria-hidden="true"
+          >
+            <img
+              src="/leaf-branch.png"
+              alt=""
+              style={{ width: '420px', height: 'auto', display: 'block' }}
+            />
+          </div>
           <img
             src="/Logo_Transparent.png"
             alt="Innerframe Care Solutions"
-            style={{ width: 'min(460px, 42vw)', height: 'auto', display: 'block' }}
+            style={{ width: '100%', height: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
           />
         </div>
 
