@@ -244,12 +244,6 @@ function PillarSidebar({
       className="hidden lg:flex flex-col flex-shrink-0 sticky self-start"
       style={{ width: '200px', top: '108px', maxHeight: 'calc(100dvh - 130px)', overflowY: 'auto' }}
     >
-      <p
-        className="text-[10px] font-semibold tracking-[0.14em] mb-3 px-2"
-        style={{ color: '#9ca3af', fontFamily: "'Outfit', system-ui" }}
-      >
-        SECTIONS
-      </p>
       <nav className="flex flex-col gap-0.5">
         {sections.map(({ id, title }) => {
           const isActive = active === id
@@ -303,12 +297,16 @@ function PillarOverview({ dbKey }: { dbKey: string }) {
         aria-expanded={expanded}
       >
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium mb-1" style={{ color: '#D4AF37', letterSpacing: '0.05em' }}>
-            PILLAR PURPOSE
-          </p>
-          <p className="text-sm leading-relaxed" style={{ color: '#1E3A2F' }}>
-            {content.purpose}
-          </p>
+          <div className="flex items-start gap-2">
+            <span
+              className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: '#D4AF37' }}
+              aria-hidden="true"
+            />
+            <p className="text-sm leading-relaxed" style={{ color: '#1E3A2F' }}>
+              {content.purpose}
+            </p>
+          </div>
         </div>
         <div className="flex-shrink-0 mt-0.5" style={{ color: '#698169' }}>
           {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -331,8 +329,8 @@ function PillarOverview({ dbKey }: { dbKey: string }) {
       {/* Key systems — expanded only */}
       {expanded && (
         <div className="border-t px-5 py-4" style={{ borderColor: '#ddd6c8', backgroundColor: '#FAFAF8' }}>
-          <p className="text-xs font-semibold mb-3" style={{ color: '#5a5a5a', letterSpacing: '0.05em' }}>
-            KEY SYSTEMS TO IMPLEMENT
+          <p className="text-xs font-semibold mb-3" style={{ color: '#5a5a5a' }}>
+            Key systems
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {content.keySystems.map(sys => (
@@ -494,7 +492,7 @@ export default function PillarPage() {
           <button
             type="button"
             onClick={() => setUploadOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium"
             style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
             onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2D5A3D')}
             onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1E3A2F')}
@@ -508,7 +506,7 @@ export default function PillarPage() {
 
       <div className="flex gap-8 items-start">
         <PillarSidebar sections={sections} active={activeSection} onNav={scrollTo} />
-        <div className="flex-1 min-w-0 space-y-2">
+        <div className="flex-1 min-w-0 space-y-10">
           {sections.map(section => (
             <section key={section.id} id={section.id} className="scroll-mt-8">
               <SectionGroup

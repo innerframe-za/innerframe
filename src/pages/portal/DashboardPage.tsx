@@ -8,12 +8,12 @@ import { useUser } from '@/lib/auth/useUser'
 import { createClient } from '@/lib/supabase/client'
 
 const pillarCards = [
-  { value: 'admin', name: 'Admin Office', icon: ClipboardList, href: '/pillar/admin' },
-  { value: 'finance', name: 'Finance', icon: DollarSign, href: '/pillar/finance' },
-  { value: 'kitchen', name: 'Kitchen', icon: UtensilsCrossed, href: '/pillar/kitchen' },
-  { value: 'medical', name: 'Medical', icon: Stethoscope, href: '/pillar/medical' },
-  { value: 'board_governance', name: 'Board Governance', icon: Scale, href: '/pillar/board-governance' },
-  { value: 'hr', name: 'HR', icon: Briefcase, href: '/pillar/hr' },
+  { value: 'admin', name: 'Admin Office', description: 'The structure behind the facility', icon: ClipboardList, href: '/pillar/admin' },
+  { value: 'finance', name: 'Finance', description: 'Financial transparency & sustainability', icon: DollarSign, href: '/pillar/finance' },
+  { value: 'kitchen', name: 'Kitchen', description: 'Safe nutrition. Safe residents.', icon: UtensilsCrossed, href: '/pillar/kitchen' },
+  { value: 'medical', name: 'Medical', description: 'Resident safety & clinical compliance', icon: Stethoscope, href: '/pillar/medical' },
+  { value: 'board_governance', name: 'Board Governance', description: 'Leadership, accountability & sustainability', icon: Scale, href: '/pillar/board-governance' },
+  { value: 'hr', name: 'HR', description: 'People. Structure. Compliance.', icon: Briefcase, href: '/pillar/hr' },
 ]
 
 type Stats = { totalResidents: number; totalDocuments: number; pendingReviews: number; compliancePct: number | null }
@@ -57,7 +57,7 @@ export default function DashboardPage() {
       />
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {loading ? (
           <>
             {[...Array(4)].map((_, i) => (
@@ -83,37 +83,43 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Pillar overview */}
-      <div className="mb-2">
-        <div className="flex items-center justify-between mb-4">
+      {/* Pillar navigation */}
+      <section>
+        <div className="flex items-center justify-between mb-5">
           <div>
             <h2
-              className="text-sm font-semibold"
-              style={{ color: '#1E3A2F', fontFamily: "'Outfit', system-ui", letterSpacing: '-0.01em' }}
+              className="text-base font-semibold"
+              style={{ color: '#1E3A2F', fontFamily: "'Plus Jakarta Sans', system-ui", letterSpacing: '-0.02em' }}
             >
-              Pillar overview
+              Pillars
             </h2>
             <div
-              style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '5px', borderRadius: '1px' }}
+              style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '6px', borderRadius: '1px' }}
               aria-hidden="true"
             />
           </div>
-          <span className="text-xs" style={{ color: '#9ca3af' }}>
-            {visiblePillars.length} pillars accessible
-          </span>
+          {visiblePillars.length < pillarCards.length && (
+            <span
+              className="text-xs px-2 py-0.5 rounded-full"
+              style={{ color: '#5a5a5a', backgroundColor: 'rgba(30,58,47,0.06)' }}
+            >
+              {visiblePillars.length} of {pillarCards.length} accessible
+            </span>
+          )}
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {visiblePillars.map(card => (
             <PillarCard
               key={card.value}
               name={card.name}
+              description={card.description}
               icon={card.icon}
               href={card.href}
               isActive={false}
             />
           ))}
         </div>
-      </div>
+      </section>
     </div>
   )
 }

@@ -33,13 +33,13 @@ export function SectionGroup({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2
-            className="text-sm font-semibold"
-            style={{ color: '#1E3A2F', fontFamily: "'Outfit', system-ui", letterSpacing: '-0.01em' }}
+            className="text-[15px] font-semibold"
+            style={{ color: '#1E3A2F', fontFamily: "'Plus Jakarta Sans', system-ui", letterSpacing: '-0.015em' }}
           >
             {title}
           </h2>
           <div
-            style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '5px', borderRadius: '1px' }}
+            style={{ width: '32px', height: '2px', backgroundColor: '#D4AF37', marginTop: '6px', borderRadius: '1px' }}
             aria-hidden="true"
           />
         </div>
@@ -72,9 +72,17 @@ export function SectionGroup({
       </div>
 
       {documents.length === 0 ? (
-        <p className="text-xs py-4 text-center" style={{ color: '#5a5a5a' }}>
-          No documents in this section yet.
-        </p>
+        <div
+          className="py-8 text-center rounded-xl border"
+          style={{ borderColor: '#ddd6c8', borderWidth: '0.5px', borderStyle: 'dashed' }}
+        >
+          <p className="text-sm" style={{ color: '#9ca3af' }}>No documents yet</p>
+          {onUpload && (
+            <p className="text-xs mt-1" style={{ color: '#9ca3af' }}>
+              Use the + button above to upload the first file.
+            </p>
+          )}
+        </div>
       ) : (
         <div className="space-y-2">
           {documents.map(doc => (
