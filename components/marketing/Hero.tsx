@@ -36,18 +36,12 @@ export function Hero() {
         {/* ── LEFT: content ── */}
         <div>
 
-          {/* Mobile: logo + leaf side by side, above the text */}
-          <div className="lg:hidden mb-10 flex items-center justify-center gap-4">
+          {/* Mobile: logo centred above the text (Logo_Transparent already contains the leaf) */}
+          <div className="lg:hidden mb-10 flex justify-center">
             <img
               src="/Logo_Transparent.png"
               alt="Innerframe Care Solutions"
-              style={{ width: 'min(200px, 50vw)', height: 'auto' }}
-            />
-            <img
-              src="/mobile-leaf-branch.png"
-              alt=""
-              aria-hidden="true"
-              style={{ width: 'min(110px, 28vw)', height: 'auto' }}
+              style={{ width: 'min(260px, 68vw)', height: 'auto' }}
             />
           </div>
 
@@ -166,50 +160,40 @@ export function Hero() {
             </a>
           </div>
 
-          {/* 4-pillar strip */}
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0 }}>
+          {/* 4-pillar strip — grid keeps all 4 in one row at every width */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
             {PILLARS.map(({ Icon, label }, i) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center' }}>
-                {i > 0 && (
-                  <div
-                    style={{
-                      width: '1px',
-                      height: '40px',
-                      backgroundColor: 'rgba(73,99,83,0.22)',
-                      margin: '0 18px',
-                      flexShrink: 0,
-                    }}
-                    aria-hidden="true"
-                  />
-                )}
-                <div
+              <div
+                key={label}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '7px',
+                  paddingLeft: i > 0 ? '12px' : 0,
+                  borderLeft: i > 0 ? '1px solid rgba(73,99,83,0.22)' : 'none',
+                }}
+              >
+                <Icon
+                  size={20}
+                  strokeWidth={1.5}
+                  style={{ color: C.evergreen }}
+                  aria-hidden="true"
+                />
+                <span
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '7px',
+                    fontFamily: INTER,
+                    fontWeight: 600,
+                    fontSize: '10px',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    color: C.slate,
+                    opacity: 0.70,
+                    textAlign: 'center',
                   }}
                 >
-                  <Icon
-                    size={20}
-                    strokeWidth={1.5}
-                    style={{ color: C.evergreen }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    style={{
-                      fontFamily: INTER,
-                      fontWeight: 600,
-                      fontSize: '10px',
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                      color: C.slate,
-                      opacity: 0.70,
-                    }}
-                  >
-                    {label}
-                  </span>
-                </div>
+                  {label}
+                </span>
               </div>
             ))}
           </div>
