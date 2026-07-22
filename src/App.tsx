@@ -65,7 +65,7 @@ export default function App() {
           <Route
             path="/settings"
             element={
-              <RoleGuard allowedRoles={['home_admin', 'super_admin']} fallback="/dashboard">
+              <RoleGuard allowedRoles={['admin', 'super_admin']} fallback="/dashboard">
                 <SettingsPage />
               </RoleGuard>
             }
@@ -76,7 +76,7 @@ export default function App() {
           <Route
             path="/admin/staff/:userId/permissions"
             element={
-              <RoleGuard allowedRoles={['home_admin', 'super_admin']} fallback="/dashboard">
+              <RoleGuard allowedRoles={['admin', 'super_admin']} fallback="/dashboard">
                 <StaffPermissionsPage />
               </RoleGuard>
             }

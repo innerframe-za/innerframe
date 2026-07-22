@@ -4,19 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Eye, EyeOff } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-
-async function getRoleDestination(supabase: ReturnType<typeof createClient>, userId: string): Promise<string> {
-  const { data } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', userId)
-    .single()
-  return data?.role === 'super_admin' ? '/superadmin' : '/dashboard'
-}
+import { useAuth } from '@/lib/auth/AuthContext'
 
 const schema = z.object({
-  identifier: z.string().min(1, 'Email or username is required'),
+  email: z.string().email('Enter a valid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
@@ -33,6 +24,7 @@ function blurInput(e: React.FocusEvent<HTMLInputElement>, hasError: boolean) {
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const { login, user } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
 
@@ -40,51 +32,23 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   })
 
-  const identifierReg = register('identifier')
+  const emailReg = register('email')
   const passwordReg = register('password')
 
   const onSubmit = async (data: LoginFormData) => {
     setAuthError(null)
-    let supabase: ReturnType<typeof createClient>
     try {
-      supabase = createClient()
-    } catch {
-      setAuthError('App is not configured correctly. Please contact support.')
-      return
-    }
-
-    try {
-      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.identifier)
-      let loginEmail = data.identifier
-
-      if (!isEmail) {
-        const { data: resolvedEmail } = await supabase.rpc('get_email_by_username', {
-          p_username: data.identifier,
-        })
-        if (!resolvedEmail) {
-          setAuthError('No account found with that username.')
-          return
-        }
-        loginEmail = resolvedEmail as string
+      await login(data.email, data.password)
+      // Role-based redirect is handled by ProtectedRoute, but we still need to push somewhere
+      const dest = user?.role === 'super_admin' ? '/superadmin' : '/dashboard'
+      navigate(dest, { replace: true })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Sign in failed'
+      if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('credentials') || msg.includes('401')) {
+        setAuthError('Incorrect email or password. Please try again.')
+      } else {
+        setAuthError(msg)
       }
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password: data.password,
-      })
-      if (error) {
-        setAuthError(
-          error.message === 'Invalid login credentials'
-            ? 'Incorrect email/username or password. Please try again.'
-            : error.message
-        )
-        return
-      }
-      const { data: { session } } = await supabase.auth.getSession()
-      const dest = session ? await getRoleDestination(supabase, session.user.id).catch(() => '/dashboard') : '/dashboard'
-      navigate(dest)
-    } catch {
-      setAuthError('Sign in failed. If you have an ad blocker, try disabling it for this site.')
     }
   }
 
@@ -177,36 +141,36 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
 
-            {/* Email / Username */}
+            {/* Email */}
             <div className="space-y-1.5">
               <label
-                htmlFor="identifier"
+                htmlFor="email"
                 className="block text-xs font-medium"
                 style={{ color: '#1a1a1a', fontFamily: "'Outfit', sans-serif" }}
               >
-                Email or Username
+                Email Address
               </label>
               <input
-                id="identifier"
-                type="text"
-                autoComplete="username"
-                placeholder="your@email.co.za or username"
-                aria-invalid={!!errors.identifier}
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="your@email.co.za"
+                aria-invalid={!!errors.email}
                 className="w-full px-4 py-2.5 text-sm rounded-lg border outline-none"
                 style={{
-                  borderColor: errors.identifier ? '#dc2626' : '#ddd6c8',
+                  borderColor: errors.email ? '#dc2626' : '#ddd6c8',
                   backgroundColor: '#ffffff',
                   color: '#1a1a1a',
                   transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
                   fontFamily: "'Outfit', sans-serif",
                 }}
                 onFocus={focusInput}
-                {...identifierReg}
-                onBlur={e => { blurInput(e, !!errors.identifier); identifierReg.onBlur(e) }}
+                {...emailReg}
+                onBlur={e => { blurInput(e, !!errors.email); emailReg.onBlur(e) }}
               />
-              {errors.identifier && (
+              {errors.email && (
                 <p className="text-xs" style={{ color: '#dc2626' }} role="alert">
-                  {errors.identifier.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>

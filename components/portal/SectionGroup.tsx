@@ -4,7 +4,7 @@ import { DocumentRow } from './DocumentRow'
 interface Document {
   id: string
   fileName: string
-  fileUrl: string
+  documentId: string
   title?: string
   category?: string
   pillar?: string
@@ -16,7 +16,7 @@ interface SectionGroupProps {
   title: string
   documents: Document[]
   canDelete?: boolean
-  onDelete?: (id: string, fileUrl: string) => void
+  onDelete?: (id: string, documentId: string) => void
   onUpload?: () => void
 }
 
@@ -80,14 +80,13 @@ export function SectionGroup({
             <DocumentRow
               key={doc.id}
               fileName={doc.fileName}
-              fileUrl={doc.fileUrl}
+              documentId={doc.documentId}
               title={doc.title}
               category={doc.category}
-              pillar={doc.pillar}
               date={doc.date}
               isGlobal={doc.isGlobal}
               canDelete={canDelete && !doc.isGlobal}
-              onDelete={onDelete ? () => onDelete(doc.id, doc.fileUrl) : undefined}
+              onDelete={onDelete ? () => onDelete(doc.id, doc.documentId) : undefined}
             />
           ))}
         </div>

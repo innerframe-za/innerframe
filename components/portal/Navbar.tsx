@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { createClient } from '@/lib/supabase/client'
+import { apiGet } from '@/lib/api/client'
+import { useAuth } from '@/lib/auth/AuthContext'
 import { Search, Menu, X, LogOut, Settings, ChevronDown } from 'lucide-react'
 import { useUser } from '@/lib/auth/useUser'
 import { usePermissions, type PillarSlug } from '@/lib/auth/usePermissions'
@@ -45,6 +46,7 @@ export function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user } = useUser()
+  const { logout } = useAuth()
   const [searchValue, setSearchValue] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [facilityName, setFacilityName] = useState<string | null>(null)
@@ -57,15 +59,9 @@ export function Navbar() {
   useEffect(() => {
     if (!user?.orgId) return
     let cancelled = false
-    const supabase = createClient()
-    supabase
-      .from('organisations')
-      .select('name')
-      .eq('id', user.orgId)
-      .single()
-      .then(({ data }) => {
-        if (!cancelled && data) setFacilityName(data.name)
-      }, () => {})
+    apiGet<{ name: string }>(`/organisations/${user.orgId}`)
+      .then(data => { if (!cancelled) setFacilityName(data.name) })
+      .catch(() => {})
     return () => { cancelled = true }
   }, [user?.orgId])
 
@@ -94,15 +90,11 @@ export function Navbar() {
   }
 
   const handleLogout = async () => {
-    try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
-    } finally {
-      navigate('/login')
-    }
+    await logout().catch(() => {})
+    navigate('/login')
   }
 
-  const isAdmin = user?.role === 'home_admin' || user?.role === 'super_admin'
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin'
   const { permissions } = usePermissions()
 
   const visibleTabs = tabItems.filter(item =>

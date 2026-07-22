@@ -1,49 +1,43 @@
 import { useState, useEffect } from 'react'
-import { Users, FileText, ClipboardCheck, BarChart2, ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Briefcase } from 'lucide-react'
+import {
+  Users, FileText, ClipboardCheck, BarChart2,
+  ClipboardList, DollarSign, UtensilsCrossed, Stethoscope, Scale, Briefcase,
+} from 'lucide-react'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { StatCard } from '@/components/portal/StatCard'
 import { PillarCard } from '@/components/portal/PillarCard'
-import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
-import { useUser } from '@/lib/auth/useUser'
-import { createClient } from '@/lib/supabase/client'
+import { usePermissions, type PillarSlug } from '@/lib/auth/usePermissions'
+import { apiGet } from '@/lib/api/client'
 
 const pillarCards = [
-  { value: 'admin', name: 'Admin Office', description: 'The structure behind the facility', icon: ClipboardList, href: '/pillar/admin' },
-  { value: 'finance', name: 'Finance', description: 'Financial transparency & sustainability', icon: DollarSign, href: '/pillar/finance' },
-  { value: 'kitchen', name: 'Kitchen', description: 'Safe nutrition. Safe residents.', icon: UtensilsCrossed, href: '/pillar/kitchen' },
-  { value: 'medical', name: 'Medical', description: 'Resident safety & clinical compliance', icon: Stethoscope, href: '/pillar/medical' },
-  { value: 'board_governance', name: 'Board Governance', description: 'Leadership, accountability & sustainability', icon: Scale, href: '/pillar/board-governance' },
-  { value: 'hr', name: 'HR', description: 'People. Structure. Compliance.', icon: Briefcase, href: '/pillar/hr' },
+  { value: 'admin',            name: 'Admin Office',      description: 'The structure behind the facility',             icon: ClipboardList, href: '/pillar/admin' },
+  { value: 'finance',          name: 'Finance',           description: 'Financial transparency & sustainability',       icon: DollarSign,    href: '/pillar/finance' },
+  { value: 'kitchen',          name: 'Kitchen',           description: 'Safe nutrition. Safe residents.',               icon: UtensilsCrossed, href: '/pillar/kitchen' },
+  { value: 'medical',          name: 'Medical',           description: 'Resident safety & clinical compliance',         icon: Stethoscope,   href: '/pillar/medical' },
+  { value: 'board_governance', name: 'Board Governance',  description: 'Leadership, accountability & sustainability',   icon: Scale,         href: '/pillar/board-governance' },
+  { value: 'hr',               name: 'HR',                description: 'People. Structure. Compliance.',                icon: Briefcase,     href: '/pillar/hr' },
 ]
 
-type Stats = { totalResidents: number; totalDocuments: number; pendingReviews: number; compliancePct: number | null }
+type Stats = {
+  totalResidents: number
+  totalDocuments: number
+  pendingReviews: number
+  compliancePct: number | null
+}
 
 export default function DashboardPage() {
   const { permissions } = usePermissions()
-  const { user } = useUser()
   const [stats, setStats] = useState<Stats>({ totalResidents: 0, totalDocuments: 0, pendingReviews: 0, compliancePct: null })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user?.orgId) return
-    const supabase = createClient()
-    Promise.all([
-      supabase.from('patients').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
-      supabase.from('documents_legacy').select('*', { count: 'exact', head: true }).eq('org_id', user.orgId),
-      supabase.from('compliance_items').select('id', { count: 'exact', head: true }).eq('is_active', true),
-      supabase.from('compliance_checks').select('id', { count: 'exact', head: true }).eq('org_id', user.orgId).eq('is_complete', true),
-    ]).then(([residentsRes, docsRes, itemsRes, checksRes]) => {
-      const total = itemsRes.count ?? 0
-      const done  = checksRes.count ?? 0
-      setStats({
-        totalResidents: residentsRes.count ?? 0,
-        totalDocuments: docsRes.count ?? 0,
-        pendingReviews: 0,
-        compliancePct: total > 0 ? Math.round((done / total) * 100) : 0,
+    apiGet<{ data: unknown[]; total: number }>('/residents?limit=1')
+      .then(res => {
+        setStats(s => ({ ...s, totalResidents: res.total ?? 0 }))
       })
-      setLoading(false)
-    })
-  }, [user?.orgId])
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
 
   const visiblePillars = pillarCards.filter(
     card => permissions[card.value as PillarSlug]?.canView !== false
@@ -70,12 +64,12 @@ export default function DashboardPage() {
           </>
         ) : (
           <>
-            <StatCard label="Total residents" value={stats.totalResidents} icon={Users} />
-            <StatCard label="Total documents" value={stats.totalDocuments} icon={FileText} />
-            <StatCard label="Pending reviews" value={stats.pendingReviews} icon={ClipboardCheck} />
+            <StatCard label="Total residents"  value={stats.totalResidents} icon={Users} />
+            <StatCard label="Total documents"  value="—"                  icon={FileText} />
+            <StatCard label="Pending reviews"  value={stats.pendingReviews} icon={ClipboardCheck} />
             <StatCard
               label="Compliance score"
-              value={stats.compliancePct !== null ? `${stats.compliancePct}%` : '—'}
+              value="—"
               icon={BarChart2}
               href="/compliance"
             />

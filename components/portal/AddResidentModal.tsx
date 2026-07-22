@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { X, UserPlus, ChevronRight } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-import { useUser } from '@/lib/auth/useUser'
+import { apiPost } from '@/lib/api/client'
 
 interface AddResidentModalProps {
   open: boolean
@@ -16,14 +15,10 @@ type Tab = 'personal' | 'medical' | 'contact'
 function validateSAId(id: string): string | null {
   if (!id.trim()) return null
   if (!/^\d{13}$/.test(id)) return 'SA ID must be exactly 13 digits'
-
-  // Validate embedded birth date (YYMMDD)
   const mm = parseInt(id.slice(2, 4))
   const dd = parseInt(id.slice(4, 6))
   if (mm < 1 || mm > 12) return 'ID number contains an invalid month'
   if (dd < 1 || dd > 31) return 'ID number contains an invalid day'
-
-  // Luhn checksum — digit 13 must satisfy the algorithm
   let sum = 0
   for (let i = 0; i < 12; i++) {
     let d = parseInt(id[i])
@@ -31,7 +26,6 @@ function validateSAId(id: string): string | null {
     sum += d
   }
   if ((10 - (sum % 10)) % 10 !== parseInt(id[12])) return 'ID number is invalid (checksum failed)'
-
   return null
 }
 
@@ -110,56 +104,50 @@ function Input({
 // ── Main modal ─────────────────────────────────────────────────────
 
 export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalProps) {
-  const { user } = useUser()
   const [tab, setTab] = useState<Tab>('personal')
   const [saving, setSaving] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  // Field values
-  const [fullName,          setFullName]          = useState('')
-  const [dob,               setDob]               = useState('')
-  const [idNumber,          setIdNumber]          = useState('')
-  const [roomNumber,        setRoomNumber]        = useState('')
-  const [admissionDate,     setAdmissionDate]     = useState('')
-  const [status,            setStatus]            = useState<'active' | 'discharged' | 'deceased'>('active')
-  const [language,          setLanguage]          = useState('')
-  const [religion,          setReligion]          = useState('')
-  const [dietary,           setDietary]           = useState('')
-  const [allergies,         setAllergies]         = useState('')
-  const [chronicConditions, setChronicConditions] = useState('')
-  const [medications,       setMedications]       = useState('')
-  const [gpName,            setGpName]            = useState('')
-  const [gpContact,         setGpContact]         = useState('')
-  const [medAidScheme,      setMedAidScheme]      = useState('')
-  const [medAidNumber,      setMedAidNumber]      = useState('')
-  const [contactName,       setContactName]       = useState('')
+  // Personal fields — backend uses first_name + last_name, not full_name
+  const [firstName,      setFirstName]      = useState('')
+  const [lastName,       setLastName]       = useState('')
+  const [dob,            setDob]            = useState('')
+  const [nationalId,     setNationalId]     = useState('')
+  const [roomNumber,     setRoomNumber]     = useState('')
+  const [ward,           setWard]           = useState('')
+  const [admissionDate,  setAdmissionDate]  = useState('')
+  const [gender,         setGender]         = useState('')
+  const [language,       setLanguage]       = useState('')
+
+  // Medical fields — stored encrypted in backend
+  const [allergies,      setAllergies]      = useState('')
+  const [diagnoses,      setDiagnoses]      = useState('')
+  const [medicationNotes, setMedicationNotes] = useState('')
+  const [attendingDoctor, setAttendingDoctor] = useState('')
+
+  // Contact person
+  const [contactName,         setContactName]         = useState('')
   const [contactRelationship, setContactRelationship] = useState('')
-  const [contactEmail,      setContactEmail]      = useState('')
-  const [contactPhone,      setContactPhone]      = useState('')
-  const [contactPrimary,    setContactPrimary]    = useState(true)
+  const [contactEmail,        setContactEmail]        = useState('')
+  const [contactPhone,        setContactPhone]        = useState('')
+  const [contactPrimary,      setContactPrimary]      = useState(true)
+  const [contactEmergency,    setContactEmergency]    = useState(true)
 
-  // Per-field error messages — only shown after blur or submit attempt
   const [errors, setErrors] = useState<Record<string, string | null>>({})
-
   const setFieldError = (field: string, msg: string | null) =>
     setErrors(prev => ({ ...prev, [field]: msg }))
 
-  // Run all validations and return the full errors map
-  const validateAll = () => {
-    const e: Record<string, string | null> = {}
-    e.fullName      = fullName.trim().length < 2 ? 'Full name is required (min 2 characters)' : null
-    e.dob           = validateDOB(dob)
-    e.idNumber      = validateSAId(idNumber)
-    e.gpContact     = validateSAPhone(gpContact)
-    e.contactPhone  = validateSAPhone(contactPhone)
-    e.contactEmail  = validateEmail(contactEmail)
-    return e
-  }
+  const validateAll = () => ({
+    firstName:    firstName.trim().length < 1 ? 'First name is required' : null,
+    lastName:     lastName.trim().length < 1 ? 'Last name is required' : null,
+    dob:          validateDOB(dob),
+    nationalId:   validateSAId(nationalId),
+    contactPhone: validateSAPhone(contactPhone),
+    contactEmail: validateEmail(contactEmail),
+  })
 
-  // Which tab owns which fields — used to auto-navigate on submit error
   const FIELD_TAB: Record<string, Tab> = {
-    fullName: 'personal', dob: 'personal', idNumber: 'personal',
-    gpContact: 'medical',
+    firstName: 'personal', lastName: 'personal', dob: 'personal', nationalId: 'personal',
     contactPhone: 'contact', contactEmail: 'contact',
   }
 
@@ -167,12 +155,11 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
 
   const resetForm = () => {
     setTab('personal')
-    setFullName(''); setDob(''); setIdNumber(''); setRoomNumber('')
-    setAdmissionDate(''); setStatus('active'); setLanguage('')
-    setReligion(''); setDietary(''); setAllergies(''); setChronicConditions('')
-    setMedications(''); setGpName(''); setGpContact(''); setMedAidScheme('')
-    setMedAidNumber(''); setContactName(''); setContactRelationship('')
-    setContactEmail(''); setContactPhone(''); setContactPrimary(true)
+    setFirstName(''); setLastName(''); setDob(''); setNationalId('')
+    setRoomNumber(''); setWard(''); setAdmissionDate(''); setGender(''); setLanguage('')
+    setAllergies(''); setDiagnoses(''); setMedicationNotes(''); setAttendingDoctor('')
+    setContactName(''); setContactRelationship(''); setContactEmail('')
+    setContactPhone(''); setContactPrimary(true); setContactEmergency(true)
     setErrors({}); setSubmitError(null)
   }
 
@@ -183,56 +170,51 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
     const newErrors = validateAll()
     setErrors(newErrors)
 
-    // Find first failing field and switch to its tab
     const firstBad = Object.entries(newErrors).find(([, msg]) => msg !== null)
     if (firstBad) {
       setTab(FIELD_TAB[firstBad[0]] ?? 'personal')
       return
     }
 
-    if (!user?.orgId) { setSubmitError('Session error — please refresh and try again.'); return }
     setSaving(true)
     setSubmitError(null)
 
     try {
-      const supabase = createClient()
+      const resident = await apiPost<{ id: string }>('/residents', {
+        first_name:     firstName.trim(),
+        last_name:      lastName.trim(),
+        date_of_birth:  dob || undefined,
+        national_id:    nationalId || undefined,
+        room_number:    roomNumber || undefined,
+        ward:           ward || undefined,
+        admission_date: admissionDate || undefined,
+        gender:         gender || undefined,
+        primary_language: language || undefined,
+      })
 
-      const { data: patient, error: patientErr } = await supabase
-        .from('patients')
-        .insert({
-          org_id: user.orgId,
-          full_name: fullName.trim(),
-          date_of_birth: dob || null,
-          id_number: idNumber || null,
-          room_number: roomNumber || null,
-          admission_date: admissionDate || null,
-          status,
-          language: language || null,
-          religion: religion || null,
-          dietary_requirements: dietary || null,
-          allergies: allergies || null,
-          chronic_conditions: chronicConditions || null,
-          current_medications: medications || null,
-          gp_name: gpName || null,
-          gp_contact: gpContact || null,
-          medical_aid_scheme: medAidScheme || null,
-          medical_aid_member_number: medAidNumber || null,
-        })
-        .select('id')
-        .single()
+      // Medical info patch (optional — skip if all fields empty)
+      const hasmedical = allergies || diagnoses || medicationNotes || attendingDoctor
+      if (hasmedical) {
+        await apiPost(`/residents/${resident.id}/medical`, {
+          allergies:        allergies ? allergies.split(',').map(s => s.trim()).filter(Boolean) : undefined,
+          diagnoses:        diagnoses ? diagnoses.split(',').map(s => s.trim()).filter(Boolean) : undefined,
+          medication_notes: medicationNotes || undefined,
+          attending_doctor: attendingDoctor || undefined,
+        }).catch(() => { /* non-fatal */ })
+      }
 
-      if (patientErr || !patient) throw patientErr ?? new Error('Failed to create resident')
-
+      // Contact person (optional)
       if (contactName.trim()) {
-        await supabase.from('patient_contacts').insert({
-          patient_id: patient.id,
-          org_id: user.orgId,
-          full_name: contactName.trim(),
-          relationship: contactRelationship || null,
-          email: contactEmail || null,
-          phone: contactPhone || null,
-          is_primary: contactPrimary,
-        })
+        await apiPost(`/residents/${resident.id}/contacts`, {
+          name:         contactName.trim(),
+          relationship: contactRelationship || undefined,
+          email:        contactEmail || undefined,
+          phone:        contactPhone || undefined,
+          is_primary:   contactPrimary,
+          is_emergency: contactEmergency,
+          is_billing_contact: false,
+          can_collect:  false,
+        }).catch(() => { /* non-fatal */ })
       }
 
       resetForm()
@@ -287,14 +269,24 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
             {/* ── Personal Details ── */}
             {tab === 'personal' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <Label>Full Name *</Label>
+                <div>
+                  <Label>First Name *</Label>
                   <Input
-                    value={fullName}
-                    onChange={v => { setFullName(v); if (errors.fullName) setFieldError('fullName', null) }}
-                    onBlur={() => setFieldError('fullName', fullName.trim().length < 2 ? 'Full name is required (min 2 characters)' : null)}
-                    placeholder="e.g. Margaret Johnson"
-                    error={errors.fullName}
+                    value={firstName}
+                    onChange={v => { setFirstName(v); if (errors.firstName) setFieldError('firstName', null) }}
+                    onBlur={() => setFieldError('firstName', firstName.trim().length < 1 ? 'First name is required' : null)}
+                    placeholder="e.g. Margaret"
+                    error={errors.firstName}
+                  />
+                </div>
+                <div>
+                  <Label>Last Name *</Label>
+                  <Input
+                    value={lastName}
+                    onChange={v => { setLastName(v); if (errors.lastName) setFieldError('lastName', null) }}
+                    onBlur={() => setFieldError('lastName', lastName.trim().length < 1 ? 'Last name is required' : null)}
+                    placeholder="e.g. Johnson"
+                    error={errors.lastName}
                   />
                 </div>
                 <div>
@@ -308,13 +300,13 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
                   />
                 </div>
                 <div>
-                  <Label>ID Number</Label>
+                  <Label>SA ID Number</Label>
                   <Input
-                    value={idNumber}
-                    onChange={v => { setIdNumber(v.replace(/\D/g, '').slice(0, 13)); if (errors.idNumber) setFieldError('idNumber', null) }}
-                    onBlur={() => setFieldError('idNumber', validateSAId(idNumber))}
+                    value={nationalId}
+                    onChange={v => { setNationalId(v.replace(/\D/g, '').slice(0, 13)); if (errors.nationalId) setFieldError('nationalId', null) }}
+                    onBlur={() => setFieldError('nationalId', validateSAId(nationalId))}
                     placeholder="13-digit SA ID number"
-                    error={errors.idNumber}
+                    error={errors.nationalId}
                   />
                 </div>
                 <div>
@@ -322,33 +314,30 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
                   <Input value={roomNumber} onChange={setRoomNumber} placeholder="e.g. 12A" />
                 </div>
                 <div>
+                  <Label>Ward</Label>
+                  <Input value={ward} onChange={setWard} placeholder="e.g. North Wing" />
+                </div>
+                <div>
                   <Label>Admission Date</Label>
                   <Input type="date" value={admissionDate} onChange={setAdmissionDate} />
                 </div>
                 <div>
-                  <Label>Status</Label>
+                  <Label>Gender</Label>
                   <select
-                    value={status}
-                    onChange={e => setStatus(e.target.value as typeof status)}
+                    value={gender}
+                    onChange={e => setGender(e.target.value)}
                     className="w-full text-sm border rounded px-2.5 py-1.5 outline-none"
                     style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
                   >
-                    <option value="active">Active</option>
-                    <option value="discharged">Discharged</option>
-                    <option value="deceased">Deceased</option>
+                    <option value="">— Not specified —</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
                 <div>
-                  <Label>Language</Label>
+                  <Label>Primary Language</Label>
                   <Input value={language} onChange={setLanguage} placeholder="e.g. Afrikaans" />
-                </div>
-                <div>
-                  <Label>Religion</Label>
-                  <Input value={religion} onChange={setReligion} placeholder="e.g. Christian" />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label>Dietary Requirements</Label>
-                  <Input value={dietary} onChange={setDietary} placeholder="e.g. Diabetic, low sodium" />
                 </div>
               </div>
             )}
@@ -356,39 +345,24 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
             {/* ── Medical Information ── */}
             {tab === 'medical' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <p className="sm:col-span-2 text-xs" style={{ color: '#5a5a5a' }}>
+                  Medical information is stored encrypted. Separate multiple items with commas.
+                </p>
                 <div className="sm:col-span-2">
                   <Label>Allergies</Label>
-                  <Input value={allergies} onChange={setAllergies} placeholder="e.g. Penicillin, latex" />
+                  <Input value={allergies} onChange={setAllergies} placeholder="e.g. Penicillin, latex, nuts" />
                 </div>
                 <div className="sm:col-span-2">
-                  <Label>Chronic Conditions</Label>
-                  <Input value={chronicConditions} onChange={setChronicConditions} placeholder="e.g. Hypertension, Type 2 Diabetes" />
+                  <Label>Diagnoses / Chronic Conditions</Label>
+                  <Input value={diagnoses} onChange={setDiagnoses} placeholder="e.g. Hypertension, Type 2 Diabetes" />
                 </div>
                 <div className="sm:col-span-2">
-                  <Label>Current Medications</Label>
-                  <Input value={medications} onChange={setMedications} placeholder="e.g. Metformin 500mg, Amlodipine 5mg" />
+                  <Label>Medication Notes</Label>
+                  <Input value={medicationNotes} onChange={setMedicationNotes} placeholder="e.g. Metformin 500mg twice daily" />
                 </div>
-                <div>
-                  <Label>GP / Doctor Name</Label>
-                  <Input value={gpName} onChange={setGpName} placeholder="Dr. van der Merwe" />
-                </div>
-                <div>
-                  <Label>GP Contact Number</Label>
-                  <Input
-                    value={gpContact}
-                    onChange={v => { setGpContact(v); if (errors.gpContact) setFieldError('gpContact', null) }}
-                    onBlur={() => setFieldError('gpContact', validateSAPhone(gpContact))}
-                    placeholder="011 555 0100"
-                    error={errors.gpContact}
-                  />
-                </div>
-                <div>
-                  <Label>Medical Aid Scheme</Label>
-                  <Input value={medAidScheme} onChange={setMedAidScheme} placeholder="e.g. Discovery Health" />
-                </div>
-                <div>
-                  <Label>Member Number</Label>
-                  <Input value={medAidNumber} onChange={setMedAidNumber} placeholder="e.g. 1234567890" />
+                <div className="sm:col-span-2">
+                  <Label>Attending Doctor</Label>
+                  <Input value={attendingDoctor} onChange={setAttendingDoctor} placeholder="Dr. van der Merwe" />
                 </div>
               </div>
             )}
@@ -429,16 +403,14 @@ export function AddResidentModal({ open, onClose, onSuccess }: AddResidentModalP
                       error={errors.contactEmail}
                     />
                   </div>
-                  <div className="sm:col-span-2 flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="add-primary"
-                      checked={contactPrimary}
-                      onChange={e => setContactPrimary(e.target.checked)}
-                      className="w-4 h-4"
-                    />
-                    <label htmlFor="add-primary" className="text-xs cursor-pointer" style={{ color: '#5a5a5a' }}>
-                      Mark as primary contact
+                  <div className="sm:col-span-2 flex items-center gap-4">
+                    <label className="flex items-center gap-2 text-xs cursor-pointer" style={{ color: '#5a5a5a' }}>
+                      <input type="checkbox" checked={contactPrimary} onChange={e => setContactPrimary(e.target.checked)} className="w-4 h-4" />
+                      Primary contact
+                    </label>
+                    <label className="flex items-center gap-2 text-xs cursor-pointer" style={{ color: '#5a5a5a' }}>
+                      <input type="checkbox" checked={contactEmergency} onChange={e => setContactEmergency(e.target.checked)} className="w-4 h-4" />
+                      Emergency contact
                     </label>
                   </div>
                 </div>

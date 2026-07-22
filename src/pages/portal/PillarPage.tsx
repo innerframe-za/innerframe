@@ -1,20 +1,16 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
-import { SectionGroup } from '@/components/portal/SectionGroup'
-import { UploadModal } from '@/components/portal/UploadModal'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
-import { useUser } from '@/lib/auth/useUser'
-import { createClient } from '@/lib/supabase/client'
-import { Lock, Upload, ChevronDown, ChevronUp, FileText, FolderOpen, Building2 } from 'lucide-react'
+import { Lock, ChevronDown, ChevronUp, FileText } from 'lucide-react'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
-  admin: { name: 'Admin Office', description: 'The Structure Behind the Facility', dbKey: 'admin' },
-  finance: { name: 'Finance', description: 'Financial Transparency & Sustainability', dbKey: 'finance' },
-  kitchen: { name: 'Kitchen', description: 'Safe Nutrition. Safe Residents.', dbKey: 'kitchen' },
-  medical: { name: 'Medical', description: 'Resident Safety & Clinical Compliance', dbKey: 'medical' },
+  admin:            { name: 'Admin Office',     description: 'The Structure Behind the Facility',             dbKey: 'admin' },
+  finance:          { name: 'Finance',          description: 'Financial Transparency & Sustainability',       dbKey: 'finance' },
+  kitchen:          { name: 'Kitchen',          description: 'Safe Nutrition. Safe Residents.',               dbKey: 'kitchen' },
+  medical:          { name: 'Medical',          description: 'Resident Safety & Clinical Compliance',         dbKey: 'medical' },
   'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability', dbKey: 'board_governance' },
-  hr: { name: 'HR', description: 'People. Structure. Compliance.', dbKey: 'hr' },
+  hr:               { name: 'HR',              description: 'People. Structure. Compliance.',                dbKey: 'hr' },
 }
 
 type PillarContent = {
@@ -23,517 +19,170 @@ type PillarContent = {
   keySystems: { category: string; items: string[] }[]
 }
 
-// Structured pillar content sourced from the InnerFrame website headers guide
 const PILLAR_CONTENT: Record<string, PillarContent> = {
   admin: {
     purpose: 'To ensure the facility runs in an organised, compliant, audit-ready, and professional manner.',
-    focusAreas: [
-      'Policies & Procedures', 'Staff Files', 'Resident Files',
-      'Admission & Discharge', 'Daily Operational Control',
-      'Compliance Systems', 'Communication Systems', 'Reporting Structure',
-    ],
+    focusAreas: ['Policies & Procedures', 'Staff Files', 'Resident Files', 'Admission & Discharge', 'Daily Operational Control', 'Compliance Systems', 'Communication Systems', 'Reporting Structure'],
     keySystems: [
-      {
-        category: 'Administration File Structure',
-        items: ['Master Index File', 'Policies & Procedures File', 'Staff Records File', 'Resident Administration File', 'Incident & Complaints File', 'Visitor Register', 'Maintenance Register', 'Asset Register'],
-      },
-      {
-        category: 'Daily Controls',
-        items: ['Attendance registers', 'Shift handover books', 'Daily task checklists', 'Visitor sign-in systems', 'Maintenance reporting system'],
-      },
-      {
-        category: 'Compliance Requirements',
-        items: ['DSD-ready filing', 'Updated organogram', 'Job descriptions', 'Employment contracts', 'Disciplinary procedures', 'Leave tracking'],
-      },
+      { category: 'Administration File Structure', items: ['Master Index File', 'Policies & Procedures File', 'Staff Records File', 'Resident Administration File', 'Incident & Complaints File', 'Visitor Register', 'Maintenance Register', 'Asset Register'] },
+      { category: 'Daily Controls', items: ['Attendance registers', 'Shift handover books', 'Daily task checklists', 'Visitor sign-in systems', 'Maintenance reporting system'] },
+      { category: 'Compliance Requirements', items: ['DSD-ready filing', 'Updated organogram', 'Job descriptions', 'Employment contracts', 'Disciplinary procedures', 'Leave tracking'] },
     ],
   },
   finance: {
     purpose: 'To ensure the facility remains financially healthy, accountable, transparent, and aligned with DSD funding structures.',
-    focusAreas: [
-      'Budgeting', 'Cash Flow Management', 'DSD Allocations', 'Petty Cash',
-      'Procurement', 'Financial Reporting', 'Payroll Controls', 'Stock Accountability',
-    ],
+    focusAreas: ['Budgeting', 'Cash Flow Management', 'DSD Allocations', 'Petty Cash', 'Procurement', 'Financial Reporting', 'Payroll Controls', 'Stock Accountability'],
     keySystems: [
-      {
-        category: 'Financial Controls',
-        items: ['Monthly budget tracking', 'Departmental budgets', 'DSD vs Private funding tracking', 'Petty cash procedures', 'Supplier approval systems'],
-      },
-      {
-        category: 'Reporting',
-        items: ['Monthly financial reports', 'Board finance reports', 'Variance analysis', 'Cost framework alignment', 'Quarterly reporting packs'],
-      },
-      {
-        category: 'Payroll & HR Finance',
-        items: ['Timesheet verification', 'Overtime control', 'Sunday/public holiday structure', 'Leave calculations', 'UIF compliance'],
-      },
-      {
-        category: 'Procurement Controls',
-        items: ['Stock issuing system', 'Purchase request forms', 'Invoice approval workflow', 'Asset tracking'],
-      },
+      { category: 'Financial Controls', items: ['Monthly budget tracking', 'Departmental budgets', 'DSD vs Private funding tracking', 'Petty cash procedures', 'Supplier approval systems'] },
+      { category: 'Reporting', items: ['Monthly financial reports', 'Board finance reports', 'Variance analysis', 'Cost framework alignment', 'Quarterly reporting packs'] },
+      { category: 'Payroll & HR Finance', items: ['Timesheet verification', 'Overtime control', 'Sunday/public holiday structure', 'Leave calculations', 'UIF compliance'] },
+      { category: 'Procurement Controls', items: ['Stock issuing system', 'Purchase request forms', 'Invoice approval workflow', 'Asset tracking'] },
     ],
   },
   kitchen: {
     purpose: 'To ensure food safety, hygiene, nutritional compliance, and proper kitchen operational control.',
-    focusAreas: [
-      'Meal Planning', 'Food Safety', 'Hygiene', 'Temperature Control',
-      'Expiry Date Management', 'Stock Issuing', 'Cleaning Schedules', 'Dietary Monitoring',
-    ],
+    focusAreas: ['Meal Planning', 'Food Safety', 'Hygiene', 'Temperature Control', 'Expiry Date Management', 'Stock Issuing', 'Cleaning Schedules', 'Dietary Monitoring'],
     keySystems: [
-      {
-        category: 'Kitchen Controls',
-        items: ['Daily temperature logs', 'Fridge/freezer monitoring', 'Cleaning schedules', 'Deep cleaning schedule', 'Pest control monitoring'],
-      },
-      {
-        category: 'Food Management',
-        items: ['Weekly menus', 'Special diet lists', 'Resident dietary requirements', 'Food receiving procedures', 'FIFO stock rotation'],
-      },
-      {
-        category: 'Stock Systems',
-        items: ['Cleaning material issue system', 'Food stock issue sheets', 'Monthly stock counts', 'Waste control tracking'],
-      },
-      {
-        category: 'Hygiene Standards',
-        items: ['Handwashing procedures', 'PPE usage', 'Dishwashing systems', 'Sanitising controls'],
-      },
+      { category: 'Kitchen Controls', items: ['Daily temperature logs', 'Fridge/freezer monitoring', 'Cleaning schedules', 'Deep cleaning schedule', 'Pest control monitoring'] },
+      { category: 'Food Management', items: ['Weekly menus', 'Special diet lists', 'Resident dietary requirements', 'Food receiving procedures', 'FIFO stock rotation'] },
+      { category: 'Stock Systems', items: ['Cleaning material issue system', 'Food stock issue sheets', 'Monthly stock counts', 'Waste control tracking'] },
+      { category: 'Hygiene Standards', items: ['Handwashing procedures', 'PPE usage', 'Dishwashing systems', 'Sanitising controls'] },
     ],
   },
   medical: {
     purpose: 'To ensure resident care, medication management, and health monitoring systems are safe, compliant, and resident-focused.',
-    focusAreas: [
-      'Medication Management', 'Care Plans', 'Incident Reporting', 'Fall Prevention',
-      'Health Monitoring', 'Infection Control', 'Nursing Documentation', 'Resident Well-being',
-    ],
+    focusAreas: ['Medication Management', 'Care Plans', 'Incident Reporting', 'Fall Prevention', 'Health Monitoring', 'Infection Control', 'Nursing Documentation', 'Resident Well-being'],
     keySystems: [
-      {
-        category: 'Medical Documentation',
-        items: ['Resident care plans', 'Medication charts', 'Observation charts', 'Weight monitoring', 'Fluid balance charts', 'Doctor visit records'],
-      },
-      {
-        category: 'Safety Systems',
-        items: ['Incident reports', 'Fall registers', 'Emergency procedures', 'Hospital transfer procedures', 'Oxygen monitoring logs'],
-      },
-      {
-        category: 'Infection Control',
-        items: ['PPE protocols', 'Isolation procedures', 'Cleaning controls', 'Waste disposal systems'],
-      },
-      {
-        category: 'Shift Controls',
-        items: ['Nursing handovers', 'Day/night reports', 'Medication checks', 'Resident monitoring systems'],
-      },
+      { category: 'Medical Documentation', items: ['Resident care plans', 'Medication charts', 'Observation charts', 'Weight monitoring', 'Fluid balance charts', 'Doctor visit records'] },
+      { category: 'Safety Systems', items: ['Incident reports', 'Fall registers', 'Emergency procedures', 'Hospital transfer procedures', 'Oxygen monitoring logs'] },
+      { category: 'Infection Control', items: ['PPE protocols', 'Isolation procedures', 'Cleaning controls', 'Waste disposal systems'] },
+      { category: 'Shift Controls', items: ['Nursing handovers', 'Day/night reports', 'Medication checks', 'Resident monitoring systems'] },
     ],
   },
   board_governance: {
     purpose: "To ensure leadership structures are professional, accountable, sustainable, and aligned with the facility's mission and compliance obligations.",
-    focusAreas: [
-      'Governance Structure', 'Board Oversight', 'Strategic Planning', 'Policy Approval',
-      'Financial Accountability', 'Risk Management', 'Compliance Oversight', 'Sustainability Planning',
-    ],
+    focusAreas: ['Governance Structure', 'Board Oversight', 'Strategic Planning', 'Policy Approval', 'Financial Accountability', 'Risk Management', 'Compliance Oversight', 'Sustainability Planning'],
     keySystems: [
-      {
-        category: 'Governance Structure',
-        items: ['Board organogram', 'Terms of reference', 'Board meeting schedule', 'Committee structure'],
-      },
-      {
-        category: 'Board Documentation',
-        items: ['Board packs', 'Minutes', 'Strategic plans', 'Risk registers', 'Annual reports'],
-      },
-      {
-        category: 'Oversight Systems',
-        items: ['Financial oversight', 'Operational reporting', 'Compliance monitoring', 'DSD reporting oversight'],
-      },
-      {
-        category: 'Sustainability Planning',
-        items: ['Fundraising strategies', 'Maintenance planning', 'Staffing sustainability', 'Growth planning'],
-      },
+      { category: 'Governance Structure', items: ['Board organogram', 'Terms of reference', 'Board meeting schedule', 'Committee structure'] },
+      { category: 'Board Documentation', items: ['Board packs', 'Minutes', 'Strategic plans', 'Risk registers', 'Annual reports'] },
+      { category: 'Oversight Systems', items: ['Financial oversight', 'Operational reporting', 'Compliance monitoring', 'DSD reporting oversight'] },
+      { category: 'Sustainability Planning', items: ['Fundraising strategies', 'Maintenance planning', 'Staffing sustainability', 'Growth planning'] },
     ],
   },
   hr: {
     purpose: 'To ensure all human resources are effectively managed, contracted, trained, and compliant with South African labour law.',
-    focusAreas: [
-      'Staff Records', 'Employment Contracts', 'Training & Development',
-      'Performance Management', 'Leave Administration', 'Labour Law Compliance',
-      'Disciplinary Procedures', 'Payroll Integration',
-    ],
+    focusAreas: ['Staff Records', 'Employment Contracts', 'Training & Development', 'Performance Management', 'Leave Administration', 'Labour Law Compliance', 'Disciplinary Procedures', 'Payroll Integration'],
     keySystems: [
-      {
-        category: 'Staff Records',
-        items: ['Employment contracts', 'Job descriptions', 'ID & qualification copies', 'Police clearance records', 'Emergency contact details'],
-      },
-      {
-        category: 'Leave & Attendance',
-        items: ['Leave application forms', 'Leave balance tracking', 'Attendance registers', 'Sick leave records', 'Maternity/paternity documentation'],
-      },
-      {
-        category: 'Training & Development',
-        items: ['Induction records', 'Training certificates', 'CPD tracking', 'Competency assessments', 'Skills development plans'],
-      },
-      {
-        category: 'Compliance & Discipline',
-        items: ['BCEA compliance checklist', 'Disciplinary records', 'Grievance records', 'CCMA documentation', 'UIF registration'],
-      },
+      { category: 'Staff Records', items: ['Employment contracts', 'Job descriptions', 'ID & qualification copies', 'Police clearance records', 'Emergency contact details'] },
+      { category: 'Leave & Attendance', items: ['Leave application forms', 'Leave balance tracking', 'Attendance registers', 'Sick leave records', 'Maternity/paternity documentation'] },
+      { category: 'Training & Development', items: ['Induction records', 'Training certificates', 'CPD tracking', 'Competency assessments', 'Skills development plans'] },
+      { category: 'Compliance & Discipline', items: ['BCEA compliance checklist', 'Disciplinary records', 'Grievance records', 'CCMA documentation', 'UIF registration'] },
     ],
   },
 }
 
-type DbSection = { id: string; title: string; sort_order: number; is_global: boolean }
+export default function PillarPage() {
+  const { pillar } = useParams<{ pillar: string }>()
+  const { permissions } = usePermissions()
+  const [contentOpen, setContentOpen] = useState(false)
 
-type DbDocument = {
-  id: string
-  title: string | null
-  file_name: string
-  file_url: string
-  pillar: string
-  section_id: string | null
-  is_global: boolean
-  created_at: string
-  category_id: string | null
-}
+  if (!pillar || !PILLAR_MAP[pillar]) return <Navigate to="/dashboard" replace />
 
-type DisplayDoc = {
-  id: string
-  title?: string
-  fileName: string
-  fileUrl: string
-  pillar: string
-  category?: string
-  date: string
-  isGlobal: boolean
-}
+  const { name, description, dbKey } = PILLAR_MAP[pillar]
+  const content = PILLAR_CONTENT[dbKey] ?? PILLAR_CONTENT[pillar]
+  const pillarSlug = dbKey.replace('_', '_') as PillarSlug
+  const canView = permissions[pillarSlug]?.canView !== false
 
-type DisplaySection = {
-  id: string
-  title: string
-  documents: DisplayDoc[]
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })
-}
-
-function toDisplayDoc(d: DbDocument): DisplayDoc {
-  return {
-    id: d.id,
-    title: d.title ?? undefined,
-    fileName: d.file_name,
-    fileUrl: d.file_url,
-    pillar: d.pillar,
-    date: formatDate(d.created_at),
-    isGlobal: d.is_global,
-  }
-}
-
-// Returns the appropriate icon component for a section based on its ID
-function sectionIcon(id: string) {
-  if (id === 'global') return FileText
-  if (id === 'unsectioned') return Building2
-  return FolderOpen
-}
-
-// Sticky left sidebar — mirrors SettingsPage sidebar pattern
-function PillarSidebar({
-  sections,
-  active,
-  onNav,
-}: {
-  sections: DisplaySection[]
-  active: string
-  onNav: (id: string) => void
-}) {
-  return (
-    <aside
-      className="hidden lg:flex flex-col flex-shrink-0 sticky self-start"
-      style={{ width: '200px', top: '80px', maxHeight: 'calc(100dvh - 96px)', overflowY: 'auto' }}
-    >
-      <nav className="flex flex-col gap-0.5">
-        {sections.map(({ id, title }) => {
-          const isActive = active === id
-          const Icon = sectionIcon(id)
-          return (
-            <button
-              key={id}
-              type="button"
-              onClick={() => onNav(id)}
-              className="relative flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-left w-full"
-              style={{
-                color: isActive ? '#1E3A2F' : '#5a5a5a',
-                backgroundColor: isActive ? 'rgba(30,58,47,0.06)' : 'transparent',
-                fontFamily: "'Outfit', system-ui",
-                fontWeight: isActive ? 500 : 400,
-              }}
-            >
-              {isActive && (
-                <span
-                  className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full"
-                  style={{ width: '2.5px', height: '16px', backgroundColor: '#D4AF37' }}
-                  aria-hidden="true"
-                />
-              )}
-              <Icon size={14} style={{ color: isActive ? '#1E3A2F' : '#9ca3af', flexShrink: 0 }} />
-              <span className="truncate">{title}</span>
-            </button>
-          )
-        })}
-      </nav>
-    </aside>
-  )
-}
-
-// Collapsible pillar overview card sourced from the InnerFrame headers guide
-function PillarOverview({ dbKey }: { dbKey: string }) {
-  const [expanded, setExpanded] = useState(false)
-  const content = PILLAR_CONTENT[dbKey]
-  if (!content) return null
-
-  return (
-    <div
-      className="rounded-2xl border mb-6 overflow-hidden"
-      style={{ borderColor: '#ddd6c8', backgroundColor: '#ffffff', borderWidth: '0.5px' }}
-    >
-      {/* Header row — always visible */}
-      <button
-        type="button"
-        className="w-full flex items-start justify-between gap-4 px-5 py-4 text-left"
-        onClick={() => setExpanded(v => !v)}
-        aria-expanded={expanded}
-      >
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start gap-2">
-            <span
-              className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ backgroundColor: '#D4AF37' }}
-              aria-hidden="true"
-            />
-            <p className="text-sm leading-relaxed" style={{ color: '#1E3A2F' }}>
-              {content.purpose}
+  if (!canView) {
+    return (
+      <div>
+        <PageHeader title={name} subtitle={description} />
+        <div
+          className="bg-white rounded-2xl border p-12 flex flex-col items-center text-center gap-4"
+          style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}
+        >
+          <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(220,38,38,0.06)' }}>
+            <Lock size={24} style={{ color: '#dc2626' }} />
+          </div>
+          <div>
+            <p className="text-base font-semibold mb-1.5" style={{ color: '#1a1a1a' }}>Access restricted</p>
+            <p className="text-sm max-w-sm" style={{ color: '#5a5a5a' }}>
+              You don't have permission to view the {name} pillar. Contact your administrator.
             </p>
           </div>
         </div>
-        <div className="flex-shrink-0 mt-0.5" style={{ color: '#698169' }}>
-          {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </div>
-      </button>
-
-      {/* Focus areas — always visible */}
-      <div className="px-5 pb-4 flex flex-wrap gap-1.5">
-        {content.focusAreas.map(area => (
-          <span
-            key={area}
-            className="text-xs px-2.5 py-1 rounded-full font-medium"
-            style={{ backgroundColor: 'rgba(30,58,47,0.07)', color: '#1E3A2F' }}
-          >
-            {area}
-          </span>
-        ))}
-      </div>
-
-      {/* Key systems — expanded only */}
-      {expanded && (
-        <div className="border-t px-5 py-4" style={{ borderColor: '#ddd6c8', backgroundColor: '#FAFAF8' }}>
-          <p className="text-xs font-semibold mb-3" style={{ color: '#5a5a5a' }}>
-            Key systems
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {content.keySystems.map(sys => (
-              <div key={sys.category}>
-                <p className="text-xs font-semibold mb-1.5" style={{ color: '#1E3A2F' }}>
-                  {sys.category}
-                </p>
-                <ul className="space-y-0.5">
-                  {sys.items.map(item => (
-                    <li key={item} className="text-xs flex gap-2" style={{ color: '#5a5a5a' }}>
-                      <span style={{ color: '#D4AF37' }}>•</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default function PillarPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const pillar = slug ? PILLAR_MAP[slug] : null
-  const { permissions, loading: permLoading } = usePermissions()
-  const { user } = useUser()
-
-  const [sections, setSections] = useState<DisplaySection[]>([])
-  const [dbSections, setDbSections] = useState<DbSection[]>([])
-  const [loading, setLoading] = useState(true)
-  const [uploadOpen, setUploadOpen] = useState(false)
-  const [uploadSectionId, setUploadSectionId] = useState<string | undefined>(undefined)
-  const [activeSection, setActiveSection] = useState<string>('')
-  const obsRef = useRef<IntersectionObserver[]>([])
-
-  const load = useCallback(async () => {
-    if (!pillar || !user?.orgId) return
-    setLoading(true)
-    const supabase = createClient()
-
-    const [sectionsRes, docsRes] = await Promise.all([
-      supabase
-        .from('document_sections')
-        .select('id, title, sort_order, is_global')
-        .eq('pillar', pillar.dbKey)
-        .or(`org_id.eq.${user.orgId},is_global.eq.true`)
-        .order('sort_order'),
-      supabase
-        .from('documents_legacy')
-        .select('id, title, file_name, file_url, pillar, section_id, is_global, created_at, category_id')
-        .eq('pillar', pillar.dbKey)
-        .or(`org_id.eq.${user.orgId},is_global.eq.true`)
-        .order('created_at', { ascending: false }),
-    ])
-
-    const fetchedSections: DbSection[] = (sectionsRes.data ?? []) as DbSection[]
-    const fetchedDocs: DbDocument[] = (docsRes.data ?? []) as DbDocument[]
-    setDbSections(fetchedSections)
-
-    // Only unsectioned global docs belong in "Innerframe Templates & Guidelines";
-    // global docs with a section_id are rendered under their named section below.
-    const globalDocs = fetchedDocs.filter(d => d.is_global && !d.section_id).map(toDisplayDoc)
-    const unsectionedFacilityDocs = fetchedDocs
-      .filter(d => !d.is_global && !d.section_id)
-      .map(toDisplayDoc)
-
-    const built: DisplaySection[] = []
-    built.push({ id: 'global', title: 'Innerframe Templates & Guidelines', documents: globalDocs })
-
-    for (const sec of fetchedSections) {
-      const docs = fetchedDocs.filter(d => d.section_id === sec.id).map(toDisplayDoc)
-      built.push({ id: sec.id, title: sec.title, documents: docs })
-    }
-
-    built.push({ id: 'unsectioned', title: 'Facility Documents', documents: unsectionedFacilityDocs })
-    setSections(built)
-    setLoading(false)
-  }, [pillar, user?.orgId])
-
-  useEffect(() => { load() }, [load])
-
-  // Re-initialise scroll-spy observers whenever sections finish loading
-  useEffect(() => {
-    obsRef.current.forEach(o => o.disconnect())
-    obsRef.current = []
-    sections.forEach(sec => {
-      const el = document.getElementById(sec.id)
-      if (!el) return
-      const obs = new IntersectionObserver(
-        ([e]) => { if (e.isIntersecting) setActiveSection(sec.id) },
-        { rootMargin: '-15% 0px -75% 0px', threshold: 0 }
-      )
-      obs.observe(el)
-      obsRef.current.push(obs)
-    })
-    return () => obsRef.current.forEach(o => o.disconnect())
-  }, [loading, sections])
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  if (!pillar) return <Navigate to="/dashboard" replace />
-
-  if (permLoading || loading) {
-    return (
-      <div>
-        <div className="skeleton h-8 w-48 mb-2" />
-        <div className="skeleton h-0.5 w-12 mb-4" />
-        <div className="skeleton h-4 w-72 mb-8" />
-        <div className="space-y-3">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="skeleton h-14 w-full rounded-xl" />
-          ))}
-        </div>
       </div>
     )
   }
-
-  const perm = permissions[pillar.dbKey as PillarSlug]
-  if (!perm?.canView) {
-    return (
-      <div>
-        <PageHeader title={pillar.name} subtitle={pillar.description} />
-        <div className="bg-white rounded-2xl border p-12 flex flex-col items-center gap-3 text-center" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
-          <Lock size={32} style={{ color: '#D4AF37' }} />
-          <p className="text-sm font-medium" style={{ color: '#1E3A2F' }}>Access Restricted</p>
-          <p className="text-xs max-w-xs" style={{ color: '#5a5a5a' }}>
-            You don't have permission to view this section. Contact your facility admin to request access.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  const handleDelete = async (docId: string, fileUrl: string) => {
-    if (!window.confirm('Delete this document? This cannot be undone.')) return
-    const supabase = createClient()
-    const { error } = await supabase.from('documents_legacy').delete().eq('id', docId)
-    if (error) {
-      alert('Could not delete document: ' + error.message)
-      return
-    }
-    await supabase.storage.from('documents').remove([fileUrl])
-    load()
-  }
-
-  const uploadSections = dbSections.map(s => ({ id: s.id, title: s.title }))
 
   return (
-    <div>
-      <PageHeader
-        title={pillar.name}
-        subtitle={pillar.description}
-        action={perm.canEdit ? (
+    <div className="space-y-4">
+      <PageHeader title={name} subtitle={description} />
+
+      {/* Pillar purpose & focus areas */}
+      {content && (
+        <div className="bg-white rounded-2xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
           <button
             type="button"
-            onClick={() => setUploadOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-[#1E3A2F] hover:bg-[#2D5A3D] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#698169] focus-visible:ring-offset-1"
+            className="w-full flex items-center justify-between px-6 py-4 text-left"
+            onClick={() => setContentOpen(o => !o)}
           >
-            <Upload size={14} />Upload Document
+            <span className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>About this pillar</span>
+            {contentOpen ? <ChevronUp size={16} style={{ color: '#5a5a5a' }} /> : <ChevronDown size={16} style={{ color: '#5a5a5a' }} />}
           </button>
-        ) : undefined}
-      />
 
-      <PillarOverview dbKey={pillar.dbKey} />
+          {contentOpen && (
+            <div className="px-6 pb-6 space-y-5" style={{ borderTop: '1px solid #f0ece3' }}>
+              <p className="text-sm pt-4" style={{ color: '#5a5a5a' }}>{content.purpose}</p>
 
-      <div className="flex gap-8 items-start">
-        <PillarSidebar sections={sections} active={activeSection} onNav={scrollTo} />
-        <div className="flex-1 min-w-0 space-y-0">
-          {sections.map(section => (
-            <section key={section.id} id={section.id} className="scroll-mt-24">
-              <SectionGroup
-                title={section.title}
-                documents={section.documents}
-                canDelete={perm.canEdit}
-                onDelete={handleDelete}
-                onUpload={perm.canEdit && section.id !== 'global' ? () => {
-                  // Real DB sections pass their UUID; the virtual 'unsectioned' bucket passes undefined
-                  setUploadSectionId(section.id === 'unsectioned' ? undefined : section.id)
-                  setUploadOpen(true)
-                } : undefined}
-              />
-            </section>
-          ))}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#1E3A2F' }}>Focus Areas</p>
+                <div className="flex flex-wrap gap-2">
+                  {content.focusAreas.map(area => (
+                    <span
+                      key={area}
+                      className="text-xs px-2.5 py-1 rounded-full"
+                      style={{ backgroundColor: 'rgba(30,58,47,0.07)', color: '#1E3A2F' }}
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {content.keySystems.map(sys => (
+                  <div key={sys.category} className="p-4 rounded-lg" style={{ backgroundColor: '#F5F0E8' }}>
+                    <p className="text-xs font-semibold mb-2" style={{ color: '#1E3A2F' }}>{sys.category}</p>
+                    <ul className="space-y-1">
+                      {sys.items.map(item => (
+                        <li key={item} className="text-xs flex items-start gap-1.5" style={{ color: '#5a5a5a' }}>
+                          <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#D4AF37' }} aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Documents — pillar-level documents not yet in backend */}
+      <div
+        className="bg-white rounded-2xl border p-10 flex flex-col items-center text-center gap-3"
+        style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}
+      >
+        <FileText size={28} style={{ color: '#ddd6c8' }} />
+        <div>
+          <p className="text-sm font-medium mb-1" style={{ color: '#5a5a5a' }}>Pillar documents coming soon</p>
+          <p className="text-xs max-w-sm" style={{ color: '#9ca3af' }}>
+            Pillar-level document management is being migrated to the new backend. Resident documents are available on each resident's profile.
+          </p>
         </div>
       </div>
-
-      {user?.orgId && (
-        <UploadModal
-          open={uploadOpen}
-          onClose={() => { setUploadOpen(false); setUploadSectionId(undefined) }}
-          orgId={user.orgId}
-          userRole={user.role}
-          defaultPillar={pillar.dbKey}
-          sections={uploadSections}
-          defaultSectionId={uploadSectionId}
-          onSuccess={() => { setUploadOpen(false); setUploadSectionId(undefined); load() }}
-        />
-      )}
     </div>
   )
 }

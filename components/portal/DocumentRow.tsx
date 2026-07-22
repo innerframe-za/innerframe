@@ -1,18 +1,16 @@
 import { FileText, FileSpreadsheet, Image as ImageIcon, File, Download, Trash2 } from 'lucide-react'
 import { GlobalBadge } from './GlobalBadge'
-import { createClient } from '@/lib/supabase/client'
+import { apiGet } from '@/lib/api/client'
 
 /**
- * A single document row used in pillar pages and section groups.
- * fileUrl is the Supabase storage path (not a public URL).
- * Downloads generate a short-lived signed URL so the bucket stays private.
+ * A single document row. documentId is the backend document UUID.
+ * Download/view requests a short-lived presigned R2 URL from the backend.
  */
 interface DocumentRowProps {
+  documentId: string
   fileName: string
-  fileUrl: string
   title?: string
   category?: string
-  pillar?: string
   date: string
   isGlobal?: boolean
   canDelete?: boolean
@@ -32,74 +30,41 @@ function getFileIcon(fileName: string) {
   return { Icon: File, color: '#5a5a5a' }
 }
 
-const pillarColors: Record<string, string> = {
-  admin: '#1E3A2F',
-  finance: '#2D5A3D',
-  kitchen: '#3B6B4A',
-  medical: '#8AAF8E',
-  medical_residence: '#5B8C6B',
-  hr: '#7A6B4A',
-  board_governance: '#D4AF37',
-}
-
-const pillarLabels: Record<string, string> = {
-  admin: 'Admin',
-  finance: 'Finance',
-  kitchen: 'Kitchen',
-  medical: 'Medical',
-  medical_residence: 'Medical Residence',
-  hr: 'HR',
-  board_governance: 'Board Governance',
-}
-
-function friendlyPillar(p: string) {
-  return pillarLabels[p] ?? p.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-}
-
 export function DocumentRow({
+  documentId,
   fileName,
-  fileUrl,
   title,
   category,
-  pillar,
   date,
   isGlobal = false,
   canDelete = false,
   onDelete,
 }: DocumentRowProps) {
   const { Icon, color } = getFileIcon(fileName)
-  const pillarColor = pillar ? (pillarColors[pillar] ?? '#5a5a5a') : '#5a5a5a'
   const displayTitle = title || fileName
 
-  const fetchFileBlob = async (): Promise<Blob | null> => {
-    const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.access_token) return null
-
-    const res = await fetch(`/api/files/${fileUrl}`, {
-      headers: { Authorization: `Bearer ${session.access_token}` },
-    })
-    if (!res.ok) return null
-    return res.blob()
+  const getDownloadUrl = async (): Promise<string | null> => {
+    try {
+      const data = await apiGet<{ url: string }>(`/documents/${documentId}/download-url`)
+      return data.url
+    } catch {
+      return null
+    }
   }
 
   const handleView = async () => {
-    const blob = await fetchFileBlob()
-    if (!blob) { alert('Could not open document. Please try again.'); return }
-    const url = URL.createObjectURL(blob)
+    const url = await getDownloadUrl()
+    if (!url) { alert('Could not open document. Please try again.'); return }
     window.open(url, '_blank', 'noopener,noreferrer')
-    setTimeout(() => URL.revokeObjectURL(url), 60_000)
   }
 
   const handleDownload = async () => {
-    const blob = await fetchFileBlob()
-    if (!blob) { alert('Could not generate download link. Please try again.'); return }
-    const url = URL.createObjectURL(blob)
+    const url = await getDownloadUrl()
+    if (!url) { alert('Could not generate download link. Please try again.'); return }
     const a = document.createElement('a')
     a.href = url
     a.download = fileName
     a.click()
-    setTimeout(() => URL.revokeObjectURL(url), 1_000)
   }
 
   return (
@@ -146,14 +111,6 @@ export function DocumentRow({
               style={{ backgroundColor: 'rgba(30,58,47,0.07)', color: '#1E3A2F' }}
             >
               {category}
-            </span>
-          )}
-          {pillar && (
-            <span
-              className="text-xs px-1.5 py-0.5 rounded"
-              style={{ backgroundColor: `${pillarColor}12`, color: pillarColor }}
-            >
-              {friendlyPillar(pillar)}
             </span>
           )}
           {isGlobal && <GlobalBadge />}

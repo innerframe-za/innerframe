@@ -6,13 +6,8 @@ import { ResidentRow } from '@/components/portal/ResidentRow'
 
 function getMockResults(q: string) {
   const query = q.toLowerCase()
-  const documents = [
-    { id: '1', fileName: 'Staff_Policies_2025.pdf', fileUrl: '#', category: 'Policies', pillar: 'admin', date: '12 May 2025', isGlobal: false },
-    { id: '2', fileName: 'Q1_Finance_Report.xlsx', fileUrl: '#', category: 'Reports', pillar: 'finance', date: '10 May 2025', isGlobal: false },
-    { id: '3', fileName: 'Kitchen_Cleaning_Schedule.pdf', fileUrl: '#', category: 'Procedures', pillar: 'kitchen', date: '8 May 2025', isGlobal: true },
-    { id: '4', fileName: 'Resident_Care_Plans.docx', fileUrl: '#', category: 'Templates', pillar: 'medical', date: '5 May 2025', isGlobal: true },
-    { id: '5', fileName: 'Board_Meeting_Minutes_April.pdf', fileUrl: '#', category: 'Minutes', pillar: 'board_governance', date: '1 May 2025', isGlobal: false },
-  ].filter(d => d.fileName.toLowerCase().includes(query) || d.category.toLowerCase().includes(query))
+  // Document search is not yet wired to the backend — suppress until real search endpoint is available
+  const documents: { id: string; fileName: string; documentId: string; category: string; pillar: string; date: string; isGlobal: boolean }[] = []
 
   const residents = [
     { id: '1', name: 'Margaret Johnson', roomNumber: '12', status: 'active' as const },
@@ -71,7 +66,7 @@ export default function SearchPage() {
                 <div style={{ width: '36px', height: '2px', backgroundColor: '#D4AF37', marginTop: '4px' }} aria-hidden="true" />
               </div>
               <div className="space-y-2">
-                {documents.map(doc => <DocumentRow key={doc.id} fileName={doc.fileName} fileUrl={doc.fileUrl} category={doc.category} pillar={doc.pillar} date={doc.date} isGlobal={doc.isGlobal} canDelete={false} />)}
+                {documents.map(doc => <DocumentRow key={doc.id} fileName={doc.fileName} documentId={doc.documentId} category={doc.category} date={doc.date} isGlobal={doc.isGlobal} canDelete={false} />)}
               </div>
             </section>
           )}

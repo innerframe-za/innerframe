@@ -5,12 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Upload, X, File, Globe } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-import type { UserRole } from '@/lib/auth/useUser'
-
-// Fixed UUID for the Innerframe internal organisation — global docs are stored here
-const INNERFRAME_ORG_ID = '00000000-0000-0000-0000-000000000001'
+import { Upload, X, File } from 'lucide-react'
+import { apiPost } from '@/lib/api/client'
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -20,85 +16,66 @@ const ACCEPTED_TYPES = [
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'image/jpeg',
   'image/png',
-]
+] as const
+
+type AcceptedMime = typeof ACCEPTED_TYPES[number]
 
 const MAX_FILE_SIZE_MB = 20
 
-const PILLARS = [
-  { value: 'admin', label: 'Admin Office' },
-  { value: 'finance', label: 'Finance' },
-  { value: 'kitchen', label: 'Kitchen' },
-  { value: 'medical', label: 'Medical' },
-  { value: 'medical_residence', label: 'Medical Residence' },
-  { value: 'hr', label: 'HR' },
-  { value: 'board_governance', label: 'Board Governance' },
+const CATEGORIES = [
+  'General',
+  'Medical',
+  'Admin',
+  'Finance',
+  'Kitchen',
+  'HR',
+  'Governance',
+  'Legal',
+  'Other',
 ]
-
-interface Section {
-  id: string
-  title: string
-}
-
-interface Patient {
-  id: string
-  fullName: string
-}
 
 interface UploadModalProps {
   open: boolean
   onClose: () => void
-  orgId: string
-  userRole?: UserRole
-  defaultPillar?: string
-  sections?: Section[]
-  patients?: Patient[]
+  residentId: string
   onSuccess?: () => void
-  // When set, locks the resident selector to this patient (e.g. from the resident detail page)
-  preselectedPatientId?: string
-  // When set, links the upload to a specific staff member
-  preselectedStaffMemberId?: string
-  // When set, pre-selects a section in the section dropdown
-  defaultSectionId?: string
+}
+
+/** Compute SHA-256 hex of a file using the Web Crypto API. */
+async function sha256Hex(file: File): Promise<string> {
+  const buf = await file.arrayBuffer()
+  const digest = await crypto.subtle.digest('SHA-256', buf)
+  return Array.from(new Uint8Array(digest))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
 }
 
 /**
- * Drag-and-drop file upload modal.
- * Uploads to Supabase Storage at {orgId}/{pillar}/{fileName},
- * then inserts a row into the documents table.
+ * 2-step R2 document upload:
+ * 1. POST /residents/:id/documents/upload-intent → { document_id, upload_url }
+ * 2. PUT upload_url (presigned R2 URL) with the raw file bytes
+ * 3. POST /documents/:id/complete-upload
  */
-export function UploadModal({
-  open,
-  onClose,
-  orgId,
-  userRole,
-  defaultPillar,
-  sections = [],
-  patients = [],
-  onSuccess,
-  preselectedPatientId,
-  preselectedStaffMemberId,
-  defaultSectionId,
-}: UploadModalProps) {
+export function UploadModal({ open, onClose, residentId, onSuccess }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState('')
-  const [pillar, setPillar] = useState(defaultPillar ?? 'admin')
-  const [sectionId, setSectionId] = useState(defaultSectionId ?? '')
-  const [patientId, setPatientId] = useState(preselectedPatientId ?? '')
-  const [isGlobal, setIsGlobal] = useState(false)
+  const [category, setCategory] = useState('General')
   const [dragging, setDragging] = useState(false)
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const isSuperAdmin = userRole === 'super_admin'
 
-  // Sync section selection whenever the modal opens with a (possibly different) defaultSectionId
+  // Reset when modal opens
   useEffect(() => {
-    if (open) setSectionId(defaultSectionId ?? '')
-  }, [open, defaultSectionId])
+    if (!open) {
+      setFile(null); setTitle(''); setCategory('General')
+      setError(null); setProgress(0)
+    }
+  }, [open])
 
   const validateFile = (f: File): string | null => {
-    if (!ACCEPTED_TYPES.includes(f.type))
+    if (!(ACCEPTED_TYPES as readonly string[]).includes(f.type))
       return 'File type not supported. Use PDF, DOC, DOCX, XLS, XLSX, JPG, or PNG.'
     if (f.size > MAX_FILE_SIZE_MB * 1024 * 1024)
       return `File is too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.`
@@ -110,7 +87,6 @@ export function UploadModal({
     if (err) { setError(err); return }
     setError(null)
     setFile(f)
-    // Auto-fill title from filename: strip extension, replace underscores/hyphens with spaces
     if (!title) {
       const stem = f.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ').trim()
       setTitle(stem)
@@ -123,62 +99,51 @@ export function UploadModal({
     const f = e.dataTransfer.files[0]
     if (f) handleFile(f)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]
-    if (f) handleFile(f)
-  }
+  }, [title])
 
   const handleUpload = async () => {
-    if (!file) return
+    if (!file || !title.trim()) {
+      setError('Please select a file and enter a title.')
+      return
+    }
     setUploading(true)
     setError(null)
     setProgress(10)
 
     try {
-      const supabase = createClient()
+      // Step 1: compute SHA-256 and request upload intent
+      const hash = await sha256Hex(file)
+      setProgress(20)
 
-      // Build storage path: orgId/pillar/uid_filename
-      const uid = crypto.randomUUID().slice(0, 8)
-      const safeFileName = `${uid}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
-      const storagePath = `${orgId}/${pillar}/uploads/${safeFileName}`
+      const intent = await apiPost<{ document_id: string; upload_url: string }>(
+        `/residents/${residentId}/documents/upload-intent`,
+        {
+          title: title.trim(),
+          category,
+          content_type: file.type as AcceptedMime,
+          size_bytes: file.size,
+          sha256: hash,
+        }
+      )
+      setProgress(40)
 
-      setProgress(30)
-
-      // TODO: replace with Supabase Storage upload once credentials are configured
-      const { error: storageError } = await supabase.storage
-        .from('documents')
-        .upload(storagePath, file, { upsert: false })
-
-      if (storageError) throw storageError
-
-      setProgress(70)
-
-      // Store the storage path — NOT a public URL.
-      // Bucket must be private; download links are generated as signed URLs at read time.
-      // Global documents are stored under the Innerframe internal org.
-      const { error: dbError } = await supabase.from('documents_legacy').insert({
-        org_id: isGlobal ? INNERFRAME_ORG_ID : orgId,
-        pillar,
-        title: title.trim() || null,
-        file_name: file.name,
-        file_url: storagePath,
-        section_id: sectionId || null,
-        patient_id: patientId || null,
-        staff_member_id: preselectedStaffMemberId || null,
-        is_global: isGlobal,
+      // Step 2: PUT file directly to presigned R2 URL (no auth header)
+      const r2Res = await fetch(intent.upload_url, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type },
       })
+      if (!r2Res.ok) throw new Error(`Storage upload failed (${r2Res.status})`)
+      setProgress(80)
 
-      if (dbError) throw dbError
-
+      // Step 3: notify backend that the upload is complete
+      await apiPost(`/documents/${intent.document_id}/complete-upload`)
       setProgress(100)
+
       onSuccess?.()
       handleClose()
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Upload failed. Please try again.'
-      )
+      setError(err instanceof Error ? err.message : 'Upload failed. Please try again.')
     } finally {
       setUploading(false)
       setProgress(0)
@@ -187,19 +152,13 @@ export function UploadModal({
 
   const handleClose = () => {
     if (uploading) return
-    setFile(null)
-    setTitle('')
-    setError(null)
-    setProgress(0)
-    setPillar(defaultPillar ?? 'admin')
-    setSectionId(defaultSectionId ?? '')
-    setPatientId('')
-    setIsGlobal(false)
+    setFile(null); setTitle(''); setCategory('General')
+    setError(null); setProgress(0)
     onClose()
   }
 
   return (
-    <Dialog open={open} onOpenChange={open => !open && handleClose()}>
+    <Dialog open={open} onOpenChange={isOpen => !isOpen && handleClose()}>
       <DialogContent className="max-w-md" style={{ backgroundColor: '#ffffff' }}>
         <DialogHeader>
           <DialogTitle style={{ color: '#1E3A2F' }}>Upload Document</DialogTitle>
@@ -227,7 +186,7 @@ export function UploadModal({
               type="file"
               className="hidden"
               accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
-              onChange={handleInputChange}
+              onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
             />
             {file ? (
               <div className="flex items-center justify-center gap-3">
@@ -259,13 +218,13 @@ export function UploadModal({
           {/* Document title */}
           <div>
             <label className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>
-              Document Title
+              Document Title *
             </label>
             <input
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              placeholder="e.g. Q1 Finance Report"
+              placeholder="e.g. Admission Consent Form"
               className="w-full px-3 py-2.5 rounded border text-sm outline-none"
               style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
               onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
@@ -273,93 +232,20 @@ export function UploadModal({
             />
           </div>
 
-          {/* Pillar selector */}
+          {/* Category */}
           <div>
-            <label
-              className="block text-xs font-medium mb-1.5"
-              style={{ color: '#1a1a1a' }}
-            >
-              Pillar
+            <label className="block text-xs font-medium mb-1.5" style={{ color: '#1a1a1a' }}>
+              Category
             </label>
             <select
-              value={pillar}
-              onChange={e => setPillar(e.target.value)}
+              value={category}
+              onChange={e => setCategory(e.target.value)}
               className="w-full px-3 py-2.5 rounded border text-sm outline-none"
               style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
             >
-              {PILLARS.map(p => (
-                <option key={p.value} value={p.value}>{p.label}</option>
-              ))}
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
-
-          {/* Section selector */}
-          {sections.length > 0 && (
-            <div>
-              <label
-                className="block text-xs font-medium mb-1.5"
-                style={{ color: '#1a1a1a' }}
-              >
-                Section (optional)
-              </label>
-              <select
-                value={sectionId}
-                onChange={e => setSectionId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded border text-sm outline-none"
-                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
-              >
-                <option value="">-- No section --</option>
-                {sections.map(s => (
-                  <option key={s.id} value={s.id}>{s.title}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Patient selector — hidden when a resident is pre-selected */}
-          {!preselectedPatientId && patients.length > 0 && (
-            <div>
-              <label
-                className="block text-xs font-medium mb-1.5"
-                style={{ color: '#1a1a1a' }}
-              >
-                Link to resident (optional)
-              </label>
-              <select
-                value={patientId}
-                onChange={e => setPatientId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded border text-sm outline-none"
-                style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
-              >
-                <option value="">-- No resident --</option>
-                {patients.map(p => (
-                  <option key={p.id} value={p.id}>{p.fullName}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Make global toggle — super_admin only */}
-          {isSuperAdmin && (
-            <label
-              className="flex items-center gap-2.5 cursor-pointer select-none p-3 rounded-lg border"
-              style={{ borderColor: '#D4AF37', backgroundColor: 'rgba(212,175,55,0.06)' }}
-            >
-              <input
-                type="checkbox"
-                checked={isGlobal}
-                onChange={e => setIsGlobal(e.target.checked)}
-                className="w-4 h-4 accent-[#1E3A2F] cursor-pointer"
-              />
-              <Globe size={14} style={{ color: '#D4AF37' }} aria-hidden="true" />
-              <span className="text-sm font-medium" style={{ color: '#1a1a1a' }}>
-                Make global
-              </span>
-              <span className="text-xs" style={{ color: '#5a5a5a' }}>
-                — visible to all facilities
-              </span>
-            </label>
-          )}
 
           {/* Progress bar */}
           {uploading && (
@@ -369,10 +255,7 @@ export function UploadModal({
             >
               <div
                 className="h-full rounded-full transition-all duration-300"
-                style={{
-                  width: `${progress}%`,
-                  backgroundColor: '#D4AF37',
-                }}
+                style={{ width: `${progress}%`, backgroundColor: '#D4AF37' }}
               />
             </div>
           )}
@@ -381,11 +264,7 @@ export function UploadModal({
           {error && (
             <p
               className="text-xs p-3 rounded border"
-              style={{
-                color: '#dc2626',
-                backgroundColor: '#fef2f2',
-                borderColor: '#fecaca',
-              }}
+              style={{ color: '#dc2626', backgroundColor: '#fef2f2', borderColor: '#fecaca' }}
               role="alert"
             >
               {error}

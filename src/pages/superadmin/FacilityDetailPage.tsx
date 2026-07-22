@@ -540,7 +540,7 @@ export default function FacilityDetailPage() {
     {inviteOpen && orgId && !isNewSystem && (
       <InviteStaffModal orgId={orgId} onClose={() => setInviteOpen(false)}
         onSuccess={member => {
-          setLegacyStaff(prev => [...prev, { id: member.id, fullName: member.fullName, email: member.email, role: member.role, createdAt: new Date().toISOString(), username: member.username }])
+          setLegacyStaff(prev => [...prev, { id: member.id, fullName: member.email.split('@')[0], email: member.email, role: member.role, createdAt: new Date().toISOString(), username: null }])
           setInviteOpen(false)
         }}
       />
