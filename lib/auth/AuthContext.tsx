@@ -36,7 +36,7 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 
 function mapRole(backendRole: string): UserRole {
   if (backendRole === 'platform_admin') return 'super_admin'
-  if (backendRole === 'admin') return 'admin'
+  if (backendRole === 'org_admin' || backendRole === 'care_manager') return 'admin'
   return 'staff'
 }
 
