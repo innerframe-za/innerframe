@@ -82,7 +82,7 @@ const PILLAR_CONTENT: Record<string, PillarContent> = {
 }
 
 export default function PillarPage() {
-  const { pillar } = useParams<{ pillar: string }>()
+  const { slug: pillar } = useParams<{ slug: string }>()
   const { permissions } = usePermissions()
   const [contentOpen, setContentOpen] = useState(false)
 
