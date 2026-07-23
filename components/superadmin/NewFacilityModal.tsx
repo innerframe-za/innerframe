@@ -69,7 +69,7 @@ export function NewFacilityModal({ onClose, onSuccess }: Props) {
     try {
       await apiPost(`/organisations/${org.id}/invite`, {
         email: data.adminEmail.trim(),
-        role_code: 'admin',
+        role_code: 'org_admin',
       })
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'

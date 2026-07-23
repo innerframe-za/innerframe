@@ -7,7 +7,7 @@ import { apiPost } from '@/lib/api/client'
 
 const schema = z.object({
   email:     z.string().email('Enter a valid email address'),
-  role_code: z.enum(['staff', 'admin']),
+  role_code: z.enum(['org_admin', 'care_manager', 'nurse', 'carer', 'admin_staff', 'viewer']),
 })
 
 type FormData = z.infer<typeof schema>
@@ -28,7 +28,7 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { role_code: 'staff' },
+    defaultValues: { role_code: 'care_manager' },
   })
 
   const onSubmit = async (data: FormData) => {
@@ -110,8 +110,12 @@ export function InviteStaffModal({ orgId, onClose, onSuccess }: InviteStaffModal
               onFocus={e => (e.target.style.borderColor = '#1E3A2F')}
               onBlur={e => { e.target.style.borderColor = '#ddd6c8'; register('role_code').onBlur(e) }}
             >
-              <option value="staff">Staff</option>
-              <option value="admin">Admin</option>
+              <option value="org_admin">Org Admin</option>
+              <option value="care_manager">Care Manager</option>
+              <option value="nurse">Nurse</option>
+              <option value="carer">Carer</option>
+              <option value="admin_staff">Admin Staff</option>
+              <option value="viewer">Viewer</option>
             </select>
             <FieldError message={errors.role_code?.message} />
           </div>
