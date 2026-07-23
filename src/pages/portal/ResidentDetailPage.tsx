@@ -646,7 +646,7 @@ export default function ResidentDetailPage() {
       <UploadModal
         open={uploadOpen}
         onClose={() => { setUploadOpen(false); load() }}
-        residentId={id!}
+        uploadPath={`residents/${id!}/documents`}
         onSuccess={load}
       />
     </div>

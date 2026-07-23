@@ -37,7 +37,9 @@ const CATEGORIES = [
 interface UploadModalProps {
   open: boolean
   onClose: () => void
-  residentId: string
+  /** API path prefix, e.g. '/residents/:id/documents' or '/pillars/admin/documents' */
+  uploadPath: string
+  categories?: string[]
   onSuccess?: () => void
 }
 
@@ -50,13 +52,7 @@ async function sha256Hex(file: File): Promise<string> {
     .join('')
 }
 
-/**
- * 2-step R2 document upload:
- * 1. POST /residents/:id/documents/upload-intent → { document_id, upload_url }
- * 2. PUT upload_url (presigned R2 URL) with the raw file bytes
- * 3. POST /documents/:id/complete-upload
- */
-export function UploadModal({ open, onClose, residentId, onSuccess }: UploadModalProps) {
+export function UploadModal({ open, onClose, uploadPath, categories = CATEGORIES, onSuccess }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('General')
@@ -116,7 +112,7 @@ export function UploadModal({ open, onClose, residentId, onSuccess }: UploadModa
       setProgress(20)
 
       const intent = await apiPost<{ document_id: string; upload_url: string }>(
-        `/residents/${residentId}/documents/upload-intent`,
+        `/${uploadPath}/upload-intent`,
         {
           title: title.trim(),
           category,
@@ -243,7 +239,7 @@ export function UploadModal({ open, onClose, residentId, onSuccess }: UploadModa
               className="w-full px-3 py-2.5 rounded border text-sm outline-none"
               style={{ borderColor: '#ddd6c8', color: '#1a1a1a' }}
             >
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
 

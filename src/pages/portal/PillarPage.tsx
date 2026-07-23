@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { PageHeader } from '@/components/portal/PageHeader'
 import { usePermissions, PillarSlug } from '@/lib/auth/usePermissions'
-import { Lock, ChevronDown, ChevronUp, FileText } from 'lucide-react'
+import { DocumentRow } from '@/components/portal/DocumentRow'
+import { UploadModal } from '@/components/portal/UploadModal'
+import { apiGet, apiDelete } from '@/lib/api/client'
+import { Lock, ChevronDown, ChevronUp, Upload, Loader2 } from 'lucide-react'
 
 const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: string }> = {
   admin:            { name: 'Admin Office',     description: 'The Structure Behind the Facility',             dbKey: 'admin' },
@@ -11,6 +14,26 @@ const PILLAR_MAP: Record<string, { name: string; description: string; dbKey: str
   medical:          { name: 'Medical',          description: 'Resident Safety & Clinical Compliance',         dbKey: 'medical' },
   'board-governance': { name: 'Board Governance', description: 'Leadership, Accountability & Sustainability', dbKey: 'board_governance' },
   hr:               { name: 'HR',              description: 'People. Structure. Compliance.',                dbKey: 'hr' },
+}
+
+interface PillarDoc {
+  id: string
+  pillar_slug: string
+  category: string
+  title: string
+  content_type: string
+  size_bytes: number
+  legal_hold: boolean
+  created_at: string
+}
+
+const PILLAR_CATEGORIES: Record<string, string[]> = {
+  admin:            ['Policy', 'Procedure', 'Register', 'Form', 'Compliance', 'Other'],
+  finance:          ['Budget', 'Report', 'Invoice', 'Payroll', 'Compliance', 'Other'],
+  kitchen:          ['Menu', 'Food Safety', 'Cleaning Schedule', 'Stock', 'Compliance', 'Other'],
+  medical:          ['Care Plan', 'Medication', 'Incident Report', 'Clinical', 'Compliance', 'Other'],
+  board_governance: ['Board Minutes', 'Strategic Plan', 'Report', 'Risk Register', 'Compliance', 'Other'],
+  hr:               ['Employment Contract', 'Training Record', 'Leave', 'Disciplinary', 'Compliance', 'Other'],
 }
 
 type PillarContent = {
@@ -85,6 +108,29 @@ export default function PillarPage() {
   const { slug: pillar } = useParams<{ slug: string }>()
   const { permissions } = usePermissions()
   const [contentOpen, setContentOpen] = useState(false)
+  const [docs, setDocs] = useState<PillarDoc[]>([])
+  const [loadingDocs, setLoadingDocs] = useState(false)
+  const [uploadOpen, setUploadOpen] = useState(false)
+
+  const loadDocs = useCallback(async () => {
+    if (!pillar || !PILLAR_MAP[pillar]) return
+    setLoadingDocs(true)
+    try {
+      const data = await apiGet<PillarDoc[]>(`/pillars/${pillar}/documents`)
+      setDocs(data)
+    } catch {
+      // silent — page still renders
+    } finally {
+      setLoadingDocs(false)
+    }
+  }, [pillar])
+
+  useEffect(() => { loadDocs() }, [loadDocs])
+
+  const handleDocDelete = async (docId: string) => {
+    await apiDelete(`/documents/${docId}`)
+    setDocs(prev => prev.filter(d => d.id !== docId))
+  }
 
   if (!pillar || !PILLAR_MAP[pillar]) return <Navigate to="/dashboard" replace />
 
@@ -170,19 +216,73 @@ export default function PillarPage() {
         </div>
       )}
 
-      {/* Documents — pillar-level documents not yet in backend */}
-      <div
-        className="bg-white rounded-2xl border p-10 flex flex-col items-center text-center gap-3"
-        style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}
-      >
-        <FileText size={28} style={{ color: '#ddd6c8' }} />
-        <div>
-          <p className="text-sm font-medium mb-1" style={{ color: '#5a5a5a' }}>Pillar documents coming soon</p>
-          <p className="text-xs max-w-sm" style={{ color: '#9ca3af' }}>
-            Pillar-level document management is being migrated to the new backend. Resident documents are available on each resident's profile.
-          </p>
+      {/* Pillar documents */}
+      <div className="bg-white rounded-2xl border overflow-hidden" style={{ borderColor: '#ddd6c8', borderWidth: '0.5px' }}>
+        <div
+          className="flex items-center justify-between px-6 py-4 border-b"
+          style={{ borderColor: '#ddd6c8' }}
+        >
+          <h2 className="text-sm font-semibold" style={{ color: '#1E3A2F' }}>
+            Documents {!loadingDocs && docs.length > 0 && `(${docs.length})`}
+          </h2>
+          {permissions[pillarSlug]?.canEdit && (
+            <button
+              type="button"
+              onClick={() => setUploadOpen(true)}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded text-xs font-medium"
+              style={{ backgroundColor: '#1E3A2F', color: '#ffffff' }}
+            >
+              <Upload size={12} />
+              Upload
+            </button>
+          )}
+        </div>
+
+        <div className="p-4">
+          {loadingDocs ? (
+            <div className="py-10 flex justify-center">
+              <Loader2 size={20} className="animate-spin" style={{ color: '#ddd6c8' }} />
+            </div>
+          ) : docs.length === 0 ? (
+            <div className="py-10 text-center">
+              <p className="text-sm" style={{ color: '#9ca3af' }}>No documents uploaded yet.</p>
+              {permissions[pillarSlug]?.canEdit && (
+                <button
+                  type="button"
+                  onClick={() => setUploadOpen(true)}
+                  className="mt-3 text-xs underline"
+                  style={{ color: '#5a5a5a' }}
+                >
+                  Upload one now
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {docs.map(doc => (
+                <DocumentRow
+                  key={doc.id}
+                  documentId={doc.id}
+                  fileName={doc.title}
+                  title={doc.title}
+                  category={doc.category}
+                  date={new Date(doc.created_at).toLocaleDateString('en-ZA')}
+                  canDelete={permissions[pillarSlug]?.canEdit && !doc.legal_hold}
+                  onDelete={() => handleDocDelete(doc.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      <UploadModal
+        open={uploadOpen}
+        onClose={() => { setUploadOpen(false); loadDocs() }}
+        uploadPath={`pillars/${pillar}/documents`}
+        categories={PILLAR_CATEGORIES[dbKey] ?? PILLAR_CATEGORIES.admin}
+        onSuccess={loadDocs}
+      />
     </div>
   )
 }
